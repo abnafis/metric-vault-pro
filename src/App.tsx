@@ -13,6 +13,7 @@ import AdminHeroEditor from "./pages/AdminHeroEditor";
 import AdminServicesEditor from "./pages/AdminServicesEditor";
 import AdminCaseStudiesEditor from "./pages/AdminCaseStudiesEditor";
 import AdminPlatformsEditor from "./pages/AdminPlatformsEditor";
+import AdminTestimonialsEditor from "./pages/AdminTestimonialsEditor";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
@@ -43,7 +44,7 @@ const App = () => (
               <Route path="services" element={<AdminServicesEditor />} />
               <Route path="case-studies" element={<AdminCaseStudiesEditor />} />
               <Route path="platforms" element={<AdminPlatformsEditor />} />
-              <Route path="testimonials" element={<div className="text-foreground">Testimonials — coming soon</div>} />
+              <Route path="testimonials" element={<AdminTestimonialsEditor />} />
               <Route path="about" element={<div className="text-foreground">About Section — coming soon</div>} />
               <Route path="cta" element={<div className="text-foreground">CTA Section — coming soon</div>} />
               <Route path="footer" element={<div className="text-foreground">Footer — coming soon</div>} />
