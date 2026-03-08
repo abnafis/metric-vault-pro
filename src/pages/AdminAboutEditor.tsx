@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, BarChart3, CheckCircle2 } from "lucide-react";
+import { Save, Plus, Trash2, BarChart3, CheckCircle2, Upload, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 interface Stat {
   icon: string;
@@ -21,6 +22,7 @@ interface AboutData {
   section_title_highlight: string;
   profile_title: string;
   profile_description: string;
+  profile_image_url: string | null;
   certifications: string[];
   stats: Stat[];
 }
@@ -29,6 +31,8 @@ const AdminAboutEditor = () => {
   const [data, setData] = useState<AboutData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchData();
@@ -48,6 +52,7 @@ const AdminAboutEditor = () => {
         section_title_highlight: r.section_title_highlight,
         profile_title: r.profile_title,
         profile_description: r.profile_description,
+        profile_image_url: r.profile_image_url ?? null,
         certifications: r.certifications as string[],
         stats: r.stats as Stat[],
       });
@@ -65,6 +70,7 @@ const AdminAboutEditor = () => {
         section_title_highlight: data.section_title_highlight.slice(0, 50),
         profile_title: data.profile_title.slice(0, 100),
         profile_description: data.profile_description.slice(0, 800),
+        profile_image_url: data.profile_image_url,
         certifications: data.certifications,
         stats: data.stats,
         updated_at: new Date().toISOString(),
@@ -108,6 +114,28 @@ const AdminAboutEditor = () => {
     setData({ ...data, stats });
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !data) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Invalid file", description: "Please upload an image.", variant: "destructive" });
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `portrait-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("profile-images").upload(path, file, { upsert: true });
+    if (upErr) {
+      toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
+      setUploading(false);
+      return;
+    }
+    const { data: urlData } = supabase.storage.from("profile-images").getPublicUrl(path);
+    setData({ ...data, profile_image_url: urlData.publicUrl });
+    setUploading(false);
+    toast({ title: "Uploaded", description: "Portrait uploaded. Click Save to apply." });
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
   if (!data) return <div className="p-8 text-muted-foreground">No about content found.</div>;
 
@@ -125,6 +153,40 @@ const AdminAboutEditor = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
+        {/* Portrait Upload */}
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Upload className="h-4 w-4" /> Portrait Photo
+            </CardTitle>
+            <CardDescription>Upload your portrait — it will appear in the Hero, About, and Navbar sections</CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center gap-6">
+            {data.profile_image_url ? (
+              <div className="relative">
+                <img src={data.profile_image_url} alt="Portrait" className="w-24 h-24 rounded-full object-cover border-2 border-border" />
+                <button
+                  onClick={() => setData({ ...data, profile_image_url: null })}
+                  className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-secondary flex items-center justify-center">
+                <BarChart3 className="w-10 h-10 text-muted-foreground" />
+              </div>
+            )}
+            <div>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+              <Button variant="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={uploading}>
+                {uploading ? "Uploading…" : "Upload Photo"}
+              </Button>
+              <p className="text-xs text-muted-foreground mt-1">Recommended: square, at least 400×400px</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Profile Card */}
         <Card>
           <CardHeader>
