@@ -6,8 +6,8 @@ import { Star } from "lucide-react";
 
 import googleAdsLogo from "@/assets/platforms/google-ads.png";
 import metaAdsLogo from "@/assets/platforms/meta-ads.png";
-import gtmLogo from "@/assets/platforms/gtm.png";
-import ga4Logo from "@/assets/platforms/ga4.png";
+import gtmLogo from "@/assets/platforms/gtm-official.svg";
+import ga4Logo from "@/assets/platforms/ga4-official.svg";
 import serverSideLogo from "@/assets/platforms/server-side.png";
 import conversionsLogo from "@/assets/platforms/conversions.png";
 
