@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
 
 interface CTAData {
   headline: string;
@@ -21,9 +22,19 @@ const fallback: CTAData = {
   success_description: "I'll review your setup and get back to you within 24 hours.",
 };
 
+const auditSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Invalid email").max(255),
+  url: z.string().trim().min(1, "Website URL is required").max(500),
+  platforms: z.string().trim().min(1, "Platforms are required").max(500),
+  problem: z.string().trim().min(1, "Please describe your issue").max(2000),
+  ad_spend: z.string().max(100).optional(),
+});
+
 const CTASection = () => {
   const [cta, setCta] = useState<CTAData>(fallback);
   const [form, setForm] = useState({ name: "", url: "", platforms: "", problem: "", email: "", ad_spend: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -49,25 +60,46 @@ const CTASection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    const result = auditSchema.safeParse(form);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string;
+        if (!fieldErrors[field]) fieldErrors[field] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setSubmitting(true);
     try {
       const { error } = await supabase.from("audit_requests").insert({
-        name: form.name,
-        email: form.email,
+        name: form.name.trim(),
+        email: form.email.trim(),
         website_url: normalizeUrl(form.url),
-        platforms: form.platforms,
-        problem_description: form.problem,
-        monthly_ad_spend: form.ad_spend || null,
+        platforms: form.platforms.trim(),
+        problem_description: form.problem.trim(),
+        monthly_ad_spend: form.ad_spend?.trim() || null,
       } as any);
       if (error) throw error;
       setSubmitted(true);
     } catch {
-      // silently fail for visitors, still show success
       setSubmitted(true);
     } finally {
       setSubmitting(false);
     }
   };
+
+  const fields = [
+    { key: "name" as const, label: "Your Name", placeholder: "John Doe", type: "text", maxLength: 100 },
+    { key: "url" as const, label: "Website URL", placeholder: "yoursite.com", type: "text", maxLength: 500 },
+    { key: "platforms" as const, label: "Platforms Used", placeholder: "GA4, GTM, Meta Ads, Google Ads...", type: "text", maxLength: 500 },
+    { key: "problem" as const, label: "Tracking Problem", placeholder: "Describe your tracking issue...", type: "text", maxLength: 2000 },
+    { key: "email" as const, label: "Email", placeholder: "you@company.com", type: "email", maxLength: 255 },
+    { key: "ad_spend" as const, label: "Monthly Ad Spend (Optional)", placeholder: "$5,000", type: "text", maxLength: 100 },
+  ];
 
   return (
     <section id="cta" className="py-24 relative overflow-hidden">
@@ -93,32 +125,34 @@ const CTASection = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-8"
             >
-              <div className="w-16 h-16 rounded-full bg-[hsl(var(--chart-green))]/20 flex items-center justify-center mx-auto mb-4">
-                <Send className="w-7 h-7 text-[hsl(var(--chart-green))]" />
+              <div className="w-16 h-16 rounded-full bg-chart-green/20 flex items-center justify-center mx-auto mb-4">
+                <Send className="w-7 h-7 text-chart-green" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">{cta.success_title}</h3>
               <p className="text-muted-foreground text-sm">{cta.success_description}</p>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {[
-                { key: "name" as const, label: "Your Name", placeholder: "John Doe", type: "text" },
-                { key: "url" as const, label: "Website URL", placeholder: "yoursite.com", type: "text" },
-                { key: "platforms" as const, label: "Platforms Used", placeholder: "GA4, GTM, Meta Ads, Google Ads...", type: "text" },
-                { key: "problem" as const, label: "Tracking Problem", placeholder: "Describe your tracking issue...", type: "text" },
-                { key: "email" as const, label: "Email", placeholder: "you@company.com", type: "email" },
-                { key: "ad_spend" as const, label: "Monthly Ad Spend (Optional)", placeholder: "$5,000", type: "text" },
-              ].map((f) => (
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              {fields.map((f) => (
                 <div key={f.key}>
                   <label className="text-xs text-muted-foreground mb-1.5 block font-medium">{f.label}</label>
                   <input
                     type={f.type}
                     required={f.key !== "ad_spend"}
                     placeholder={f.placeholder}
+                    maxLength={f.maxLength}
                     value={form[f.key]}
-                    onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                    className="w-full rounded-lg bg-secondary border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
+                    onChange={(e) => {
+                      setForm({ ...form, [f.key]: e.target.value });
+                      if (errors[f.key]) setErrors({ ...errors, [f.key]: "" });
+                    }}
+                    className={`w-full rounded-lg bg-secondary border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all ${
+                      errors[f.key] ? "border-destructive" : "border-border"
+                    }`}
                   />
+                  {errors[f.key] && (
+                    <p className="text-xs text-destructive mt-1">{errors[f.key]}</p>
+                  )}
                 </div>
               ))}
               <button type="submit" disabled={submitting} className="btn-primary-glow w-full flex items-center justify-center gap-2 mt-2 disabled:opacity-50">

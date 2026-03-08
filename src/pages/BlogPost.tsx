@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import DOMPurify from "dompurify";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ export default function BlogPost() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     (async () => {
       setLoading(true);
       const [{ data: p }, { data: c }] = await Promise.all([
@@ -30,17 +32,15 @@ export default function BlogPost() {
         supabase.from("blog_categories").select("*"),
       ]);
       if (p) {
-        setPost(p as any);
-        // SEO
-        if ((p as any).meta_title) document.title = (p as any).meta_title;
-        else document.title = (p as any).title;
+        const postData = p as unknown as Post;
+        setPost(postData);
+        document.title = postData.meta_title || postData.title;
         const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc && (p as any).meta_description) metaDesc.setAttribute("content", (p as any).meta_description);
-        // Related
-        const { data: rel } = await supabase.from("blog_posts").select("*").eq("status", "published").neq("id", (p as any).id).limit(3);
-        if (rel) setRelated(rel as any);
+        if (metaDesc && postData.meta_description) metaDesc.setAttribute("content", postData.meta_description);
+        const { data: rel } = await supabase.from("blog_posts").select("*").eq("status", "published").neq("id", postData.id).limit(3);
+        if (rel) setRelated(rel as unknown as Post[]);
       }
-      if (c) setCategories(c as any);
+      if (c) setCategories(c as unknown as Category[]);
       setLoading(false);
     })();
   }, [slug]);
@@ -50,7 +50,7 @@ export default function BlogPost() {
       const h = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(h > 0 ? (window.scrollY / h) * 100 : 0);
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -70,13 +70,19 @@ export default function BlogPost() {
         <h1 className="text-2xl font-bold mb-4">Post not found</h1>
         <Link to="/blog" className="text-primary hover:underline">← Back to blog</Link>
       </div>
+      <Footer />
     </div>
   );
+
+  const sanitizedContent = DOMPurify.sanitize(post.content, {
+    ADD_TAGS: ["iframe"],
+    ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "scrolling", "target"],
+  });
 
   return (
     <div className="min-h-screen bg-background">
       {/* Reading progress */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-muted">
+      <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-muted">
         <div className="h-full bg-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       </div>
 
@@ -87,7 +93,7 @@ export default function BlogPost() {
         </Link>
 
         {post.featured_image_url && (
-          <img src={post.featured_image_url} alt={post.title} className="w-full h-64 sm:h-80 object-cover rounded-xl mb-8" />
+          <img src={post.featured_image_url} alt={post.title} className="w-full h-64 sm:h-80 object-cover rounded-xl mb-8" loading="lazy" />
         )}
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4">
@@ -109,7 +115,7 @@ export default function BlogPost() {
           </div>
         )}
 
-        {/* Article body */}
+        {/* Article body — sanitized */}
         <div className="prose prose-invert prose-lg max-w-none
           prose-headings:font-bold prose-headings:text-foreground
           prose-p:text-muted-foreground prose-p:leading-relaxed
@@ -119,7 +125,7 @@ export default function BlogPost() {
           prose-img:rounded-lg prose-img:max-w-full
           prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
           prose-li:text-muted-foreground"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
 
         {/* Related posts */}
@@ -130,7 +136,7 @@ export default function BlogPost() {
               {related.map(r => (
                 <Link key={r.id} to={`/blog/${r.slug}`} className="glass-card-hover overflow-hidden group">
                   {r.featured_image_url ? (
-                    <img src={r.featured_image_url} alt={r.title} className="w-full h-36 object-cover" />
+                    <img src={r.featured_image_url} alt={r.title} className="w-full h-36 object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-36 bg-muted" />
                   )}
