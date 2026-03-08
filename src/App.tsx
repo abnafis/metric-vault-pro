@@ -17,6 +17,9 @@ import AdminTestimonialsEditor from "./pages/AdminTestimonialsEditor";
 import AdminSettings from "./pages/AdminSettings";
 import AdminAboutEditor from "./pages/AdminAboutEditor";
 import AdminCTAEditor from "./pages/AdminCTAEditor";
+import AdminBlogEditor from "./pages/AdminBlogEditor";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
@@ -50,9 +53,12 @@ const App = () => (
               <Route path="testimonials" element={<AdminTestimonialsEditor />} />
               <Route path="about" element={<AdminAboutEditor />} />
               <Route path="cta" element={<AdminCTAEditor />} />
+              <Route path="blog" element={<AdminBlogEditor />} />
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
