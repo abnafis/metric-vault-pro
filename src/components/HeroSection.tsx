@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroDashboard from "./HeroDashboard";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Activity, Target, TrendingUp, Code2, Megaphone, LineChart } from "lucide-react";
 
 interface HeroData {
   headline: string;
