@@ -14,6 +14,7 @@ import AdminServicesEditor from "./pages/AdminServicesEditor";
 import AdminCaseStudiesEditor from "./pages/AdminCaseStudiesEditor";
 import AdminPlatformsEditor from "./pages/AdminPlatformsEditor";
 import AdminTestimonialsEditor from "./pages/AdminTestimonialsEditor";
+import AdminSettings from "./pages/AdminSettings";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
@@ -47,8 +48,8 @@ const App = () => (
               <Route path="testimonials" element={<AdminTestimonialsEditor />} />
               <Route path="about" element={<div className="text-foreground">About Section — coming soon</div>} />
               <Route path="cta" element={<div className="text-foreground">CTA Section — coming soon</div>} />
-              <Route path="footer" element={<div className="text-foreground">Footer — coming soon</div>} />
-              <Route path="settings" element={<div className="text-foreground">Settings — coming soon</div>} />
+              <Route path="footer" element={<AdminSettings />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
