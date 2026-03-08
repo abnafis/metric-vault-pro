@@ -47,6 +47,48 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_requests: {
+        Row: {
+          admin_notes: string
+          created_at: string
+          email: string
+          id: string
+          monthly_ad_spend: string | null
+          name: string
+          platforms: string
+          problem_description: string
+          status: string
+          updated_at: string
+          website_url: string
+        }
+        Insert: {
+          admin_notes?: string
+          created_at?: string
+          email: string
+          id?: string
+          monthly_ad_spend?: string | null
+          name: string
+          platforms?: string
+          problem_description?: string
+          status?: string
+          updated_at?: string
+          website_url: string
+        }
+        Update: {
+          admin_notes?: string
+          created_at?: string
+          email?: string
+          id?: string
+          monthly_ad_spend?: string | null
+          name?: string
+          platforms?: string
+          problem_description?: string
+          status?: string
+          updated_at?: string
+          website_url?: string
+        }
+        Relationships: []
+      }
       blog_categories: {
         Row: {
           created_at: string
