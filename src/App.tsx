@@ -26,6 +26,10 @@ import AdminAuditRequests from "./pages/AdminAuditRequests";
 import AdminBrandingEditor from "./pages/AdminBrandingEditor";
 import AdminPageBuilder from "./pages/AdminPageBuilder";
 import AdminPageEditor from "./pages/AdminPageEditor";
+import AdminProcessEditor from "./pages/AdminProcessEditor";
+import AdminDashboardShowcaseEditor from "./pages/AdminDashboardShowcaseEditor";
+import AdminFooterEditor from "./pages/AdminFooterEditor";
+import AdminMediaLibrary from "./pages/AdminMediaLibrary";
 import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 import DynamicPage from "./pages/DynamicPage";
@@ -53,10 +57,11 @@ const App = () => (
               }
             >
               <Route index element={<AdminDashboard />} />
-              {/* Future content management routes */}
               <Route path="hero" element={<AdminHeroEditor />} />
               <Route path="services" element={<AdminServicesEditor />} />
+              <Route path="process" element={<AdminProcessEditor />} />
               <Route path="case-studies" element={<AdminCaseStudiesEditor />} />
+              <Route path="dashboard-showcase" element={<AdminDashboardShowcaseEditor />} />
               <Route path="platforms" element={<AdminPlatformsEditor />} />
               <Route path="testimonials" element={<AdminTestimonialsEditor />} />
               <Route path="about" element={<AdminAboutEditor />} />
@@ -64,11 +69,12 @@ const App = () => (
               <Route path="blog" element={<AdminBlogEditor />} />
               <Route path="scripts" element={<AdminScriptsEditor />} />
               <Route path="audit-requests" element={<AdminAuditRequests />} />
-              <Route path="footer" element={<AdminSettings />} />
+              <Route path="footer" element={<AdminFooterEditor />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="branding" element={<AdminBrandingEditor />} />
               <Route path="pages" element={<AdminPageBuilder />} />
               <Route path="pages/:pageId" element={<AdminPageEditor />} />
+              <Route path="media" element={<AdminMediaLibrary />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />

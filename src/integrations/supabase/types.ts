@@ -304,6 +304,36 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_showcase: {
+        Row: {
+          description: string
+          heading: string
+          heading_highlight: string
+          id: string
+          metrics: Json
+          section_label: string
+          updated_at: string
+        }
+        Insert: {
+          description?: string
+          heading?: string
+          heading_highlight?: string
+          id?: string
+          metrics?: Json
+          section_label?: string
+          updated_at?: string
+        }
+        Update: {
+          description?: string
+          heading?: string
+          heading_highlight?: string
+          id?: string
+          metrics?: Json
+          section_label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           badge_text: string
@@ -446,6 +476,36 @@ export type Database = {
           logo_url?: string
           name?: string
           sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      process_steps: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          title?: string
           updated_at?: string
         }
         Relationships: []
