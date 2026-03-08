@@ -46,6 +46,37 @@ export default function AdminBlogEditor() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [tagInput, setTagInput] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+  const toggleAll = () => {
+    if (selectedIds.size === filtered.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(filtered.map(p => p.id)));
+  };
+  const bulkDelete = async () => {
+    if (!selectedIds.size || !confirm(`Delete ${selectedIds.size} posts?`)) return;
+    for (const id of selectedIds) await supabase.from("blog_posts").delete().eq("id", id);
+    toast({ title: `${selectedIds.size} posts deleted` });
+    setSelectedIds(new Set());
+    fetchAll();
+  };
+  const bulkStatus = async (status: string) => {
+    if (!selectedIds.size) return;
+    for (const id of selectedIds) {
+      const payload: any = { status, updated_at: new Date().toISOString() };
+      if (status === "published") payload.publish_date = new Date().toISOString();
+      await supabase.from("blog_posts").update(payload).eq("id", id);
+    }
+    toast({ title: `${selectedIds.size} posts set to ${status}` });
+    setSelectedIds(new Set());
+    fetchAll();
+  };
 
   // Category management
   const [catDialogOpen, setCatDialogOpen] = useState(false);
@@ -172,11 +203,27 @@ export default function AdminBlogEditor() {
         </Select>
       </div>
 
+      {/* Bulk Actions */}
+      {selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/10 border border-primary/20">
+          <span className="text-sm font-medium text-foreground">{selectedIds.size} selected</span>
+          <Button size="sm" variant="outline" onClick={() => bulkStatus("published")}>Publish</Button>
+          <Button size="sm" variant="outline" onClick={() => bulkStatus("draft")}>Unpublish</Button>
+          <Button size="sm" variant="destructive" onClick={bulkDelete}>Delete</Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelectedIds(new Set())}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+
       {/* Posts Table */}
       <div className="rounded-lg border border-border overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-10">
+                <input type="checkbox" checked={selectedIds.size === filtered.length && filtered.length > 0} onChange={toggleAll} className="rounded border-input" />
+              </TableHead>
               <TableHead>Title</TableHead>
               <TableHead className="hidden md:table-cell">Author</TableHead>
               <TableHead className="hidden md:table-cell">Category</TableHead>
@@ -190,7 +237,10 @@ export default function AdminBlogEditor() {
               <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No posts found</TableCell></TableRow>
             )}
             {filtered.map(post => (
-              <TableRow key={post.id}>
+              <TableRow key={post.id} className={selectedIds.has(post.id) ? "bg-primary/5" : ""}>
+                <TableCell>
+                  <input type="checkbox" checked={selectedIds.has(post.id)} onChange={() => toggleSelect(post.id)} className="rounded border-input" />
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span className="font-medium line-clamp-1">{post.title}</span>
