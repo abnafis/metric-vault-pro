@@ -2,7 +2,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroDashboard from "./HeroDashboard";
-import { BarChart3, Activity, Target, TrendingUp, Code2, Megaphone, LineChart, Star } from "lucide-react";
+import { Star } from "lucide-react";
+
+import googleAdsLogo from "@/assets/platforms/google-ads.png";
+import metaAdsLogo from "@/assets/platforms/meta-ads.png";
+import gtmLogo from "@/assets/platforms/gtm.png";
+import ga4Logo from "@/assets/platforms/ga4.png";
+import serverSideLogo from "@/assets/platforms/server-side.png";
+import conversionsLogo from "@/assets/platforms/conversions.png";
 
 interface HeroData {
   headline: string;
@@ -26,13 +33,13 @@ const fallback: HeroData = {
   hero_image_url: null,
 };
 
-const orbitIcons = [
-  { Icon: Megaphone, label: "Google Ads", color: "hsl(var(--chart-green))" },
-  { Icon: Target, label: "Meta Ads", color: "hsl(var(--glow-blue))" },
-  { Icon: Code2, label: "GTM", color: "hsl(var(--glow-purple))" },
-  { Icon: LineChart, label: "GA4", color: "hsl(var(--chart-green))" },
-  { Icon: Activity, label: "Server-Side", color: "hsl(var(--glow-blue))" },
-  { Icon: TrendingUp, label: "Conversions", color: "hsl(var(--glow-purple))" },
+const orbitItems = [
+  { logo: googleAdsLogo, label: "Google Ads" },
+  { logo: metaAdsLogo, label: "Meta Ads" },
+  { logo: gtmLogo, label: "GTM" },
+  { logo: ga4Logo, label: "GA4" },
+  { logo: serverSideLogo, label: "Server-Side" },
+  { logo: conversionsLogo, label: "Conversions" },
 ];
 
 const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string }) => {
@@ -47,10 +54,10 @@ const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string })
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Orbiting icons */}
-      {orbitIcons.map((item, i) => {
-        const angle = (360 / orbitIcons.length) * i;
-        const radius = 220; // px from center
+      {/* Orbiting platform logos */}
+      {orbitItems.map((item, i) => {
+        const angle = (360 / orbitItems.length) * i;
+        const radius = 220;
         const rad = (angle * Math.PI) / 180;
         const x = Math.cos(rad) * radius;
         const y = Math.sin(rad) * radius;
@@ -62,7 +69,7 @@ const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string })
             initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
             animate={
               hovered
-                ? { opacity: 1, scale: 1, x: x - 20, y: y - 20 }
+                ? { opacity: 1, scale: 1, x: x - 22, y: y - 22 }
                 : { opacity: 0, scale: 0, x: 0, y: 0 }
             }
             transition={{
@@ -74,12 +81,11 @@ const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string })
             }}
           >
             <motion.div
-              className="glass-card w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-lg"
-              animate={hovered ? { rotate: [0, 8, -8, 0] } : {}}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-              style={{ borderColor: item.color + "33" }}
+              className="glass-card w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center shadow-lg p-2"
+              animate={hovered ? { rotate: [0, 5, -5, 0] } : {}}
+              transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
             >
-              <item.Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: item.color }} />
+              <img src={item.logo} alt={item.label} className="w-full h-full object-contain" />
             </motion.div>
             <p className="text-[10px] text-muted-foreground text-center mt-1 font-medium whitespace-nowrap">
               {item.label}
