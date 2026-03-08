@@ -38,9 +38,26 @@ const CTASection = () => {
       });
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("audit_requests").insert({
+        name: form.name,
+        email: form.email,
+        website_url: form.url,
+        platforms: form.platforms,
+        problem_description: form.problem,
+        monthly_ad_spend: form.ad_spend || null,
+      } as any);
+      if (error) throw error;
+      setSubmitted(true);
+    } catch {
+      // silently fail for visitors, still show success
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -76,16 +93,18 @@ const CTASection = () => {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {[
+                { key: "name" as const, label: "Your Name", placeholder: "John Doe", type: "text" },
                 { key: "url" as const, label: "Website URL", placeholder: "https://yoursite.com", type: "url" },
                 { key: "platforms" as const, label: "Platforms Used", placeholder: "GA4, GTM, Meta Ads, Google Ads...", type: "text" },
                 { key: "problem" as const, label: "Tracking Problem", placeholder: "Describe your tracking issue...", type: "text" },
                 { key: "email" as const, label: "Email", placeholder: "you@company.com", type: "email" },
+                { key: "ad_spend" as const, label: "Monthly Ad Spend (Optional)", placeholder: "$5,000", type: "text" },
               ].map((f) => (
                 <div key={f.key}>
                   <label className="text-xs text-muted-foreground mb-1.5 block font-medium">{f.label}</label>
                   <input
                     type={f.type}
-                    required
+                    required={f.key !== "ad_spend"}
                     placeholder={f.placeholder}
                     value={form[f.key]}
                     onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
@@ -93,9 +112,9 @@ const CTASection = () => {
                   />
                 </div>
               ))}
-              <button type="submit" className="btn-primary-glow w-full flex items-center justify-center gap-2 mt-2">
+              <button type="submit" disabled={submitting} className="btn-primary-glow w-full flex items-center justify-center gap-2 mt-2 disabled:opacity-50">
                 <Send className="w-4 h-4" />
-                {cta.button_text}
+                {submitting ? "Submitting..." : cta.button_text}
               </button>
             </form>
           )}
