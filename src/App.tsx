@@ -21,6 +21,8 @@ import AdminBlogEditor from "./pages/AdminBlogEditor";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import ResetPassword from "./pages/ResetPassword";
+import AdminScriptsEditor from "./pages/AdminScriptsEditor";
+import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <ScriptInjector />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -54,6 +57,7 @@ const App = () => (
               <Route path="about" element={<AdminAboutEditor />} />
               <Route path="cta" element={<AdminCTAEditor />} />
               <Route path="blog" element={<AdminBlogEditor />} />
+              <Route path="scripts" element={<AdminScriptsEditor />} />
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>

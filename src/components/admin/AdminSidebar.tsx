@@ -10,6 +10,7 @@ import {
   PanelBottom,
   Settings,
   FileText,
+  Code,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -39,6 +40,7 @@ const contentItems = [
   { title: "CTA Section", url: "/admin/cta", icon: PhoneCall },
   { title: "Blog", url: "/admin/blog", icon: FileText },
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
+  { title: "Scripts", url: "/admin/scripts", icon: Code },
 ];
 
 const settingsItems = [
