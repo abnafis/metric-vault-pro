@@ -13,6 +13,7 @@ import {
   Code,
   ClipboardList,
   Palette,
+  Blocks,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -44,6 +45,7 @@ const contentItems = [
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
   { title: "Scripts", url: "/admin/scripts", icon: Code },
   { title: "Audit Requests", url: "/admin/audit-requests", icon: ClipboardList },
+  { title: "Page Builder", url: "/admin/pages", icon: Blocks },
 ];
 
 const settingsItems = [

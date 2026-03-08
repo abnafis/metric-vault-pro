@@ -24,8 +24,11 @@ import ResetPassword from "./pages/ResetPassword";
 import AdminScriptsEditor from "./pages/AdminScriptsEditor";
 import AdminAuditRequests from "./pages/AdminAuditRequests";
 import AdminBrandingEditor from "./pages/AdminBrandingEditor";
+import AdminPageBuilder from "./pages/AdminPageBuilder";
+import AdminPageEditor from "./pages/AdminPageEditor";
 import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
+import DynamicPage from "./pages/DynamicPage";
 
 const queryClient = new QueryClient();
 
@@ -64,9 +67,12 @@ const App = () => (
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="branding" element={<AdminBrandingEditor />} />
+              <Route path="pages" element={<AdminPageBuilder />} />
+              <Route path="pages/:pageId" element={<AdminPageEditor />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/p/:slug" element={<DynamicPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
