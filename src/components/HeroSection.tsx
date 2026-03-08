@@ -26,6 +26,87 @@ const fallback: HeroData = {
   hero_image_url: null,
 };
 
+const orbitIcons = [
+  { Icon: Megaphone, label: "Google Ads", color: "hsl(var(--chart-green))" },
+  { Icon: Target, label: "Meta Ads", color: "hsl(var(--glow-blue))" },
+  { Icon: Code2, label: "GTM", color: "hsl(var(--glow-purple))" },
+  { Icon: LineChart, label: "GA4", color: "hsl(var(--chart-green))" },
+  { Icon: Activity, label: "Server-Side", color: "hsl(var(--glow-blue))" },
+  { Icon: TrendingUp, label: "Conversions", color: "hsl(var(--glow-purple))" },
+];
+
+const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.7, delay: 0.3 }}
+      className="relative cursor-pointer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Orbiting icons */}
+      {orbitIcons.map((item, i) => {
+        const angle = (360 / orbitIcons.length) * i;
+        const radius = 220; // px from center
+        const rad = (angle * Math.PI) / 180;
+        const x = Math.cos(rad) * radius;
+        const y = Math.sin(rad) * radius;
+
+        return (
+          <motion.div
+            key={item.label}
+            className="absolute left-1/2 top-1/2 z-20"
+            initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+            animate={
+              hovered
+                ? { opacity: 1, scale: 1, x: x - 20, y: y - 20 }
+                : { opacity: 0, scale: 0, x: 0, y: 0 }
+            }
+            transition={{
+              duration: 0.4,
+              delay: hovered ? i * 0.06 : 0,
+              type: "spring",
+              stiffness: 200,
+              damping: 15,
+            }}
+          >
+            <motion.div
+              className="glass-card w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-lg"
+              animate={hovered ? { rotate: [0, 8, -8, 0] } : {}}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+              style={{ borderColor: item.color + "33" }}
+            >
+              <item.Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: item.color }} />
+            </motion.div>
+            <p className="text-[10px] text-muted-foreground text-center mt-1 font-medium whitespace-nowrap">
+              {item.label}
+            </p>
+          </motion.div>
+        );
+      })}
+
+      {/* Portrait */}
+      <motion.div
+        className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full glow-border overflow-hidden shadow-2xl relative z-10"
+        whileHover={{ boxShadow: "0 0 40px 10px hsl(var(--glow-blue) / 0.3)" }}
+        transition={{ duration: 0.3 }}
+      >
+        <img src={profileImageUrl} alt="Portrait" className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+      </motion.div>
+
+      {/* Background glow */}
+      <motion.div
+        className="absolute -inset-4 rounded-full bg-[hsl(var(--glow-blue))]/10 blur-2xl -z-10"
+        animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </motion.div>
+  );
+};
+
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
