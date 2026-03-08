@@ -161,6 +161,45 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          name: string
+          platform: string
+          rating: number
+          role: string
+          sort_order: number
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          platform?: string
+          rating?: number
+          role: string
+          sort_order?: number
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          platform?: string
+          rating?: number
+          role?: string
+          sort_order?: number
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
