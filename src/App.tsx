@@ -22,6 +22,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import ResetPassword from "./pages/ResetPassword";
 import AdminScriptsEditor from "./pages/AdminScriptsEditor";
+import AdminAuditRequests from "./pages/AdminAuditRequests";
 import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="cta" element={<AdminCTAEditor />} />
               <Route path="blog" element={<AdminBlogEditor />} />
               <Route path="scripts" element={<AdminScriptsEditor />} />
+              <Route path="audit-requests" element={<AdminAuditRequests />} />
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>

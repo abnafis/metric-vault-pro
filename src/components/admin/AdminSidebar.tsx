@@ -11,6 +11,7 @@ import {
   Settings,
   FileText,
   Code,
+  ClipboardList,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -41,6 +42,7 @@ const contentItems = [
   { title: "Blog", url: "/admin/blog", icon: FileText },
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
   { title: "Scripts", url: "/admin/scripts", icon: Code },
+  { title: "Audit Requests", url: "/admin/audit-requests", icon: ClipboardList },
 ];
 
 const settingsItems = [
