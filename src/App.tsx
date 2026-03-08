@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminHeroEditor from "./pages/AdminHeroEditor";
 import AdminServicesEditor from "./pages/AdminServicesEditor";
 import AdminCaseStudiesEditor from "./pages/AdminCaseStudiesEditor";
+import AdminPlatformsEditor from "./pages/AdminPlatformsEditor";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
