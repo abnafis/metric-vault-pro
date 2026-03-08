@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -21,9 +22,18 @@ export default function Blog() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { settings } = useSiteSettings();
 
   const activeCategory = searchParams.get("category");
   const activeTag = searchParams.get("tag");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const blogPage = settings.page_titles?.blog;
+    document.title = blogPage?.meta_title || settings.title_format?.replace("{page}", "Blog").replace("{site}", settings.site_name) || "Blog";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc && blogPage?.meta_description) metaDesc.setAttribute("content", blogPage.meta_description);
+  }, [settings]);
 
   useEffect(() => {
     (async () => {
@@ -32,8 +42,8 @@ export default function Blog() {
         supabase.from("blog_posts").select("*").eq("status", "published").order("publish_date", { ascending: false }),
         supabase.from("blog_categories").select("*").order("sort_order"),
       ]);
-      if (p) setPosts(p as any);
-      if (c) setCategories(c as any);
+      if (p) setPosts(p as unknown as Post[]);
+      if (c) setCategories(c as unknown as Category[]);
       setLoading(false);
     })();
   }, []);
@@ -109,7 +119,7 @@ export default function Blog() {
                 <div className="glass-card-hover overflow-hidden grid md:grid-cols-2 gap-0">
                   {featuredPost.featured_image_url ? (
                     <img src={featuredPost.featured_image_url} alt={featuredPost.title}
-                      className="w-full h-64 md:h-full object-cover" />
+                      className="w-full h-64 md:h-full object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-64 md:h-full bg-muted flex items-center justify-center text-muted-foreground">No image</div>
                   )}
@@ -135,7 +145,7 @@ export default function Blog() {
               {otherPosts.map(post => (
                 <Link key={post.id} to={`/blog/${post.slug}`} className="glass-card-hover overflow-hidden group flex flex-col">
                   {post.featured_image_url ? (
-                    <img src={post.featured_image_url} alt={post.title} className="w-full h-48 object-cover" />
+                    <img src={post.featured_image_url} alt={post.title} className="w-full h-48 object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-48 bg-muted flex items-center justify-center text-muted-foreground text-sm">No image</div>
                   )}

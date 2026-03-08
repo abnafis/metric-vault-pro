@@ -1,21 +1,29 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { BarChart3 } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
+    document.title = "Page Not Found";
+  }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background bg-grid-pattern">
+      <div className="absolute inset-0 bg-radial-glow opacity-30 pointer-events-none" />
+      <div className="relative z-10 text-center space-y-6">
+        <BarChart3 className="w-12 h-12 text-primary mx-auto" />
+        <h1 className="text-6xl font-extrabold text-foreground">404</h1>
+        <p className="text-lg text-muted-foreground max-w-md mx-auto">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <Link
+          to="/"
+          className="btn-primary-glow inline-flex items-center gap-2 text-sm"
+        >
           Return to Home
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -9,12 +9,27 @@ const Navbar = () => {
 
   const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
 
+  const handleNavClick = (href: string) => {
+    setOpen(false);
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 backdrop-blur-xl bg-background/70">
       <div className="section-container flex items-center justify-between h-16">
-        <a href="#" className="flex items-center gap-2 font-bold text-lg text-foreground">
+        <a href="/" className="flex items-center gap-2 font-bold text-lg text-foreground shrink-0">
           {settings.logo_url ? (
-            <img src={settings.logo_url} alt={settings.site_name} className="h-8 max-w-[140px] object-contain" />
+            <img
+              src={settings.logo_url}
+              alt={settings.site_name}
+              className="h-8 max-w-[140px] object-contain"
+              loading="eager"
+            />
           ) : (
             <BarChart3 className="w-6 h-6 text-glow-blue" />
           )}
@@ -26,12 +41,18 @@ const Navbar = () => {
             <a
               key={l.href}
               href={l.href}
+              onClick={(e) => {
+                if (l.href.startsWith("#")) {
+                  e.preventDefault();
+                  handleNavClick(l.href);
+                }
+              }}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               {l.label}
             </a>
           ))}
-          <a href="#cta" className="btn-primary-glow text-sm px-5 py-2">
+          <a href="#cta" onClick={(e) => { e.preventDefault(); handleNavClick("#cta"); }} className="btn-primary-glow text-sm px-5 py-2">
             Get Audit
           </a>
         </div>
@@ -39,6 +60,7 @@ const Navbar = () => {
         <button
           className="md:hidden text-foreground"
           onClick={() => setOpen(!open)}
+          aria-label={open ? "Close menu" : "Open menu"}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -57,13 +79,24 @@ const Navbar = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => {
+                    if (l.href.startsWith("#")) {
+                      e.preventDefault();
+                      handleNavClick(l.href);
+                    } else {
+                      setOpen(false);
+                    }
+                  }}
                   className="text-sm text-muted-foreground hover:text-foreground py-2"
                 >
                   {l.label}
                 </a>
               ))}
-              <a href="#cta" className="btn-primary-glow text-sm px-5 py-2 text-center mt-2">
+              <a
+                href="#cta"
+                onClick={(e) => { e.preventDefault(); handleNavClick("#cta"); }}
+                className="btn-primary-glow text-sm px-5 py-2 text-center mt-2"
+              >
                 Get Audit
               </a>
             </div>
