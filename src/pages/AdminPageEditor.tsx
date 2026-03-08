@@ -50,7 +50,7 @@ export default function AdminPageEditor() {
       sort_order: blocks.length,
       visible: true,
     };
-    const { data, error } = await supabase.from("page_blocks").insert(newBlock).select().single();
+    const { data, error } = await supabase.from("page_blocks").insert(newBlock as any).select().single();
     if (error) { toast({ title: "Error adding block", variant: "destructive" }); return; }
     setBlocks((prev) => [...prev, data as BlockData]);
     setExpandedBlock((data as BlockData).id);
@@ -78,7 +78,7 @@ export default function AdminPageEditor() {
       sort_order: blocks.length,
       visible: block.visible,
     };
-    const { data } = await supabase.from("page_blocks").insert(newBlock).select().single();
+    const { data } = await supabase.from("page_blocks").insert(newBlock as any).select().single();
     if (data) setBlocks((prev) => [...prev, data as BlockData]);
   };
 
@@ -100,7 +100,7 @@ export default function AdminPageEditor() {
   const saveAll = async () => {
     setSaving(true);
     const promises = blocks.map((b, i) =>
-      supabase.from("page_blocks").update({ content: b.content, sort_order: i, visible: b.visible }).eq("id", b.id)
+      supabase.from("page_blocks").update({ content: b.content as any, sort_order: i, visible: b.visible }).eq("id", b.id)
     );
     await Promise.all(promises);
     setSaving(false);

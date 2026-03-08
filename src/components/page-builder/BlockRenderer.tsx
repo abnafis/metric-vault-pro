@@ -65,7 +65,7 @@ export default function BlockRenderer({ block }: { block: BlockData }) {
             {c.text && <p className="text-muted-foreground italic mb-4">"{c.text}"</p>}
             <div className="flex justify-center gap-1 mb-2">
               {Array.from({ length: c.rating || 5 }).map((_, i) => (
-                <span key={i} className="text-yellow-400">★</span>
+                <span key={i} className="text-amber-400">★</span>
               ))}
             </div>
             {c.name && <p className="font-semibold text-foreground">{c.name}</p>}
