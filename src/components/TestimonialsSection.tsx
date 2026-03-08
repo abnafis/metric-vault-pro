@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
 import { Star, Globe, BarChart3, Zap } from "lucide-react";
 
+import jamesImg from "@/assets/testimonials/james-carter.jpg";
+import sarahImg from "@/assets/testimonials/sarah-mitchell.jpg";
+import davidImg from "@/assets/testimonials/david-chen.jpg";
+import emilyImg from "@/assets/testimonials/emily-rodriguez.jpg";
+import michaelImg from "@/assets/testimonials/michael-brooks.jpg";
+import oliviaImg from "@/assets/testimonials/olivia-tran.jpg";
+
 const trustMetrics = [
   { icon: BarChart3, value: "100+", label: "Tracking Implementations" },
   { icon: Globe, value: "30+", label: "Countries Served" },
@@ -18,7 +25,7 @@ const testimonials = [
   {
     name: "James Carter",
     role: "Marketing Director, ShopVault",
-    avatar: "JC",
+    img: jamesImg,
     platform: "Fiverr",
     rating: 5,
     text: "Abdullah fixed our broken Google Ads conversion tracking and implemented GA4 properly through GTM. Our reporting is now accurate and our ROAS optimization improved significantly.",
@@ -26,7 +33,7 @@ const testimonials = [
   {
     name: "Sarah Mitchell",
     role: "CEO, GrowthLoop Agency",
-    avatar: "SM",
+    img: sarahImg,
     platform: "LinkedIn",
     rating: 5,
     text: "We had massive data discrepancies between GA4 and our ad platforms. Abdullah implemented server-side tracking with Meta CAPI and our conversion accuracy jumped by over 30%.",
@@ -34,7 +41,7 @@ const testimonials = [
   {
     name: "David Chen",
     role: "E-Commerce Manager, NovaBrand",
-    avatar: "DC",
+    img: davidImg,
     platform: "Upwork",
     rating: 5,
     text: "Professional, fast, and extremely knowledgeable. The GTM setup and enhanced conversions implementation were done flawlessly. Our attribution data finally makes sense.",
@@ -42,7 +49,7 @@ const testimonials = [
   {
     name: "Emily Rodriguez",
     role: "Head of Growth, SaaSMetrics",
-    avatar: "ER",
+    img: emilyImg,
     platform: "Direct Client",
     rating: 5,
     text: "Abdullah built our entire tracking infrastructure from scratch — GA4, GTM, and CRM integration. We can now track every touchpoint in our trial-to-paid funnel.",
@@ -50,7 +57,7 @@ const testimonials = [
   {
     name: "Michael Brooks",
     role: "PPC Specialist, AdScale Co.",
-    avatar: "MB",
+    img: michaelImg,
     platform: "Fiverr",
     rating: 5,
     text: "After the server-side tracking setup, our Facebook ad campaigns started optimizing correctly again. iOS14 data loss is no longer an issue. Highly recommend.",
@@ -58,7 +65,7 @@ const testimonials = [
   {
     name: "Olivia Tran",
     role: "Founder, LeadHarvest",
-    avatar: "OT",
+    img: oliviaImg,
     platform: "Upwork",
     rating: 5,
     text: "We were sending duplicate form submissions to Google Ads. Abdullah cleaned up our GTM container, added deduplication, and our cost per lead dropped by 35%.",
@@ -122,9 +129,7 @@ const TestimonialsSection = () => (
           >
             {/* Header */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-glow-blue shrink-0">
-                {t.avatar}
-              </div>
+              <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{t.role}</p>
