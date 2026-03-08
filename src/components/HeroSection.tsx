@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroDashboard from "./HeroDashboard";
-import { BarChart3, Activity, Target, TrendingUp, Code2, Megaphone, LineChart } from "lucide-react";
+import { BarChart3, Activity, Target, TrendingUp, Code2, Megaphone, LineChart, Star } from "lucide-react";
 
 interface HeroData {
   headline: string;
@@ -107,9 +107,74 @@ const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string })
   );
 };
 
+interface ReviewSnippet {
+  name: string;
+  text: string;
+  rating: number;
+}
+
+const fallbackReviews: ReviewSnippet[] = [
+  { name: "Sarah M.", text: "Tracking accuracy improved by 40%", rating: 5 },
+  { name: "David C.", text: "Finally, data we can trust", rating: 5 },
+  { name: "Emily R.", text: "Best GA4 setup I've seen", rating: 5 },
+  { name: "James C.", text: "ROI visible within weeks", rating: 5 },
+  { name: "Olivia T.", text: "Server-side tracking game changer", rating: 5 },
+  { name: "Michael B.", text: "Attribution issues solved overnight", rating: 5 },
+];
+
+const FloatingReviews = ({ reviews }: { reviews: ReviewSnippet[] }) => {
+  // Position cards at fixed spots scattered across the background
+  const positions = [
+    { top: "8%", left: "5%", delay: 0 },
+    { top: "65%", left: "2%", delay: 2.5 },
+    { top: "30%", right: "3%", delay: 1.2 },
+    { top: "75%", right: "5%", delay: 3.8 },
+    { top: "15%", right: "15%", delay: 5 },
+    { top: "85%", left: "12%", delay: 6.5 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {reviews.slice(0, positions.length).map((review, i) => {
+        const pos = positions[i];
+        return (
+          <motion.div
+            key={i}
+            className="absolute max-w-[200px]"
+            style={{ top: pos.top, left: pos.left, right: (pos as any).right }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: [0, 0.15, 0.15, 0],
+              y: [20, 0, 0, -10],
+            }}
+            transition={{
+              duration: 8,
+              delay: pos.delay,
+              repeat: Infinity,
+              repeatDelay: 4,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="glass-card rounded-xl p-3 border border-border/30 bg-background/40 backdrop-blur-sm">
+              <div className="flex gap-0.5 mb-1">
+                {Array.from({ length: review.rating }).map((_, s) => (
+                  <Star key={s} className="w-3 h-3 fill-[hsl(var(--chart-green))] text-[hsl(var(--chart-green))]" />
+                ))}
+              </div>
+              <p className="text-[11px] text-muted-foreground leading-snug italic">"{review.text}"</p>
+              <p className="text-[10px] text-muted-foreground/60 mt-1 font-medium">— {review.name}</p>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
+
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<ReviewSnippet[]>(fallbackReviews);
 
   useEffect(() => {
     supabase
@@ -128,6 +193,16 @@ const HeroSection = () => {
       .then(({ data }) => {
         if (data && (data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
       });
+    supabase
+      .from("testimonials")
+      .select("name, text, rating")
+      .order("sort_order")
+      .limit(6)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setReviews(data.map((t) => ({ name: t.name.split(" ")[0] + " " + (t.name.split(" ")[1]?.[0] || "") + ".", text: t.text.length > 45 ? t.text.slice(0, 45) + "…" : t.text, rating: t.rating })));
+        }
+      });
   }, []);
 
   const headlineParts = hero.headline.includes(".")
@@ -143,6 +218,9 @@ const HeroSection = () => {
           : undefined
       }
     >
+      {/* Floating review snippets */}
+      <FloatingReviews reviews={reviews} />
+
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-pattern opacity-30" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-radial-glow pointer-events-none" />
