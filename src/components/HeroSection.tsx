@@ -144,14 +144,14 @@ const FloatingReviews = ({ reviews }: { reviews: ReviewSnippet[] }) => {
             style={{ top: pos.top, left: pos.left, right: (pos as any).right }}
             initial={{ opacity: 0, y: 20 }}
             animate={{
-              opacity: [0, 0.15, 0.15, 0],
+              opacity: [0, 0.45, 0.45, 0],
               y: [20, 0, 0, -10],
             }}
             transition={{
-              duration: 8,
+              duration: 6,
               delay: pos.delay,
               repeat: Infinity,
-              repeatDelay: 4,
+              repeatDelay: 2,
               ease: "easeInOut",
             }}
           >
