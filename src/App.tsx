@@ -10,6 +10,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminHeroEditor from "./pages/AdminHeroEditor";
+import AdminServicesEditor from "./pages/AdminServicesEditor";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
@@ -37,7 +38,7 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               {/* Future content management routes */}
               <Route path="hero" element={<AdminHeroEditor />} />
-              <Route path="services" element={<div className="text-foreground">Services — coming soon</div>} />
+              <Route path="services" element={<AdminServicesEditor />} />
               <Route path="case-studies" element={<div className="text-foreground">Case Studies — coming soon</div>} />
               <Route path="platforms" element={<div className="text-foreground">Platforms — coming soon</div>} />
               <Route path="testimonials" element={<div className="text-foreground">Testimonials — coming soon</div>} />
