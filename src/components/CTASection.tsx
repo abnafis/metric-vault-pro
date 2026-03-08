@@ -23,8 +23,9 @@ const fallback: CTAData = {
 
 const CTASection = () => {
   const [cta, setCta] = useState<CTAData>(fallback);
-  const [form, setForm] = useState({ url: "", platforms: "", problem: "", email: "" });
+  const [form, setForm] = useState({ name: "", url: "", platforms: "", problem: "", email: "", ad_spend: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     supabase
