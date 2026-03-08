@@ -1,44 +1,111 @@
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { BarChart3, LogOut } from "lucide-react";
+import {
+  Wrench,
+  BookOpen,
+  MessageSquareQuote,
+  Monitor,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const stats = [
+  { label: "Services", value: "6", icon: Wrench, href: "/admin/services", color: "text-primary" },
+  { label: "Case Studies", value: "3", icon: BookOpen, href: "/admin/case-studies", color: "text-accent" },
+  { label: "Testimonials", value: "6", icon: MessageSquareQuote, href: "/admin/testimonials", color: "text-[hsl(var(--glow-cyan))]" },
+  { label: "Platforms", value: "6", icon: Monitor, href: "/admin/platforms", color: "text-[hsl(var(--chart-green))]" },
+];
+
+const recentEdits = [
+  { section: "Hero Section", time: "2 hours ago" },
+  { section: "Testimonials", time: "5 hours ago" },
+  { section: "Services", time: "1 day ago" },
+  { section: "Case Studies", time: "3 days ago" },
+];
+
+const quickLinks = [
+  { label: "Edit Hero", href: "/admin/hero" },
+  { label: "Manage Services", href: "/admin/services" },
+  { label: "Edit Testimonials", href: "/admin/testimonials" },
+  { label: "CTA Settings", href: "/admin/cta" },
+];
 
 const AdminDashboard = () => {
-  const { user, signOut } = useAuth();
-
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border/50 backdrop-blur-xl bg-background/70">
-        <div className="section-container flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="w-6 h-6 text-glow-blue" />
-            <span className="font-bold text-foreground">TrackRight Admin</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-muted-foreground hidden sm:inline">{user?.email}</span>
-            <Button variant="ghost" size="sm" onClick={signOut}>
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline ml-1">Logout</span>
-            </Button>
-          </div>
-        </div>
-      </nav>
+    <div className="max-w-6xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Overview of your website content.
+        </p>
+      </div>
 
-      <div className="section-container py-12">
-        <h1 className="text-2xl font-bold text-foreground mb-2">Dashboard</h1>
-        <p className="text-muted-foreground text-sm">Welcome back. Your admin panel is ready for content management.</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-          {[
-            { label: "Testimonials", value: "6" },
-            { label: "Case Studies", value: "3" },
-            { label: "Platforms", value: "6" },
-          ].map((s) => (
-            <div key={s.label} className="glass-card p-6 text-center">
-              <p className="text-3xl font-bold gradient-text">{s.value}</p>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08 }}
+          >
+            <Link to={s.href} className="block glass-card-hover p-5 group">
+              <div className="flex items-center justify-between mb-3">
+                <s.icon className={`h-5 w-5 ${s.color}`} />
+                <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-3xl font-bold text-foreground">{s.value}</p>
               <p className="text-sm text-muted-foreground mt-1">{s.label}</p>
-            </div>
-          ))}
-        </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Edits */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="glass-card p-6"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <h2 className="font-semibold text-foreground">Last Edited</h2>
+          </div>
+          <div className="space-y-3">
+            {recentEdits.map((e) => (
+              <div
+                key={e.section}
+                className="flex items-center justify-between py-2 border-b border-border/30 last:border-0"
+              >
+                <span className="text-sm text-foreground">{e.section}</span>
+                <span className="text-xs text-muted-foreground">{e.time}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="glass-card p-6"
+        >
+          <h2 className="font-semibold text-foreground mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {quickLinks.map((q) => (
+              <Link
+                key={q.label}
+                to={q.href}
+                className="btn-secondary-glass text-center text-sm py-3 hover:border-primary/40 transition-colors"
+              >
+                {q.label}
+              </Link>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
