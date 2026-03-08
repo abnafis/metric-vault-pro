@@ -126,12 +126,12 @@ const AdminCaseStudiesEditor = () => {
     }
     setSaving(true);
     const cleanMetrics = form.metrics.filter((m) => m.label.trim() && m.value.trim());
-    const payload = {
+    const payload: any = {
       title: form.title,
       problem: form.problem,
       solution: form.solution,
-      metrics: cleanMetrics as unknown as Record<string, unknown>[],
-      chart_data: form.chart_data as unknown as Record<string, unknown>[],
+      metrics: cleanMetrics,
+      chart_data: form.chart_data,
       image_url: form.image_url || null,
       client_name: form.client_name || null,
       platform_used: form.platform_used || null,
@@ -143,7 +143,7 @@ const AdminCaseStudiesEditor = () => {
       if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
       else toast({ title: "Case study updated" });
     } else {
-      const { error } = await supabase.from("case_studies").insert([{ ...payload, sort_order: items.length }]);
+      const { error } = await supabase.from("case_studies").insert([{ ...payload, sort_order: items.length }] as any);
       if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
       else toast({ title: "Case study created" });
     }
