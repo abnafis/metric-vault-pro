@@ -38,6 +38,15 @@ const CTASection = () => {
       });
   }, []);
 
+  const normalizeUrl = (url: string): string => {
+    let trimmed = url.trim();
+    if (!trimmed) return trimmed;
+    if (!/^https?:\/\//i.test(trimmed)) {
+      trimmed = "https://" + trimmed;
+    }
+    return trimmed;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -45,7 +54,7 @@ const CTASection = () => {
       const { error } = await supabase.from("audit_requests").insert({
         name: form.name,
         email: form.email,
-        website_url: form.url,
+        website_url: normalizeUrl(form.url),
         platforms: form.platforms,
         problem_description: form.problem,
         monthly_ad_spend: form.ad_spend || null,
@@ -94,7 +103,7 @@ const CTASection = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {[
                 { key: "name" as const, label: "Your Name", placeholder: "John Doe", type: "text" },
-                { key: "url" as const, label: "Website URL", placeholder: "https://yoursite.com", type: "url" },
+                { key: "url" as const, label: "Website URL", placeholder: "yoursite.com", type: "text" },
                 { key: "platforms" as const, label: "Platforms Used", placeholder: "GA4, GTM, Meta Ads, Google Ads...", type: "text" },
                 { key: "problem" as const, label: "Tracking Problem", placeholder: "Describe your tracking issue...", type: "text" },
                 { key: "email" as const, label: "Email", placeholder: "you@company.com", type: "email" },
