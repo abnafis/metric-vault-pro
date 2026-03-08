@@ -102,26 +102,7 @@ const HeroSection = () => {
         {/* Right */}
         <div className="flex justify-center lg:justify-end">
           {profileImageUrl ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              className="relative cursor-pointer"
-            >
-              <motion.div
-                className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full glow-border overflow-hidden shadow-2xl"
-                whileHover={{ boxShadow: "0 0 40px 10px hsl(var(--glow-blue) / 0.3)" }}
-                transition={{ duration: 0.3 }}
-              >
-                <img src={profileImageUrl} alt="Portrait" className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-              </motion.div>
-              <motion.div
-                className="absolute -inset-4 rounded-full bg-[hsl(var(--glow-blue))]/10 blur-2xl -z-10"
-                animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </motion.div>
+            <HeroPortraitWithIcons profileImageUrl={profileImageUrl} />
           ) : (
             <HeroDashboard />
           )}
