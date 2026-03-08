@@ -25,7 +25,7 @@ const testimonials = [
   {
     name: "James Carter",
     role: "Marketing Director, ShopVault",
-    avatar: "JC",
+    img: jamesImg,
     platform: "Fiverr",
     rating: 5,
     text: "Abdullah fixed our broken Google Ads conversion tracking and implemented GA4 properly through GTM. Our reporting is now accurate and our ROAS optimization improved significantly.",
@@ -33,7 +33,7 @@ const testimonials = [
   {
     name: "Sarah Mitchell",
     role: "CEO, GrowthLoop Agency",
-    avatar: "SM",
+    img: sarahImg,
     platform: "LinkedIn",
     rating: 5,
     text: "We had massive data discrepancies between GA4 and our ad platforms. Abdullah implemented server-side tracking with Meta CAPI and our conversion accuracy jumped by over 30%.",
@@ -41,7 +41,7 @@ const testimonials = [
   {
     name: "David Chen",
     role: "E-Commerce Manager, NovaBrand",
-    avatar: "DC",
+    img: davidImg,
     platform: "Upwork",
     rating: 5,
     text: "Professional, fast, and extremely knowledgeable. The GTM setup and enhanced conversions implementation were done flawlessly. Our attribution data finally makes sense.",
@@ -49,7 +49,7 @@ const testimonials = [
   {
     name: "Emily Rodriguez",
     role: "Head of Growth, SaaSMetrics",
-    avatar: "ER",
+    img: emilyImg,
     platform: "Direct Client",
     rating: 5,
     text: "Abdullah built our entire tracking infrastructure from scratch — GA4, GTM, and CRM integration. We can now track every touchpoint in our trial-to-paid funnel.",
@@ -57,7 +57,7 @@ const testimonials = [
   {
     name: "Michael Brooks",
     role: "PPC Specialist, AdScale Co.",
-    avatar: "MB",
+    img: michaelImg,
     platform: "Fiverr",
     rating: 5,
     text: "After the server-side tracking setup, our Facebook ad campaigns started optimizing correctly again. iOS14 data loss is no longer an issue. Highly recommend.",
@@ -65,7 +65,7 @@ const testimonials = [
   {
     name: "Olivia Tran",
     role: "Founder, LeadHarvest",
-    avatar: "OT",
+    img: oliviaImg,
     platform: "Upwork",
     rating: 5,
     text: "We were sending duplicate form submissions to Google Ads. Abdullah cleaned up our GTM container, added deduplication, and our cost per lead dropped by 35%.",
