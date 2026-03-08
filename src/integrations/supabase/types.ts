@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      hero_content: {
+        Row: {
+          badge_text: string
+          headline: string
+          hero_image_url: string | null
+          id: string
+          primary_cta_link: string
+          primary_cta_text: string
+          secondary_cta_link: string
+          secondary_cta_text: string
+          subheadline: string
+          updated_at: string
+        }
+        Insert: {
+          badge_text?: string
+          headline?: string
+          hero_image_url?: string | null
+          id?: string
+          primary_cta_link?: string
+          primary_cta_text?: string
+          secondary_cta_link?: string
+          secondary_cta_text?: string
+          subheadline?: string
+          updated_at?: string
+        }
+        Update: {
+          badge_text?: string
+          headline?: string
+          hero_image_url?: string | null
+          id?: string
+          primary_cta_link?: string
+          primary_cta_text?: string
+          secondary_cta_link?: string
+          secondary_cta_text?: string
+          subheadline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
