@@ -70,7 +70,7 @@ const AdminCaseStudiesEditor = () => {
       .select("*")
       .order("sort_order", { ascending: true });
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-    else setItems((data as CaseStudy[]) || []);
+    else setItems((data as unknown as CaseStudy[]) || []);
     setLoading(false);
   }, [toast]);
 
@@ -130,8 +130,8 @@ const AdminCaseStudiesEditor = () => {
       title: form.title,
       problem: form.problem,
       solution: form.solution,
-      metrics: cleanMetrics,
-      chart_data: form.chart_data,
+      metrics: cleanMetrics as unknown as Record<string, unknown>[],
+      chart_data: form.chart_data as unknown as Record<string, unknown>[],
       image_url: form.image_url || null,
       client_name: form.client_name || null,
       platform_used: form.platform_used || null,
@@ -143,7 +143,7 @@ const AdminCaseStudiesEditor = () => {
       if (error) toast({ title: "Update failed", description: error.message, variant: "destructive" });
       else toast({ title: "Case study updated" });
     } else {
-      const { error } = await supabase.from("case_studies").insert({ ...payload, sort_order: items.length });
+      const { error } = await supabase.from("case_studies").insert([{ ...payload, sort_order: items.length }]);
       if (error) toast({ title: "Create failed", description: error.message, variant: "destructive" });
       else toast({ title: "Case study created" });
     }

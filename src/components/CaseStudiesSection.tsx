@@ -52,7 +52,7 @@ const CaseStudiesSection = () => {
       .select("*")
       .order("sort_order", { ascending: true })
       .then(({ data }) => {
-        if (data && data.length > 0) setCases(data as CaseStudy[]);
+        if (data && data.length > 0) setCases(data as unknown as CaseStudy[]);
       });
   }, []);
 
