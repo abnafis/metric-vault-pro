@@ -161,6 +161,48 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          contact_email: string
+          copyright_text: string
+          cta_form_email: string
+          favicon_url: string | null
+          footer_description: string
+          id: string
+          nav_links: Json
+          seo_description: string
+          seo_title: string
+          social_links: Json
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string
+          copyright_text?: string
+          cta_form_email?: string
+          favicon_url?: string | null
+          footer_description?: string
+          id?: string
+          nav_links?: Json
+          seo_description?: string
+          seo_title?: string
+          social_links?: Json
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string
+          copyright_text?: string
+          cta_form_email?: string
+          favicon_url?: string | null
+          footer_description?: string
+          id?: string
+          nav_links?: Json
+          seo_description?: string
+          seo_title?: string
+          social_links?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           avatar_url: string | null
