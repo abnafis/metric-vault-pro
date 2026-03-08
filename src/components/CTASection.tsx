@@ -1,10 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface CTAData {
+  headline: string;
+  headline_highlight: string;
+  description: string;
+  button_text: string;
+  success_title: string;
+  success_description: string;
+}
+
+const fallback: CTAData = {
+  headline: "Fix Your Tracking.",
+  headline_highlight: "Unlock Accurate Marketing Data.",
+  description: "Get a free tracking audit and start making data-driven decisions with confidence.",
+  button_text: "Request Free Audit",
+  success_title: "Request Received!",
+  success_description: "I'll review your setup and get back to you within 24 hours.",
+};
 
 const CTASection = () => {
+  const [cta, setCta] = useState<CTAData>(fallback);
   const [form, setForm] = useState({ url: "", platforms: "", problem: "", email: "" });
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    supabase
+      .from("cta_content" as any)
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }: any) => {
+        if (data) setCta(data as CTAData);
+      });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,12 +54,10 @@ const CTASection = () => {
         >
           <div className="text-center mb-8">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Fix Your Tracking.{" "}
-              <span className="gradient-text">Unlock Accurate Marketing Data.</span>
+              {cta.headline}{" "}
+              <span className="gradient-text">{cta.headline_highlight}</span>
             </h2>
-            <p className="text-muted-foreground">
-              Get a free tracking audit and start making data-driven decisions with confidence.
-            </p>
+            <p className="text-muted-foreground">{cta.description}</p>
           </div>
 
           {submitted ? (
@@ -37,11 +66,11 @@ const CTASection = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-8"
             >
-              <div className="w-16 h-16 rounded-full bg-chart-green/20 flex items-center justify-center mx-auto mb-4">
-                <Send className="w-7 h-7 text-chart-green" />
+              <div className="w-16 h-16 rounded-full bg-[hsl(var(--chart-green))]/20 flex items-center justify-center mx-auto mb-4">
+                <Send className="w-7 h-7 text-[hsl(var(--chart-green))]" />
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Request Received!</h3>
-              <p className="text-muted-foreground text-sm">I'll review your setup and get back to you within 24 hours.</p>
+              <h3 className="text-xl font-bold text-foreground mb-2">{cta.success_title}</h3>
+              <p className="text-muted-foreground text-sm">{cta.success_description}</p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -59,13 +88,13 @@ const CTASection = () => {
                     placeholder={f.placeholder}
                     value={form[f.key]}
                     onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                    className="w-full rounded-lg bg-secondary border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-glow-blue/50 transition-all"
+                    className="w-full rounded-lg bg-secondary border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring/50 transition-all"
                   />
                 </div>
               ))}
               <button type="submit" className="btn-primary-glow w-full flex items-center justify-center gap-2 mt-2">
                 <Send className="w-4 h-4" />
-                Request Free Audit
+                {cta.button_text}
               </button>
             </form>
           )}

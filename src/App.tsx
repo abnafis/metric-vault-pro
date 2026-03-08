@@ -15,6 +15,8 @@ import AdminCaseStudiesEditor from "./pages/AdminCaseStudiesEditor";
 import AdminPlatformsEditor from "./pages/AdminPlatformsEditor";
 import AdminTestimonialsEditor from "./pages/AdminTestimonialsEditor";
 import AdminSettings from "./pages/AdminSettings";
+import AdminAboutEditor from "./pages/AdminAboutEditor";
+import AdminCTAEditor from "./pages/AdminCTAEditor";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
@@ -46,8 +48,8 @@ const App = () => (
               <Route path="case-studies" element={<AdminCaseStudiesEditor />} />
               <Route path="platforms" element={<AdminPlatformsEditor />} />
               <Route path="testimonials" element={<AdminTestimonialsEditor />} />
-              <Route path="about" element={<div className="text-foreground">About Section — coming soon</div>} />
-              <Route path="cta" element={<div className="text-foreground">CTA Section — coming soon</div>} />
+              <Route path="about" element={<AdminAboutEditor />} />
+              <Route path="cta" element={<AdminCTAEditor />} />
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>

@@ -8,20 +8,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-
-const stats = [
-  { label: "Services", value: "6", icon: Wrench, href: "/admin/services", color: "text-primary" },
-  { label: "Case Studies", value: "3", icon: BookOpen, href: "/admin/case-studies", color: "text-accent" },
-  { label: "Testimonials", value: "6", icon: MessageSquareQuote, href: "/admin/testimonials", color: "text-[hsl(var(--glow-cyan))]" },
-  { label: "Platforms", value: "6", icon: Monitor, href: "/admin/platforms", color: "text-[hsl(var(--chart-green))]" },
-];
-
-const recentEdits = [
-  { section: "Hero Section", time: "2 hours ago" },
-  { section: "Testimonials", time: "5 hours ago" },
-  { section: "Services", time: "1 day ago" },
-  { section: "Case Studies", time: "3 days ago" },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const quickLinks = [
   { label: "Edit Hero", href: "/admin/hero" },
@@ -31,6 +19,33 @@ const quickLinks = [
 ];
 
 const AdminDashboard = () => {
+  const [counts, setCounts] = useState({ services: 0, case_studies: 0, testimonials: 0, platforms: 0 });
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const [s, c, t, p] = await Promise.all([
+        supabase.from("services").select("id", { count: "exact", head: true }),
+        supabase.from("case_studies").select("id", { count: "exact", head: true }),
+        supabase.from("testimonials").select("id", { count: "exact", head: true }),
+        supabase.from("platforms").select("id", { count: "exact", head: true }),
+      ]);
+      setCounts({
+        services: s.count ?? 0,
+        case_studies: c.count ?? 0,
+        testimonials: t.count ?? 0,
+        platforms: p.count ?? 0,
+      });
+    };
+    fetchCounts();
+  }, []);
+
+  const stats = [
+    { label: "Services", value: String(counts.services), icon: Wrench, href: "/admin/services", color: "text-primary" },
+    { label: "Case Studies", value: String(counts.case_studies), icon: BookOpen, href: "/admin/case-studies", color: "text-accent" },
+    { label: "Testimonials", value: String(counts.testimonials), icon: MessageSquareQuote, href: "/admin/testimonials", color: "text-[hsl(var(--glow-cyan))]" },
+    { label: "Platforms", value: String(counts.platforms), icon: Monitor, href: "/admin/platforms", color: "text-[hsl(var(--chart-green))]" },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div>
@@ -40,7 +55,6 @@ const AdminDashboard = () => {
         </p>
       </div>
 
-      {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s, i) => (
           <motion.div
@@ -62,35 +76,10 @@ const AdminDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Edits */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="glass-card p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <h2 className="font-semibold text-foreground">Last Edited</h2>
-          </div>
-          <div className="space-y-3">
-            {recentEdits.map((e) => (
-              <div
-                key={e.section}
-                className="flex items-center justify-between py-2 border-b border-border/30 last:border-0"
-              >
-                <span className="text-sm text-foreground">{e.section}</span>
-                <span className="text-xs text-muted-foreground">{e.time}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
           className="glass-card p-6"
         >
           <h2 className="font-semibold text-foreground mb-4">Quick Actions</h2>
