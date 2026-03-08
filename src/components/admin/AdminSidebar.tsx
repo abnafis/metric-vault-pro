@@ -9,6 +9,7 @@ import {
   PhoneCall,
   PanelBottom,
   Settings,
+  FileText,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -36,6 +37,7 @@ const contentItems = [
   { title: "Testimonials", url: "/admin/testimonials", icon: MessageSquareQuote },
   { title: "About Section", url: "/admin/about", icon: UserCircle },
   { title: "CTA Section", url: "/admin/cta", icon: PhoneCall },
+  { title: "Blog", url: "/admin/blog", icon: FileText },
   { title: "Footer", url: "/admin/footer", icon: PanelBottom },
 ];
 
