@@ -1,28 +1,28 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, BarChart3 } from "lucide-react";
-
-const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
-  { label: "Case Studies", href: "#cases" },
-  { label: "About", href: "#about" },
-  { label: "Blog", href: "/blog" },
-];
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { settings } = useSiteSettings();
+
+  const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 backdrop-blur-xl bg-background/70">
       <div className="section-container flex items-center justify-between h-16">
         <a href="#" className="flex items-center gap-2 font-bold text-lg text-foreground">
-          <BarChart3 className="w-6 h-6 text-glow-blue" />
-          <span>TrackRight</span>
+          {settings.logo_url ? (
+            <img src={settings.logo_url} alt={settings.site_name} className="h-8 max-w-[140px] object-contain" />
+          ) : (
+            <BarChart3 className="w-6 h-6 text-glow-blue" />
+          )}
+          <span>{settings.site_name}</span>
         </a>
 
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((l) => (
+          {visibleLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -53,7 +53,7 @@ const Navbar = () => {
             className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl"
           >
             <div className="section-container py-4 flex flex-col gap-3">
-              {navLinks.map((l) => (
+              {visibleLinks.map((l) => (
                 <a
                   key={l.href}
                   href={l.href}

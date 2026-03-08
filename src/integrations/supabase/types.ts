@@ -411,39 +411,57 @@ export type Database = {
           contact_email: string
           copyright_text: string
           cta_form_email: string
+          dark_logo_url: string | null
           favicon_url: string | null
           footer_description: string
           id: string
+          logo_url: string | null
           nav_links: Json
+          page_titles: Json
           seo_description: string
           seo_title: string
+          site_name: string
+          site_tagline: string
           social_links: Json
+          title_format: string
           updated_at: string
         }
         Insert: {
           contact_email?: string
           copyright_text?: string
           cta_form_email?: string
+          dark_logo_url?: string | null
           favicon_url?: string | null
           footer_description?: string
           id?: string
+          logo_url?: string | null
           nav_links?: Json
+          page_titles?: Json
           seo_description?: string
           seo_title?: string
+          site_name?: string
+          site_tagline?: string
           social_links?: Json
+          title_format?: string
           updated_at?: string
         }
         Update: {
           contact_email?: string
           copyright_text?: string
           cta_form_email?: string
+          dark_logo_url?: string | null
           favicon_url?: string | null
           footer_description?: string
           id?: string
+          logo_url?: string | null
           nav_links?: Json
+          page_titles?: Json
           seo_description?: string
           seo_title?: string
+          site_name?: string
+          site_tagline?: string
           social_links?: Json
+          title_format?: string
           updated_at?: string
         }
         Relationships: []

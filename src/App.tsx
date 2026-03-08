@@ -23,6 +23,7 @@ import BlogPost from "./pages/BlogPost";
 import ResetPassword from "./pages/ResetPassword";
 import AdminScriptsEditor from "./pages/AdminScriptsEditor";
 import AdminAuditRequests from "./pages/AdminAuditRequests";
+import AdminBrandingEditor from "./pages/AdminBrandingEditor";
 import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="audit-requests" element={<AdminAuditRequests />} />
               <Route path="footer" element={<AdminSettings />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="branding" element={<AdminBrandingEditor />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />

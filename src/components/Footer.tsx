@@ -2,7 +2,7 @@ import { BarChart3 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const Footer = () => {
-  const { settings, loading } = useSiteSettings();
+  const { settings } = useSiteSettings();
 
   const visibleSocial = settings.social_links.filter((l) => l.visible);
   const year = new Date().getFullYear();
@@ -14,8 +14,12 @@ const Footer = () => {
         <div className="grid sm:grid-cols-3 gap-8">
           <div className="space-y-3">
             <a href="#" className="flex items-center gap-2 font-bold text-lg text-foreground">
-              <BarChart3 className="w-5 h-5 text-glow-blue" />
-              TrackRight
+              {settings.logo_url ? (
+                <img src={settings.logo_url} alt={settings.site_name} className="h-7 max-w-[120px] object-contain" />
+              ) : (
+                <BarChart3 className="w-5 h-5 text-glow-blue" />
+              )}
+              {settings.site_name}
             </a>
             <p className="text-sm text-muted-foreground">{settings.footer_description}</p>
             <p className="text-xs text-muted-foreground">{settings.contact_email}</p>
@@ -24,7 +28,7 @@ const Footer = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-3">Navigation</h4>
             <div className="space-y-2">
-              {settings.nav_links.map((l) => (
+              {settings.nav_links.filter(l => l.visible !== false).map((l) => (
                 <a key={l.href} href={l.href} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
                   {l.label}
                 </a>
