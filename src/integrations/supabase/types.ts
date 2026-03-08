@@ -220,6 +220,48 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_scripts: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          enabled: boolean
+          id: string
+          name: string
+          page_path: string | null
+          placement: string
+          script_type: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code?: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          name: string
+          page_path?: string | null
+          placement?: string
+          script_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          name?: string
+          page_path?: string | null
+          placement?: string
+          script_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           badge_text: string
