@@ -12,6 +12,7 @@ import {
   FileText,
   Code,
   ClipboardList,
+  Palette,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -46,6 +47,7 @@ const contentItems = [
 ];
 
 const settingsItems = [
+  { title: "Branding", url: "/admin/branding", icon: Palette },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 
