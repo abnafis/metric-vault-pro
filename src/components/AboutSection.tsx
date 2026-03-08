@@ -12,6 +12,7 @@ interface AboutData {
   section_title_highlight: string;
   profile_title: string;
   profile_description: string;
+  profile_image_url: string | null;
   certifications: string[];
   stats: { icon: string; value: string; label: string }[];
 }
@@ -21,6 +22,7 @@ const fallback: AboutData = {
   section_title_highlight: "Expertise",
   profile_title: "The Specialist",
   profile_description: "With years of hands-on experience in web analytics and conversion tracking, I help businesses fix broken data, implement accurate attribution, and build the measurement infrastructure that modern marketing teams need to scale confidently. From GA4 setup to server-side tracking, I've worked across every major ad platform and analytics tool.",
+  profile_image_url: null,
   certifications: ["GA4 & GTM certified expert", "Server-side tracking specialist", "Cross-platform attribution"],
   stats: [
     { icon: "BarChart3", value: "100+", label: "Tracking Setups" },
@@ -54,9 +56,15 @@ const AboutSection = () => {
             className="relative"
           >
             <div className="glass-card glow-border p-8 space-y-6">
-              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center">
-                <BarChart3 className="w-10 h-10 text-[hsl(var(--glow-blue))]" />
-              </div>
+              {about.profile_image_url ? (
+                <div className="w-24 h-24 rounded-full glow-border overflow-hidden">
+                  <img src={about.profile_image_url} alt={about.profile_title} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center">
+                  <BarChart3 className="w-10 h-10 text-[hsl(var(--glow-blue))]" />
+                </div>
+              )}
               <h3 className="text-2xl font-bold text-foreground">{about.profile_title}</h3>
               <p className="text-muted-foreground leading-relaxed">{about.profile_description}</p>
               <div className="space-y-3">

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroDashboard from "./HeroDashboard";
+import { BarChart3 } from "lucide-react";
 
 interface HeroData {
   headline: string;
@@ -27,6 +28,7 @@ const fallback: HeroData = {
 
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     supabase
@@ -36,6 +38,14 @@ const HeroSection = () => {
       .maybeSingle()
       .then(({ data }) => {
         if (data) setHero(data as HeroData);
+      });
+    supabase
+      .from("about_content")
+      .select("profile_image_url")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data && (data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
       });
   }, []);
 
@@ -91,7 +101,21 @@ const HeroSection = () => {
 
         {/* Right */}
         <div className="flex justify-center lg:justify-end">
-          <HeroDashboard />
+          {profileImageUrl ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="relative"
+            >
+              <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full glow-border overflow-hidden shadow-2xl">
+                <img src={profileImageUrl} alt="Portrait" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -inset-4 rounded-full bg-[hsl(var(--glow-blue))]/10 blur-2xl -z-10" />
+            </motion.div>
+          ) : (
+            <HeroDashboard />
+          )}
         </div>
       </div>
     </section>

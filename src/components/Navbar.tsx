@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, BarChart3 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { settings } = useSiteSettings();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("about_content")
+      .select("profile_image_url")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data && (data as any).profile_image_url) setAvatarUrl((data as any).profile_image_url);
+      });
+  }, []);
 
   const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
 
@@ -23,6 +36,9 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 backdrop-blur-xl bg-background/70">
       <div className="section-container flex items-center justify-between h-16">
         <a href="/" className="flex items-center gap-2 font-bold text-lg text-foreground shrink-0">
+          {avatarUrl && (
+            <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full object-cover border-2 border-[hsl(var(--glow-blue))]/50" />
+          )}
           {settings.logo_url ? (
             <img
               src={settings.logo_url}
@@ -30,9 +46,9 @@ const Navbar = () => {
               className="h-8 max-w-[140px] object-contain"
               loading="eager"
             />
-          ) : (
+          ) : !avatarUrl ? (
             <BarChart3 className="w-6 h-6 text-glow-blue" />
-          )}
+          ) : null}
           <span>{settings.site_name}</span>
         </a>
 
