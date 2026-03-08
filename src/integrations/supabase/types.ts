@@ -19,6 +19,7 @@ export type Database = {
           certifications: Json
           id: string
           profile_description: string
+          profile_image_url: string | null
           profile_title: string
           section_title: string
           section_title_highlight: string
@@ -29,6 +30,7 @@ export type Database = {
           certifications?: Json
           id?: string
           profile_description?: string
+          profile_image_url?: string | null
           profile_title?: string
           section_title?: string
           section_title_highlight?: string
@@ -39,6 +41,7 @@ export type Database = {
           certifications?: Json
           id?: string
           profile_description?: string
+          profile_image_url?: string | null
           profile_title?: string
           section_title?: string
           section_title_highlight?: string
