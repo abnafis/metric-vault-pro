@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      about_content: {
+        Row: {
+          certifications: Json
+          id: string
+          profile_description: string
+          profile_title: string
+          section_title: string
+          section_title_highlight: string
+          stats: Json
+          updated_at: string
+        }
+        Insert: {
+          certifications?: Json
+          id?: string
+          profile_description?: string
+          profile_title?: string
+          section_title?: string
+          section_title_highlight?: string
+          stats?: Json
+          updated_at?: string
+        }
+        Update: {
+          certifications?: Json
+          id?: string
+          profile_description?: string
+          profile_title?: string
+          section_title?: string
+          section_title_highlight?: string
+          stats?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       case_studies: {
         Row: {
           chart_data: Json | null
@@ -55,6 +88,39 @@ export type Database = {
           solution?: string
           sort_order?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cta_content: {
+        Row: {
+          button_text: string
+          description: string
+          headline: string
+          headline_highlight: string
+          id: string
+          success_description: string
+          success_title: string
+          updated_at: string
+        }
+        Insert: {
+          button_text?: string
+          description?: string
+          headline?: string
+          headline_highlight?: string
+          id?: string
+          success_description?: string
+          success_title?: string
+          updated_at?: string
+        }
+        Update: {
+          button_text?: string
+          description?: string
+          headline?: string
+          headline_highlight?: string
+          id?: string
+          success_description?: string
+          success_title?: string
           updated_at?: string
         }
         Relationships: []
