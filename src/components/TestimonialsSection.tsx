@@ -129,9 +129,7 @@ const TestimonialsSection = () => (
           >
             {/* Header */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-glow-blue shrink-0">
-                {t.avatar}
-              </div>
+              <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{t.role}</p>
