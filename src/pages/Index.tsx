@@ -9,6 +9,7 @@ import DashboardShowcase from "@/components/DashboardShowcase";
 import TrustedPlatformsSection from "@/components/TrustedPlatformsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import AboutSection from "@/components/AboutSection";
+import BlogSection from "@/components/BlogSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -45,6 +46,7 @@ const Index = () => {
       <TrustedPlatformsSection />
       <TestimonialsSection />
       <AboutSection />
+      <BlogSection />
       <CTASection />
       <Footer />
     </div>
