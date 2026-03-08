@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      case_studies: {
+        Row: {
+          chart_data: Json | null
+          client_name: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          metrics: Json
+          platform_used: string | null
+          problem: string
+          solution: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          chart_data?: Json | null
+          client_name?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metrics?: Json
+          platform_used?: string | null
+          problem: string
+          solution: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          chart_data?: Json | null
+          client_name?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metrics?: Json
+          platform_used?: string | null
+          problem?: string
+          solution?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           badge_text: string
