@@ -1,6 +1,13 @@
 import { motion } from "framer-motion";
 import { Star, Globe, BarChart3, Zap } from "lucide-react";
 
+import jamesImg from "@/assets/testimonials/james-carter.jpg";
+import sarahImg from "@/assets/testimonials/sarah-mitchell.jpg";
+import davidImg from "@/assets/testimonials/david-chen.jpg";
+import emilyImg from "@/assets/testimonials/emily-rodriguez.jpg";
+import michaelImg from "@/assets/testimonials/michael-brooks.jpg";
+import oliviaImg from "@/assets/testimonials/olivia-tran.jpg";
+
 const trustMetrics = [
   { icon: BarChart3, value: "100+", label: "Tracking Implementations" },
   { icon: Globe, value: "30+", label: "Countries Served" },
