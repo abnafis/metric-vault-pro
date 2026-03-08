@@ -62,6 +62,35 @@ export default function AdminAuditRequests() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [notes, setNotes] = useState("");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+  const toggleAll = () => {
+    if (selectedIds.size === filtered.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(filtered.map(r => r.id)));
+  };
+  const bulkDelete = async () => {
+    if (!selectedIds.size || !confirm(`Delete ${selectedIds.size} requests?`)) return;
+    for (const id of selectedIds) await supabase.from("audit_requests").delete().eq("id", id);
+    toast({ title: `${selectedIds.size} requests deleted` });
+    setSelectedIds(new Set());
+    fetchRequests();
+  };
+  const bulkStatus = async (status: string) => {
+    if (!selectedIds.size) return;
+    for (const id of selectedIds) {
+      await supabase.from("audit_requests").update({ status, updated_at: new Date().toISOString() } as any).eq("id", id);
+    }
+    toast({ title: `${selectedIds.size} requests set to ${status}` });
+    setSelectedIds(new Set());
+    fetchRequests();
+  };
 
   const fetchRequests = async () => {
     const { data, error } = await supabase
@@ -176,11 +205,26 @@ export default function AdminAuditRequests() {
         </Select>
       </div>
 
+      {/* Bulk Actions */}
+      {selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/10 border border-primary/20">
+          <span className="text-sm font-medium text-foreground">{selectedIds.size} selected</span>
+          {STATUS_OPTIONS.map(s => (
+            <Button key={s} size="sm" variant="outline" onClick={() => bulkStatus(s)}>{statusLabels[s]}</Button>
+          ))}
+          <Button size="sm" variant="destructive" onClick={bulkDelete}>Delete</Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelectedIds(new Set())}>Clear</Button>
+        </div>
+      )}
+
       {/* Table */}
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-10">
+                <input type="checkbox" checked={selectedIds.size === filtered.length && filtered.length > 0} onChange={toggleAll} className="rounded border-input" />
+              </TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead className="hidden md:table-cell">Website</TableHead>
@@ -201,7 +245,10 @@ export default function AdminAuditRequests() {
               </TableRow>
             ) : (
               filtered.map((r) => (
-                <TableRow key={r.id}>
+                <TableRow key={r.id} className={selectedIds.has(r.id) ? "bg-primary/5" : ""}>
+                  <TableCell>
+                    <input type="checkbox" checked={selectedIds.has(r.id)} onChange={() => toggleSelect(r.id)} className="rounded border-input" />
+                  </TableCell>
                   <TableCell className="font-medium">{r.name}</TableCell>
                   <TableCell className="text-sm">{r.email}</TableCell>
                   <TableCell className="hidden md:table-cell text-sm max-w-[200px] truncate">{r.website_url}</TableCell>
