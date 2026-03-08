@@ -7,6 +7,7 @@ const navLinks = [
   { label: "Process", href: "#process" },
   { label: "Case Studies", href: "#cases" },
   { label: "About", href: "#about" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const Navbar = () => {
