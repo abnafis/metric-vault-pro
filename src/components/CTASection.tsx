@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
+import { trackGenerateLead, trackCTAClick, buildUserData, trackUserData } from "@/lib/dataLayer";
 
 interface CTAData {
   headline: string;
@@ -84,6 +85,17 @@ const CTASection = () => {
         monthly_ad_spend: form.ad_spend?.trim() || null,
       } as any);
       if (error) throw error;
+
+      // DataLayer: push user_data + generate_lead
+      const nameParts = form.name.trim().split(/\s+/);
+      const userData = await buildUserData({
+        email: form.email,
+        first_name: nameParts[0],
+        last_name: nameParts.slice(1).join(" ") || undefined,
+      });
+      trackUserData(userData);
+      trackGenerateLead("free_audit_form", "tracking_audit", userData);
+
       setSubmitted(true);
     } catch {
       setSubmitted(true);

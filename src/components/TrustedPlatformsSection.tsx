@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { trackPlatformClick } from "@/lib/dataLayer";
 
 import googleAdsLogo from "@/assets/platforms/google-ads.png";
 import metaAdsLogo from "@/assets/platforms/meta-ads.png";
@@ -69,6 +70,7 @@ const TrustedPlatformsSection = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07 }}
                 className="glass-card-hover flex flex-col items-center justify-center gap-3 py-6 px-3 group cursor-default"
+                onClick={() => trackPlatformClick(p.name)}
               >
                 <div className="w-12 h-12 flex items-center justify-center opacity-60 grayscale group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500">
                   <img src={p.logo_url} alt={p.name} className="w-full h-full object-contain" />

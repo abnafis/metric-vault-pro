@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, BarChart3 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
+import { trackNavigationClick, trackCTAClick } from "@/lib/dataLayer";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -22,8 +23,9 @@ const Navbar = () => {
 
   const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (href: string, label?: string) => {
     setOpen(false);
+    if (label) trackNavigationClick(label);
     if (href.startsWith("#")) {
       const el = document.querySelector(href);
       if (el) {
@@ -60,7 +62,9 @@ const Navbar = () => {
               onClick={(e) => {
                 if (l.href.startsWith("#")) {
                   e.preventDefault();
-                  handleNavClick(l.href);
+                  handleNavClick(l.href, l.label);
+                } else {
+                  trackNavigationClick(l.label);
                 }
               }}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
@@ -68,7 +72,7 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <a href="#cta" onClick={(e) => { e.preventDefault(); handleNavClick("#cta"); }} className="btn-primary-glow text-sm px-5 py-2">
+          <a href="#cta" onClick={(e) => { e.preventDefault(); trackCTAClick("nav_get_audit"); handleNavClick("#cta"); }} className="btn-primary-glow text-sm px-5 py-2">
             Get Audit
           </a>
         </div>
@@ -98,8 +102,9 @@ const Navbar = () => {
                   onClick={(e) => {
                     if (l.href.startsWith("#")) {
                       e.preventDefault();
-                      handleNavClick(l.href);
+                      handleNavClick(l.href, l.label);
                     } else {
+                      trackNavigationClick(l.label);
                       setOpen(false);
                     }
                   }}
@@ -110,7 +115,7 @@ const Navbar = () => {
               ))}
               <a
                 href="#cta"
-                onClick={(e) => { e.preventDefault(); handleNavClick("#cta"); }}
+                onClick={(e) => { e.preventDefault(); trackCTAClick("mobile_nav_get_audit"); handleNavClick("#cta"); }}
                 className="btn-primary-glow text-sm px-5 py-2 text-center mt-2"
               >
                 Get Audit
