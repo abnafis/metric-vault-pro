@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroDashboard from "./HeroDashboard";
 import { Star } from "lucide-react";
+import { trackCTAClick } from "@/lib/dataLayer";
 
 import googleAdsLogo from "@/assets/platforms/google-ads.png";
 import metaAdsLogo from "@/assets/platforms/meta-ads.png";
@@ -255,10 +256,10 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
-            <a href={hero.primary_cta_link} className="btn-primary-glow text-sm">
+            <a href={hero.primary_cta_link} onClick={() => trackCTAClick("hero_get_tracking_audit")} className="btn-primary-glow text-sm">
               {hero.primary_cta_text}
             </a>
-            <a href={hero.secondary_cta_link} className="btn-secondary-glass text-sm">
+            <a href={hero.secondary_cta_link} onClick={() => trackCTAClick("hero_view_case_studies")} className="btn-secondary-glass text-sm">
               {hero.secondary_cta_text}
             </a>
           </div>

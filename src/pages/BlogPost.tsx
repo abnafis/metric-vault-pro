@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import DOMPurify from "dompurify";
+import { trackViewArticle } from "@/lib/dataLayer";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +38,9 @@ export default function BlogPost() {
         document.title = postData.meta_title || postData.title;
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc && postData.meta_description) metaDesc.setAttribute("content", postData.meta_description);
+        // DataLayer: track article view
+        const catName = (c as unknown as Category[])?.find(cat => cat.id === postData.category_id)?.name;
+        trackViewArticle(postData.title, catName);
         const { data: rel } = await supabase.from("blog_posts").select("*").eq("status", "published").neq("id", postData.id).limit(3);
         if (rel) setRelated(rel as unknown as Post[]);
       }
