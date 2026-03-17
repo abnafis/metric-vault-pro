@@ -269,7 +269,9 @@ const HeroSection = () => {
 
         {/* Right */}
         <div className="flex justify-center lg:justify-end">
-          {profileImageUrl ? (
+          {profileLoading ? (
+            <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full bg-muted/20 animate-pulse" />
+          ) : profileImageUrl ? (
             <HeroPortraitWithIcons profileImageUrl={profileImageUrl} />
           ) : (
             <HeroDashboard />
