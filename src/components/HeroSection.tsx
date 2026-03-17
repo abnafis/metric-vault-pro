@@ -200,6 +200,7 @@ const HeroSection = () => {
       .maybeSingle()
       .then(({ data }) => {
         if (data && (data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
+        setProfileLoading(false);
       });
     supabase
       .from("testimonials")
