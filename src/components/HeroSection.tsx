@@ -181,6 +181,7 @@ const FloatingReviews = ({ reviews }: { reviews: ReviewSnippet[] }) => {
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [reviews, setReviews] = useState<ReviewSnippet[]>(fallbackReviews);
 
   useEffect(() => {
