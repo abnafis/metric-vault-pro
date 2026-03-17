@@ -181,6 +181,7 @@ const FloatingReviews = ({ reviews }: { reviews: ReviewSnippet[] }) => {
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [reviews, setReviews] = useState<ReviewSnippet[]>(fallbackReviews);
 
   useEffect(() => {
@@ -199,6 +200,7 @@ const HeroSection = () => {
       .maybeSingle()
       .then(({ data }) => {
         if (data && (data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
+        setProfileLoading(false);
       });
     supabase
       .from("testimonials")
@@ -267,7 +269,9 @@ const HeroSection = () => {
 
         {/* Right */}
         <div className="flex justify-center lg:justify-end">
-          {profileImageUrl ? (
+          {profileLoading ? (
+            <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full bg-muted/20 animate-pulse" />
+          ) : profileImageUrl ? (
             <HeroPortraitWithIcons profileImageUrl={profileImageUrl} />
           ) : (
             <HeroDashboard />
