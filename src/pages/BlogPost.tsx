@@ -276,7 +276,7 @@ export default function BlogPost() {
 
           {/* Title */}
           <motion.h1
-            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-foreground leading-[1.15] tracking-tight mb-6"
+            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-gray-900 leading-[1.15] tracking-tight mb-6"
             style={{ textWrap: "balance" } as React.CSSProperties}
             variants={fadeUp}
           >
