@@ -425,7 +425,7 @@ export default function BlogPost() {
                           {getCatName(r.category_id)}
                         </span>
                       )}
-                      <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-snug">
+                      <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-snug">
                         {r.title}
                       </h3>
                       <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
