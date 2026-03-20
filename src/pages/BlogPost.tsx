@@ -191,7 +191,7 @@ export default function BlogPost() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* ── Reading progress bar ── */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent">
         <motion.div
