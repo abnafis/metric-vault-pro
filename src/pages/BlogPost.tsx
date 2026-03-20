@@ -121,14 +121,17 @@ export default function BlogPost() {
 
         {/* Article body — sanitized */}
         <div className="prose prose-invert prose-lg max-w-none
-          prose-headings:font-bold prose-headings:text-foreground
-          prose-p:text-muted-foreground prose-p:leading-relaxed
-          prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-          prose-code:bg-muted prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm
-          prose-pre:bg-muted prose-pre:rounded-lg prose-pre:border prose-pre:border-border
+          text-[hsl(var(--muted-foreground))]
+          prose-headings:font-bold prose-headings:text-[hsl(var(--foreground))]
+          prose-p:text-[hsl(var(--muted-foreground))] prose-p:leading-relaxed
+          prose-a:text-[hsl(var(--primary))] prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-[hsl(var(--foreground))]
+          prose-code:bg-[hsl(var(--muted))] prose-code:text-[hsl(var(--foreground))] prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm
+          prose-pre:bg-[hsl(var(--muted))] prose-pre:rounded-lg prose-pre:border prose-pre:border-[hsl(var(--border))]
           prose-img:rounded-lg prose-img:max-w-full
-          prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-          prose-li:text-muted-foreground"
+          prose-blockquote:border-l-[hsl(var(--primary))] prose-blockquote:text-[hsl(var(--muted-foreground))]
+          prose-li:text-[hsl(var(--muted-foreground))]
+          [&_*]:!text-[hsl(var(--muted-foreground))] [&_h1]:!text-[hsl(var(--foreground))] [&_h2]:!text-[hsl(var(--foreground))] [&_h3]:!text-[hsl(var(--foreground))] [&_h4]:!text-[hsl(var(--foreground))] [&_a]:!text-[hsl(var(--primary))] [&_strong]:!text-[hsl(var(--foreground))]"
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
 
