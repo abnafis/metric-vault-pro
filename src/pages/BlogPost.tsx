@@ -241,7 +241,7 @@ export default function BlogPost() {
                 loading="eager"
               />
               {/* Bottom gradient overlay for seamless blend */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
             </div>
           </motion.div>
         )}
