@@ -399,7 +399,7 @@ export default function BlogPost() {
                 <motion.div key={r.id} variants={fadeUp} custom={i}>
                   <Link
                     to={`/blog/${r.slug}`}
-                    className="group block rounded-2xl overflow-hidden border border-border/30 bg-[hsl(var(--card)/0.5)] hover:border-border/60 transition-all duration-500 hover:shadow-[0_8px_40px_-12px_hsl(var(--glow-blue)/0.12)]"
+                    className="group block rounded-2xl overflow-hidden border border-gray-200 bg-white hover:border-gray-300 transition-all duration-500 hover:shadow-lg"
                   >
                     <div className="relative overflow-hidden">
                       {r.featured_image_url ? (
