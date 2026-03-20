@@ -258,7 +258,7 @@ export default function BlogPost() {
             variants={fadeUp}
           >
             {post.category_id && (
-              <Badge className="bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 text-xs font-medium px-3 py-1">
+              <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 text-xs font-medium px-3 py-1">
                 {getCatName(post.category_id)}
               </Badge>
             )}
