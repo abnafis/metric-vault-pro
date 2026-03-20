@@ -428,7 +428,7 @@ export default function BlogPost() {
                       <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-snug">
                         {r.title}
                       </h3>
-                      <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-3 mt-3 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {r.read_time_minutes} min
