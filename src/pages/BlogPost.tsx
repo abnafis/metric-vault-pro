@@ -412,7 +412,7 @@ export default function BlogPost() {
                       ) : (
                         <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
                           <span className="text-muted-foreground/30 text-4xl font-bold">
-                            {r.title[0]}
+                            <span className="text-gray-300 text-4xl font-bold">{r.title[0]}</span>
                           </span>
                         </div>
                       )}
