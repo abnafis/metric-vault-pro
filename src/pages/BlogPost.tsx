@@ -346,25 +346,25 @@ export default function BlogPost() {
 
         {/* Sanitized article content */}
         <div
-          className="blog-article-content prose prose-invert prose-lg max-w-none
-            [&_*]:!text-[hsl(var(--muted-foreground))]
-            [&_h1]:!text-[hsl(var(--foreground))] [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
-            [&_h2]:!text-[hsl(var(--foreground))] [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
-            [&_h3]:!text-[hsl(var(--foreground))] [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
-            [&_h4]:!text-[hsl(var(--foreground))] [&_h4]:!font-semibold
+          className="blog-article-content prose prose-lg max-w-none
+            [&_*]:!text-gray-700
+            [&_h1]:!text-gray-900 [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
+            [&_h2]:!text-gray-900 [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
+            [&_h3]:!text-gray-900 [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
+            [&_h4]:!text-gray-900 [&_h4]:!font-semibold
             [&_p]:!leading-[1.85] [&_p]:!mb-5
-            [&_a]:!text-[hsl(var(--primary))] [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
-            [&_strong]:!text-[hsl(var(--foreground))] [&_strong]:!font-semibold
-            [&_em]:!text-[hsl(var(--foreground)/0.85)]
-            [&_code]:!bg-[hsl(var(--muted))] [&_code]:!text-[hsl(var(--foreground))] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
-            [&_pre]:!bg-[hsl(var(--muted)/0.6)] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-[hsl(var(--border))] [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8
+            [&_a]:!text-primary [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
+            [&_strong]:!text-gray-900 [&_strong]:!font-semibold
+            [&_em]:!text-gray-600
+            [&_code]:!bg-gray-100 [&_code]:!text-gray-800 [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
+            [&_pre]:!bg-gray-50 [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-gray-200 [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
-            [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-[hsl(var(--glow-purple))] [&_blockquote]:!bg-[hsl(var(--muted)/0.3)] [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
+            [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
-            [&_li]:!text-[hsl(var(--muted-foreground))] [&_li]:!leading-relaxed
+            [&_li]:!text-gray-700 [&_li]:!leading-relaxed
             [&_li::marker]:!text-primary/60
-            [&_hr]:!border-[hsl(var(--border)/0.5)] [&_hr]:!my-10
-            [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-[hsl(var(--foreground))] [&_th]:!border-b [&_th]:!border-[hsl(var(--border))] [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-[hsl(var(--border)/0.3)]"
+            [&_hr]:!border-gray-200 [&_hr]:!my-10
+            [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-gray-900 [&_th]:!border-b [&_th]:!border-gray-200 [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-gray-100"
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </motion.article>
