@@ -299,7 +299,7 @@ export default function BlogPost() {
                   .toUpperCase()}
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-medium text-gray-900">
                   {post.author_name}
                 </p>
                 {post.publish_date && (
