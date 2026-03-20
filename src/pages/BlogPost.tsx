@@ -311,7 +311,7 @@ export default function BlogPost() {
             </div>
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors rounded-lg border border-border/50 px-3 py-2 hover:border-border active:scale-[0.97]"
+              className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-900 transition-colors rounded-lg border border-gray-200 px-3 py-2 hover:border-gray-400 active:scale-[0.97]"
               title="Share article"
             >
               <Share2 className="h-3.5 w-3.5" />
