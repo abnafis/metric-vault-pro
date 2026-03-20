@@ -191,7 +191,7 @@ export default function BlogPost() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       {/* ── Reading progress bar ── */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent">
         <motion.div
@@ -219,7 +219,7 @@ export default function BlogPost() {
           <motion.div variants={fadeUp}>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors group"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />{" "}
               Back to blog
@@ -241,7 +241,7 @@ export default function BlogPost() {
                 loading="eager"
               />
               {/* Bottom gradient overlay for seamless blend */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
             </div>
           </motion.div>
         )}
@@ -258,16 +258,16 @@ export default function BlogPost() {
             variants={fadeUp}
           >
             {post.category_id && (
-              <Badge className="bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 text-xs font-medium px-3 py-1">
+              <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 text-xs font-medium px-3 py-1">
                 {getCatName(post.category_id)}
               </Badge>
             )}
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5 text-xs text-gray-500">
               <Clock className="h-3.5 w-3.5" />
               {post.read_time_minutes} min read
             </span>
             {post.publish_date && (
-              <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5 text-xs text-gray-500">
                 <Calendar className="h-3.5 w-3.5" />
                 {formattedDate}
               </span>
@@ -276,7 +276,7 @@ export default function BlogPost() {
 
           {/* Title */}
           <motion.h1
-            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-foreground leading-[1.15] tracking-tight mb-6"
+            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-gray-900 leading-[1.15] tracking-tight mb-6"
             style={{ textWrap: "balance" } as React.CSSProperties}
             variants={fadeUp}
           >
@@ -285,7 +285,7 @@ export default function BlogPost() {
 
           {/* Author + share row */}
           <motion.div
-            className="flex items-center justify-between gap-4 pb-8 border-b border-border/40"
+            className="flex items-center justify-between gap-4 pb-8 border-b border-gray-200"
             variants={fadeUp}
           >
             <div className="flex items-center gap-3">
@@ -298,11 +298,11 @@ export default function BlogPost() {
                   .toUpperCase()}
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-medium text-gray-900">
                   {post.author_name}
                 </p>
                 {post.publish_date && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-gray-500">
                     {formattedDate}
                   </p>
                 )}
@@ -310,7 +310,7 @@ export default function BlogPost() {
             </div>
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors rounded-lg border border-border/50 px-3 py-2 hover:border-border active:scale-[0.97]"
+              className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-900 transition-colors rounded-lg border border-gray-200 px-3 py-2 hover:border-gray-400 active:scale-[0.97]"
               title="Share article"
             >
               <Share2 className="h-3.5 w-3.5" />
@@ -334,7 +334,7 @@ export default function BlogPost() {
               <Link key={t} to={`/blog?tag=${t}`}>
                 <Badge
                   variant="outline"
-                  className="text-xs border-border/50 text-muted-foreground hover:text-foreground hover:border-border transition-colors"
+                  className="text-xs border-gray-300 text-gray-500 hover:text-gray-900 hover:border-gray-500 transition-colors"
                 >
                   #{t}
                 </Badge>
@@ -345,25 +345,25 @@ export default function BlogPost() {
 
         {/* Sanitized article content */}
         <div
-          className="blog-article-content prose prose-invert prose-lg max-w-none
-            [&_*]:!text-[hsl(var(--muted-foreground))]
-            [&_h1]:!text-[hsl(var(--foreground))] [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
-            [&_h2]:!text-[hsl(var(--foreground))] [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
-            [&_h3]:!text-[hsl(var(--foreground))] [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
-            [&_h4]:!text-[hsl(var(--foreground))] [&_h4]:!font-semibold
+          className="blog-article-content prose prose-lg max-w-none
+            [&_*]:!text-gray-700
+            [&_h1]:!text-gray-900 [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
+            [&_h2]:!text-gray-900 [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
+            [&_h3]:!text-gray-900 [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
+            [&_h4]:!text-gray-900 [&_h4]:!font-semibold
             [&_p]:!leading-[1.85] [&_p]:!mb-5
-            [&_a]:!text-[hsl(var(--primary))] [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
-            [&_strong]:!text-[hsl(var(--foreground))] [&_strong]:!font-semibold
-            [&_em]:!text-[hsl(var(--foreground)/0.85)]
-            [&_code]:!bg-[hsl(var(--muted))] [&_code]:!text-[hsl(var(--foreground))] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
-            [&_pre]:!bg-[hsl(var(--muted)/0.6)] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-[hsl(var(--border))] [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8
+            [&_a]:!text-primary [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
+            [&_strong]:!text-gray-900 [&_strong]:!font-semibold
+            [&_em]:!text-gray-600
+            [&_code]:!bg-gray-100 [&_code]:!text-gray-800 [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
+            [&_pre]:!bg-gray-50 [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-gray-200 [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
-            [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-[hsl(var(--glow-purple))] [&_blockquote]:!bg-[hsl(var(--muted)/0.3)] [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
+            [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
-            [&_li]:!text-[hsl(var(--muted-foreground))] [&_li]:!leading-relaxed
+            [&_li]:!text-gray-700 [&_li]:!leading-relaxed
             [&_li::marker]:!text-primary/60
-            [&_hr]:!border-[hsl(var(--border)/0.5)] [&_hr]:!my-10
-            [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-[hsl(var(--foreground))] [&_th]:!border-b [&_th]:!border-[hsl(var(--border))] [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-[hsl(var(--border)/0.3)]"
+            [&_hr]:!border-gray-200 [&_hr]:!my-10
+            [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-gray-900 [&_th]:!border-b [&_th]:!border-gray-200 [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-gray-100"
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
       </motion.article>
@@ -371,7 +371,7 @@ export default function BlogPost() {
       {/* ── Related posts ── */}
       {related.length > 0 && (
         <motion.section
-          className="border-t border-border/30 bg-[hsl(var(--card)/0.3)]"
+          className="border-t border-gray-200 bg-gray-50"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
@@ -382,12 +382,12 @@ export default function BlogPost() {
               className="flex items-center justify-between mb-10"
               variants={fadeUp}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
                 Continue Reading
               </h2>
               <Link
                 to="/blog"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 group"
               >
                 All articles{" "}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -398,7 +398,7 @@ export default function BlogPost() {
                 <motion.div key={r.id} variants={fadeUp} custom={i}>
                   <Link
                     to={`/blog/${r.slug}`}
-                    className="group block rounded-2xl overflow-hidden border border-border/30 bg-[hsl(var(--card)/0.5)] hover:border-border/60 transition-all duration-500 hover:shadow-[0_8px_40px_-12px_hsl(var(--glow-blue)/0.12)]"
+                    className="group block rounded-2xl overflow-hidden border border-gray-200 bg-white hover:border-gray-300 transition-all duration-500 hover:shadow-lg"
                   >
                     <div className="relative overflow-hidden">
                       {r.featured_image_url ? (
@@ -409,14 +409,14 @@ export default function BlogPost() {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-44 bg-muted/20 flex items-center justify-center">
+                        <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
                           <span className="text-muted-foreground/30 text-4xl font-bold">
-                            {r.title[0]}
+                            <span className="text-gray-300 text-4xl font-bold">{r.title[0]}</span>
                           </span>
                         </div>
                       )}
                       {/* Subtle overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
                     <div className="p-5">
                       {r.category_id && (
@@ -424,10 +424,10 @@ export default function BlogPost() {
                           {getCatName(r.category_id)}
                         </span>
                       )}
-                      <h3 className="font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-snug">
+                      <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-snug">
                         {r.title}
                       </h3>
-                      <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-3 mt-3 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {r.read_time_minutes} min
