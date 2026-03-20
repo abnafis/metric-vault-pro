@@ -388,7 +388,7 @@ export default function BlogPost() {
               </h2>
               <Link
                 to="/blog"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+                className="text-sm text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 group"
               >
                 All articles{" "}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
