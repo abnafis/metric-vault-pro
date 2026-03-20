@@ -383,7 +383,7 @@ export default function BlogPost() {
               className="flex items-center justify-between mb-10"
               variants={fadeUp}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
                 Continue Reading
               </h2>
               <Link
