@@ -372,7 +372,7 @@ export default function BlogPost() {
       {/* ── Related posts ── */}
       {related.length > 0 && (
         <motion.section
-          className="border-t border-border/30 bg-[hsl(var(--card)/0.3)]"
+          className="border-t border-gray-200 bg-gray-50"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
