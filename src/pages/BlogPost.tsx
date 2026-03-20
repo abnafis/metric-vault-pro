@@ -285,7 +285,7 @@ export default function BlogPost() {
 
           {/* Author + share row */}
           <motion.div
-            className="flex items-center justify-between gap-4 pb-8 border-b border-border/40"
+            className="flex items-center justify-between gap-4 pb-8 border-b border-gray-200"
             variants={fadeUp}
           >
             <div className="flex items-center gap-3">
