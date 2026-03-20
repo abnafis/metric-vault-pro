@@ -303,7 +303,7 @@ export default function BlogPost() {
                   {post.author_name}
                 </p>
                 {post.publish_date && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-gray-500">
                     {formattedDate}
                   </p>
                 )}
