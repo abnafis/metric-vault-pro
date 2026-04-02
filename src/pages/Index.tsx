@@ -12,6 +12,7 @@ import AboutSection from "@/components/AboutSection";
 import BlogSection from "@/components/BlogSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import FloatingSocials from "@/components/FloatingSocials";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const Index = () => {
@@ -37,6 +38,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <FloatingSocials />
       <HeroSection />
       <PlatformsSection />
       <ServicesSection />
