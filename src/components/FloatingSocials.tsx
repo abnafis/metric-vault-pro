@@ -54,7 +54,7 @@ const FloatingSocials = () => {
           </motion.a>
         );
       })}
-      <div className="w-px h-8 bg-border/50 mx-auto" />
+      <div className="h-px w-8 bg-border/50 my-auto" />
     </motion.div>
   );
 };
