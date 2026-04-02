@@ -31,7 +31,7 @@ const FloatingSocials = () => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 1.5, duration: 0.5 }}
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-3"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden md:flex flex-row gap-3"
     >
       {visible.map((link, i) => {
         const Icon = getIcon(link.label);
