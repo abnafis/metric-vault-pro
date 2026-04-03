@@ -130,9 +130,9 @@ export default function BlogPost() {
         const btn = document.createElement('button');
         btn.className = 'copy-code-btn';
         btn.textContent = 'Copy';
-        btn.style.cssText = 'position:absolute;top:8px;right:8px;padding:4px 12px;font-size:12px;font-family:inherit;color:#a1a1aa;background:#27272a;border:1px solid #3f3f46;border-radius:6px;cursor:pointer;transition:all 0.2s;z-index:10;';
-        btn.onmouseenter = () => { btn.style.background = '#3f3f46'; btn.style.color = '#e4e4e7'; };
-        btn.onmouseleave = () => { btn.style.background = '#27272a'; btn.style.color = '#a1a1aa'; };
+        btn.style.cssText = 'position:absolute;top:10px;right:10px;padding:5px 10px;font-size:12px;font-family:inherit;color:#565f89;background:transparent;border:1px solid #2f3349;border-radius:6px;cursor:pointer;transition:all 0.2s;z-index:10;';
+        btn.onmouseenter = () => { btn.style.background = '#2f3349'; btn.style.color = '#9aa5ce'; };
+        btn.onmouseleave = () => { btn.style.background = 'transparent'; btn.style.color = '#565f89'; };
         btn.onclick = () => {
           const code = pre.querySelector('code')?.textContent || pre.textContent || '';
           navigator.clipboard.writeText(code).then(() => {
