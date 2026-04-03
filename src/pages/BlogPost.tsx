@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import DOMPurify from "dompurify";
+import hljs from "highlight.js";
+import "highlight.js/styles/tokyo-night-dark.css";
 import { trackViewArticle } from "@/lib/dataLayer";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -119,32 +121,37 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Inject copy buttons into code blocks
+  // Syntax highlight + copy buttons
   useEffect(() => {
     if (!post) return;
     const timer = setTimeout(() => {
       const container = document.querySelector('.blog-article-content');
       if (!container) return;
+      container.querySelectorAll('pre code').forEach((block) => {
+        if (!(block as HTMLElement).classList.contains('hljs')) {
+          hljs.highlightElement(block as HTMLElement);
+        }
+      });
       container.querySelectorAll('pre').forEach((pre) => {
         if (pre.querySelector('.copy-code-btn')) return;
         const btn = document.createElement('button');
         btn.className = 'copy-code-btn';
-        btn.textContent = 'Copy';
-        btn.style.cssText = 'position:absolute;top:10px;right:10px;padding:5px 10px;font-size:12px;font-family:inherit;color:#565f89;background:transparent;border:1px solid #2f3349;border-radius:6px;cursor:pointer;transition:all 0.2s;z-index:10;';
-        btn.onmouseenter = () => { btn.style.background = '#2f3349'; btn.style.color = '#9aa5ce'; };
-        btn.onmouseleave = () => { btn.style.background = 'transparent'; btn.style.color = '#565f89'; };
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>';
+        btn.style.cssText = 'position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:12px;font-family:inherit;color:#7982a9;background:rgba(30,32,48,0.8);border:1px solid rgba(65,70,100,0.4);border-radius:8px;cursor:pointer;transition:all 0.2s;z-index:10;backdrop-filter:blur(4px);';
+        btn.onmouseenter = () => { btn.style.background = 'rgba(50,54,80,0.9)'; btn.style.color = '#c0caf5'; btn.style.borderColor = 'rgba(100,108,154,0.6)'; };
+        btn.onmouseleave = () => { btn.style.background = 'rgba(30,32,48,0.8)'; btn.style.color = '#7982a9'; btn.style.borderColor = 'rgba(65,70,100,0.4)'; };
         btn.onclick = () => {
           const code = pre.querySelector('code')?.textContent || pre.textContent || '';
           navigator.clipboard.writeText(code).then(() => {
-            btn.textContent = 'Copied!';
-            btn.style.color = '#4ade80';
-            setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a1a1aa'; }, 2000);
+            const span = btn.querySelector('span');
+            if (span) { span.textContent = 'Copied!'; btn.style.color = '#9ece6a'; }
+            setTimeout(() => { if (span) span.textContent = 'Copy'; btn.style.color = '#7982a9'; }, 2000);
           });
         };
         pre.style.position = 'relative';
         pre.appendChild(btn);
       });
-    }, 100);
+    }, 150);
     return () => clearTimeout(timer);
   }, [post]);
 
@@ -384,9 +391,9 @@ export default function BlogPost() {
             [&_a]:!text-primary [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
             [&_strong]:!text-gray-900 [&_strong]:!font-semibold
             [&_em]:!text-gray-600
-            [&_code]:!bg-gray-800 [&_code]:!text-gray-100 [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-[13px] [&_code]:!font-mono
-            [&_pre]:!bg-[#1a1b26] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-gray-700/50 [&_pre]:!p-5 [&_pre]:!pt-12 [&_pre]:!overflow-auto [&_pre]:!my-8 [&_pre]:!relative [&_pre]:!max-h-[400px]
-            [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-[#9aa5ce] [&_pre_code]:!text-[13px] [&_pre_code]:!leading-relaxed
+            [&_code]:!bg-[#1e2030] [&_code]:!text-[#c0caf5] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-[13px] [&_code]:!font-mono [&_code]:!border [&_code]:!border-[#2f3349]
+            [&_pre]:!bg-[#1a1b26] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-[#2f3349] [&_pre]:!p-5 [&_pre]:!pt-14 [&_pre]:!overflow-auto [&_pre]:!my-8 [&_pre]:!relative [&_pre]:!max-h-[400px] [&_pre]:!shadow-[0_4px_24px_rgba(0,0,0,0.3)]
+            [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-[13px] [&_pre_code]:!leading-relaxed [&_pre_code]:!border-0
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
             [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
