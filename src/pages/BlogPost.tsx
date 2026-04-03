@@ -382,7 +382,7 @@ export default function BlogPost() {
         {/* Sanitized article content */}
         <div
           className="blog-article-content prose prose-lg max-w-none
-            [&_*]:!text-gray-700
+            [&>*]:!text-gray-700 [&_p]:!text-gray-700 [&_li]:!text-gray-700 [&_td]:!text-gray-700 [&_span]:!text-gray-700
             [&_h1]:!text-gray-900 [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
             [&_h2]:!text-gray-900 [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
             [&_h3]:!text-gray-900 [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
@@ -394,10 +394,11 @@ export default function BlogPost() {
             [&_code]:!bg-[#1e2030] [&_code]:!text-[#c0caf5] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-[13px] [&_code]:!font-mono [&_code]:!border [&_code]:!border-[#2f3349]
             [&_pre]:!bg-[#1a1b26] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-[#2f3349] [&_pre]:!p-5 [&_pre]:!pt-14 [&_pre]:!overflow-auto [&_pre]:!my-8 [&_pre]:!relative [&_pre]:!max-h-[400px] [&_pre]:!shadow-[0_4px_24px_rgba(0,0,0,0.3)]
             [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-[13px] [&_pre_code]:!leading-relaxed [&_pre_code]:!border-0
+            [&_pre_span]:!text-inherit [&_pre_.hljs]:!bg-transparent
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
             [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
-            [&_li]:!text-gray-700 [&_li]:!leading-relaxed
+            [&_li]:!leading-relaxed
             [&_li::marker]:!text-primary/60
             [&_hr]:!border-gray-200 [&_hr]:!my-10
             [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-gray-900 [&_th]:!border-b [&_th]:!border-gray-200 [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-gray-100"
