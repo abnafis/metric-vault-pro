@@ -119,6 +119,35 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Inject copy buttons into code blocks
+  useEffect(() => {
+    if (!post) return;
+    const timer = setTimeout(() => {
+      const container = document.querySelector('.blog-article-content');
+      if (!container) return;
+      container.querySelectorAll('pre').forEach((pre) => {
+        if (pre.querySelector('.copy-code-btn')) return;
+        const btn = document.createElement('button');
+        btn.className = 'copy-code-btn';
+        btn.textContent = 'Copy';
+        btn.style.cssText = 'position:absolute;top:8px;right:8px;padding:4px 12px;font-size:12px;font-family:inherit;color:#a1a1aa;background:#27272a;border:1px solid #3f3f46;border-radius:6px;cursor:pointer;transition:all 0.2s;z-index:10;';
+        btn.onmouseenter = () => { btn.style.background = '#3f3f46'; btn.style.color = '#e4e4e7'; };
+        btn.onmouseleave = () => { btn.style.background = '#27272a'; btn.style.color = '#a1a1aa'; };
+        btn.onclick = () => {
+          const code = pre.querySelector('code')?.textContent || pre.textContent || '';
+          navigator.clipboard.writeText(code).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.color = '#4ade80';
+            setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a1a1aa'; }, 2000);
+          });
+        };
+        pre.style.position = 'relative';
+        pre.appendChild(btn);
+      });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [post]);
+
   const getCatName = (id: string | null) =>
     categories.find((c) => c.id === id)?.name || "";
 
