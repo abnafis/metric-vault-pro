@@ -127,31 +127,46 @@ export default function BlogPost() {
     const timer = setTimeout(() => {
       const container = document.querySelector('.blog-article-content');
       if (!container) return;
+
+      // Highlight code blocks
       container.querySelectorAll('pre code').forEach((block) => {
         if (!(block as HTMLElement).classList.contains('hljs')) {
           hljs.highlightElement(block as HTMLElement);
         }
       });
+
+      // Wrap each pre in a relative container and add a sticky copy button
       container.querySelectorAll('pre').forEach((pre) => {
-        if (pre.querySelector('.copy-code-btn')) return;
+        if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
+
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        wrapper.style.cssText = 'position:relative;margin:2rem 0;';
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        // Style pre for internal scroll
+        pre.style.cssText = 'margin:0;border-radius:12px;overflow:auto;max-height:400px;padding:20px;padding-top:20px;background:#1a1b26;border:1px solid #2f3349;box-shadow:0 4px 24px rgba(0,0,0,0.3);';
+
+        // Create copy button OUTSIDE the scrollable pre
         const btn = document.createElement('button');
         btn.className = 'copy-code-btn';
         btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>';
-        btn.style.cssText = 'position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:12px;font-family:inherit;color:#7982a9;background:rgba(30,32,48,0.8);border:1px solid rgba(65,70,100,0.4);border-radius:8px;cursor:pointer;transition:all 0.2s;z-index:10;backdrop-filter:blur(4px);';
-        btn.onmouseenter = () => { btn.style.background = 'rgba(50,54,80,0.9)'; btn.style.color = '#c0caf5'; btn.style.borderColor = 'rgba(100,108,154,0.6)'; };
-        btn.onmouseleave = () => { btn.style.background = 'rgba(30,32,48,0.8)'; btn.style.color = '#7982a9'; btn.style.borderColor = 'rgba(65,70,100,0.4)'; };
+        btn.style.cssText = 'position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;font-family:inherit;color:#9aa5ce;background:rgba(26,27,38,0.95);border:1px solid rgba(65,70,100,0.5);border-radius:8px;cursor:pointer;transition:all 0.2s;z-index:10;backdrop-filter:blur(8px);';
+        btn.onmouseenter = () => { btn.style.background = 'rgba(50,54,80,0.95)'; btn.style.color = '#c0caf5'; btn.style.borderColor = 'rgba(100,108,154,0.7)'; };
+        btn.onmouseleave = () => { btn.style.background = 'rgba(26,27,38,0.95)'; btn.style.color = '#9aa5ce'; btn.style.borderColor = 'rgba(65,70,100,0.5)'; };
         btn.onclick = () => {
           const code = pre.querySelector('code')?.textContent || pre.textContent || '';
           navigator.clipboard.writeText(code).then(() => {
             const span = btn.querySelector('span');
             if (span) { span.textContent = 'Copied!'; btn.style.color = '#9ece6a'; }
-            setTimeout(() => { if (span) span.textContent = 'Copy'; btn.style.color = '#7982a9'; }, 2000);
+            setTimeout(() => { if (span) span.textContent = 'Copy'; btn.style.color = '#9aa5ce'; }, 2000);
           });
         };
-        pre.style.position = 'relative';
-        pre.appendChild(btn);
+        wrapper.appendChild(btn);
       });
-    }, 150);
+    }, 200);
     return () => clearTimeout(timer);
   }, [post]);
 
