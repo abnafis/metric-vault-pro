@@ -119,6 +119,35 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Inject copy buttons into code blocks
+  useEffect(() => {
+    if (!post) return;
+    const timer = setTimeout(() => {
+      const container = document.querySelector('.blog-article-content');
+      if (!container) return;
+      container.querySelectorAll('pre').forEach((pre) => {
+        if (pre.querySelector('.copy-code-btn')) return;
+        const btn = document.createElement('button');
+        btn.className = 'copy-code-btn';
+        btn.textContent = 'Copy';
+        btn.style.cssText = 'position:absolute;top:8px;right:8px;padding:4px 12px;font-size:12px;font-family:inherit;color:#a1a1aa;background:#27272a;border:1px solid #3f3f46;border-radius:6px;cursor:pointer;transition:all 0.2s;z-index:10;';
+        btn.onmouseenter = () => { btn.style.background = '#3f3f46'; btn.style.color = '#e4e4e7'; };
+        btn.onmouseleave = () => { btn.style.background = '#27272a'; btn.style.color = '#a1a1aa'; };
+        btn.onclick = () => {
+          const code = pre.querySelector('code')?.textContent || pre.textContent || '';
+          navigator.clipboard.writeText(code).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.color = '#4ade80';
+            setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = '#a1a1aa'; }, 2000);
+          });
+        };
+        pre.style.position = 'relative';
+        pre.appendChild(btn);
+      });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [post]);
+
   const getCatName = (id: string | null) =>
     categories.find((c) => c.id === id)?.name || "";
 
@@ -355,8 +384,9 @@ export default function BlogPost() {
             [&_a]:!text-primary [&_a]:!underline [&_a]:!underline-offset-4 [&_a]:!decoration-primary/30 hover:[&_a]:!decoration-primary
             [&_strong]:!text-gray-900 [&_strong]:!font-semibold
             [&_em]:!text-gray-600
-            [&_code]:!bg-gray-100 [&_code]:!text-gray-800 [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
-            [&_pre]:!bg-gray-50 [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-gray-200 [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8
+            [&_code]:!bg-gray-800 [&_code]:!text-gray-100 [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-sm [&_code]:!font-mono
+            [&_pre]:!bg-gray-900 [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-gray-700 [&_pre]:!p-5 [&_pre]:!overflow-x-auto [&_pre]:!my-8 [&_pre]:!relative
+            [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-gray-200
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
             [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
