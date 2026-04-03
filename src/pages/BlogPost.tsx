@@ -407,7 +407,7 @@ export default function BlogPost() {
             [&_strong]:!text-gray-900 [&_strong]:!font-semibold
             [&_em]:!text-gray-600
             [&_code]:!bg-[#1e2030] [&_code]:!text-[#c0caf5] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-[13px] [&_code]:!font-mono [&_code]:!border [&_code]:!border-[#2f3349]
-            [&_pre]:!bg-[#1a1b26] [&_pre]:!rounded-xl [&_pre]:!border [&_pre]:!border-[#2f3349] [&_pre]:!p-5 [&_pre]:!pt-14 [&_pre]:!overflow-auto [&_pre]:!my-8 [&_pre]:!relative [&_pre]:!max-h-[400px] [&_pre]:!shadow-[0_4px_24px_rgba(0,0,0,0.3)]
+            [&_pre]:!my-0 [&_pre]:!shadow-none [&_pre]:!border-0 [&_pre]:!bg-transparent [&_pre]:!p-0 [&_pre]:!max-h-none [&_pre]:!rounded-none
             [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-[13px] [&_pre_code]:!leading-relaxed [&_pre_code]:!border-0
             [&_pre_span]:!text-inherit [&_pre_.hljs]:!bg-transparent
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
