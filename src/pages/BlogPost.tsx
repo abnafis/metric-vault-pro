@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import DOMPurify from "dompurify";
+import hljs from "highlight.js";
+import "highlight.js/styles/tokyo-night-dark.css";
 import { trackViewArticle } from "@/lib/dataLayer";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
