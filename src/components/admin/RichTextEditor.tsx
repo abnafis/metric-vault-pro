@@ -225,26 +225,6 @@ export default function RichTextEditor({ content, onChange, placeholder = "Start
         </ToolBtn>
       </div>
 
-      {/* Bubble Menu for inline formatting */}
-      {editor && (
-        <BubbleMenu editor={editor} tippyOptions={{ duration: 150 }} className="flex items-center gap-0.5 rounded-lg border border-border bg-card p-1 shadow-lg">
-          <ToolBtn title="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
-            <Bold className="h-3.5 w-3.5" />
-          </ToolBtn>
-          <ToolBtn title="Italic" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}>
-            <Italic className="h-3.5 w-3.5" />
-          </ToolBtn>
-          <ToolBtn title="Underline" active={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}>
-            <UnderlineIcon className="h-3.5 w-3.5" />
-          </ToolBtn>
-          <ToolBtn title="Highlight" active={editor.isActive("highlight")} onClick={() => editor.chain().focus().toggleHighlight().run()}>
-            <Highlighter className="h-3.5 w-3.5" />
-          </ToolBtn>
-          <ToolBtn title="Link" active={editor.isActive("link")} onClick={setLink}>
-            <LinkIcon className="h-3.5 w-3.5" />
-          </ToolBtn>
-        </BubbleMenu>
-      )}
 
       {/* Editor Area */}
       <EditorContent editor={editor} className="[&_.tiptap]:min-h-[350px] [&_.tiptap_p.is-editor-empty:first-child::before]:text-muted-foreground [&_.tiptap_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.tiptap_p.is-editor-empty:first-child::before]:float-left [&_.tiptap_p.is-editor-empty:first-child::before]:pointer-events-none [&_.tiptap_p.is-editor-empty:first-child::before]:h-0 [&_.tiptap_pre]:bg-[#1a1b26] [&_.tiptap_pre]:rounded-lg [&_.tiptap_pre]:p-4 [&_.tiptap_pre]:text-sm [&_.tiptap_pre]:overflow-x-auto [&_.tiptap_blockquote]:border-l-4 [&_.tiptap_blockquote]:border-primary/50 [&_.tiptap_blockquote]:pl-4 [&_.tiptap_blockquote]:italic [&_.tiptap_blockquote]:text-muted-foreground [&_.tiptap_hr]:border-border [&_.tiptap_img]:rounded-lg [&_.tiptap_img]:max-w-full" />
