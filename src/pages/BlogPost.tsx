@@ -64,6 +64,65 @@ const scaleFade = {
   },
 };
 
+const enhanceCodeBlocks = (html: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  doc.body.querySelectorAll("pre").forEach((pre, index) => {
+    const existingCode = pre.querySelector("code");
+    const rawCode = existingCode?.textContent ?? pre.textContent ?? "";
+
+    if (!rawCode.trim()) return;
+
+    const detectedLanguage = existingCode?.className
+      .match(/(?:language|lang)-([a-z0-9#+-]+)/i)?.[1]
+      ?.toLowerCase();
+
+    let highlightedCode = "";
+
+    try {
+      highlightedCode = detectedLanguage && hljs.getLanguage(detectedLanguage)
+        ? hljs.highlight(rawCode, { language: detectedLanguage }).value
+        : hljs.highlightAuto(rawCode).value;
+    } catch {
+      highlightedCode = hljs.highlightAuto(rawCode).value;
+    }
+
+    const wrapper = doc.createElement("div");
+    wrapper.className = "code-block-wrapper not-prose my-8";
+
+    const frame = doc.createElement("div");
+    frame.className =
+      "relative w-full overflow-hidden rounded-2xl border border-[#2f3349] bg-[#1a1b26] shadow-[0_20px_45px_rgba(15,23,42,0.28)]";
+
+    const button = doc.createElement("button");
+    button.type = "button";
+    button.className =
+      "copy-code-btn absolute right-3 top-3 z-10 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs font-semibold text-[#c0caf5] backdrop-blur-md transition-all duration-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20";
+    button.setAttribute("aria-label", "Copy code block");
+    button.setAttribute("data-copy-target", `blog-code-${index}`);
+    button.innerHTML = '<span aria-hidden="true">⧉</span><span data-copy-label>Copy code</span>';
+
+    const nextPre = doc.createElement("pre");
+    nextPre.className = "m-0 h-[400px] w-full overflow-auto bg-transparent p-5 pt-16";
+
+    const nextCode = doc.createElement("code");
+    nextCode.id = `blog-code-${index}`;
+    nextCode.className = `hljs block min-w-full text-[13px] leading-6 ${
+      detectedLanguage ? `language-${detectedLanguage}` : ""
+    }`;
+    nextCode.innerHTML = highlightedCode;
+
+    nextPre.appendChild(nextCode);
+    frame.appendChild(button);
+    frame.appendChild(nextPre);
+    wrapper.appendChild(frame);
+    pre.replaceWith(wrapper);
+  });
+
+  return doc.body.innerHTML;
+};
+
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
@@ -121,55 +180,6 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Syntax highlight + copy buttons
-  useEffect(() => {
-    if (!post) return;
-    const timer = setTimeout(() => {
-      const container = document.querySelector('.blog-article-content');
-      if (!container) return;
-
-      // Highlight code blocks
-      container.querySelectorAll('pre code').forEach((block) => {
-        if (!(block as HTMLElement).classList.contains('hljs')) {
-          hljs.highlightElement(block as HTMLElement);
-        }
-      });
-
-      // Wrap each pre in a relative container and add a sticky copy button
-      container.querySelectorAll('pre').forEach((pre) => {
-        if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
-
-        // Create wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'code-block-wrapper';
-        wrapper.style.cssText = 'position:relative;margin:2rem 0;';
-        pre.parentNode?.insertBefore(wrapper, pre);
-        wrapper.appendChild(pre);
-
-        // Style pre for internal scroll
-        pre.style.cssText = 'margin:0 !important;border-radius:12px !important;overflow:auto !important;max-height:400px !important;padding:20px !important;background:#1a1b26 !important;border:1px solid #2f3349 !important;box-shadow:0 4px 24px rgba(0,0,0,0.3) !important;';
-
-        // Create copy button OUTSIDE the scrollable pre
-        const btn = document.createElement('button');
-        btn.className = 'copy-code-btn';
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>';
-        btn.style.cssText = 'position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;font-family:inherit;color:#9aa5ce;background:rgba(26,27,38,0.95);border:1px solid rgba(65,70,100,0.5);border-radius:8px;cursor:pointer;transition:all 0.2s;z-index:10;backdrop-filter:blur(8px);';
-        btn.onmouseenter = () => { btn.style.background = 'rgba(50,54,80,0.95)'; btn.style.color = '#c0caf5'; btn.style.borderColor = 'rgba(100,108,154,0.7)'; };
-        btn.onmouseleave = () => { btn.style.background = 'rgba(26,27,38,0.95)'; btn.style.color = '#9aa5ce'; btn.style.borderColor = 'rgba(65,70,100,0.5)'; };
-        btn.onclick = () => {
-          const code = pre.querySelector('code')?.textContent || pre.textContent || '';
-          navigator.clipboard.writeText(code).then(() => {
-            const span = btn.querySelector('span');
-            if (span) { span.textContent = 'Copied!'; btn.style.color = '#9ece6a'; }
-            setTimeout(() => { if (span) span.textContent = 'Copy'; btn.style.color = '#9aa5ce'; }, 2000);
-          });
-        };
-        wrapper.appendChild(btn);
-      });
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [post]);
-
   const getCatName = (id: string | null) =>
     categories.find((c) => c.id === id)?.name || "";
 
@@ -191,6 +201,61 @@ export default function BlogPost() {
     } else {
       await navigator.clipboard.writeText(window.location.href);
     }
+  };
+
+  const renderedContent = useMemo(() => {
+    if (!post?.content) return "";
+
+    const cleanHtml = DOMPurify.sanitize(post.content, {
+      ADD_TAGS: ["iframe"],
+      ADD_ATTR: [
+        "allow",
+        "allowfullscreen",
+        "frameborder",
+        "scrolling",
+        "target",
+      ],
+    });
+
+    return enhanceCodeBlocks(cleanHtml);
+  }, [post?.content]);
+
+  const handleArticleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const copyButton = target.closest<HTMLButtonElement>(".copy-code-btn");
+
+    if (!copyButton) return;
+
+    const targetId = copyButton.getAttribute("data-copy-target");
+    const codeText = targetId
+      ? document.getElementById(targetId)?.textContent ?? ""
+      : "";
+
+    if (!codeText) return;
+
+    const label = copyButton.querySelector<HTMLElement>("[data-copy-label]");
+    const resetLabel = () => {
+      if (label) label.textContent = "Copy code";
+      copyButton.style.color = "#c0caf5";
+    };
+
+    window.clearTimeout(Number(copyButton.dataset.timeoutId || 0));
+
+    try {
+      await navigator.clipboard.writeText(codeText);
+      if (label) label.textContent = "Copied!";
+      copyButton.style.color = "#9ece6a";
+    } catch {
+      if (label) label.textContent = "Copy failed";
+      copyButton.style.color = "#f7768e";
+    }
+
+    copyButton.dataset.timeoutId = String(
+      window.setTimeout(() => {
+        resetLabel();
+        delete copyButton.dataset.timeoutId;
+      }, 2000)
+    );
   };
 
   /* ——— Loading skeleton ——— */
@@ -229,17 +294,6 @@ export default function BlogPost() {
         <Footer />
       </div>
     );
-
-  const sanitizedContent = DOMPurify.sanitize(post.content, {
-    ADD_TAGS: ["iframe"],
-    ADD_ATTR: [
-      "allow",
-      "allowfullscreen",
-      "frameborder",
-      "scrolling",
-      "target",
-    ],
-  });
 
   return (
     <div className="min-h-screen bg-white">
@@ -397,7 +451,7 @@ export default function BlogPost() {
         {/* Sanitized article content */}
         <div
           className="blog-article-content prose prose-lg max-w-none
-            [&>*]:!text-gray-700 [&_p]:!text-gray-700 [&_li]:!text-gray-700 [&_td]:!text-gray-700 [&_span]:!text-gray-700
+            [&>*]:!text-gray-700 [&_p]:!text-gray-700 [&_li]:!text-gray-700 [&_td]:!text-gray-700
             [&_h1]:!text-gray-900 [&_h1]:!text-2xl [&_h1]:!sm:text-3xl [&_h1]:!font-bold [&_h1]:!mt-12 [&_h1]:!mb-5
             [&_h2]:!text-gray-900 [&_h2]:!text-xl [&_h2]:!sm:text-2xl [&_h2]:!font-bold [&_h2]:!mt-10 [&_h2]:!mb-4 [&_h2]:!border-l-[3px] [&_h2]:!border-l-primary [&_h2]:!pl-4
             [&_h3]:!text-gray-900 [&_h3]:!text-lg [&_h3]:!font-semibold [&_h3]:!mt-8 [&_h3]:!mb-3
@@ -407,10 +461,8 @@ export default function BlogPost() {
             [&_strong]:!text-gray-900 [&_strong]:!font-semibold
             [&_em]:!text-gray-600
             [&_code]:!bg-[#1e2030] [&_code]:!text-[#c0caf5] [&_code]:!rounded-md [&_code]:!px-2 [&_code]:!py-1 [&_code]:!text-[13px] [&_code]:!font-mono [&_code]:!border [&_code]:!border-[#2f3349]
-            [&_.code-block-wrapper_pre]:!my-0 [&_.code-block-wrapper_pre]:!shadow-none [&_.code-block-wrapper_pre]:!border-[#2f3349] [&_.code-block-wrapper_pre]:!bg-[#1a1b26] [&_.code-block-wrapper_pre]:!rounded-xl [&_.code-block-wrapper_pre]:!max-h-[400px] [&_.code-block-wrapper_pre]:!overflow-auto [&_.code-block-wrapper_pre]:!p-5
             [&_pre_code]:!bg-transparent [&_pre_code]:!p-0 [&_pre_code]:!text-[13px] [&_pre_code]:!leading-relaxed [&_pre_code]:!border-0
-            [&_pre_span]:!text-inherit [&_pre_.hljs]:!bg-transparent
-            [&_pre:not(.code-block-wrapper_pre)]:!bg-[#1a1b26] [&_pre:not(.code-block-wrapper_pre)]:!rounded-xl [&_pre:not(.code-block-wrapper_pre)]:!p-5 [&_pre:not(.code-block-wrapper_pre)]:!max-h-[400px] [&_pre:not(.code-block-wrapper_pre)]:!overflow-auto [&_pre:not(.code-block-wrapper_pre)]:!border [&_pre:not(.code-block-wrapper_pre)]:!border-[#2f3349]
+            [&_pre_.hljs]:!bg-transparent
             [&_img]:!rounded-xl [&_img]:!max-w-full [&_img]:!my-8
             [&_blockquote]:!border-l-[3px] [&_blockquote]:!border-l-primary [&_blockquote]:!bg-gray-50 [&_blockquote]:!rounded-r-xl [&_blockquote]:!pl-6 [&_blockquote]:!py-4 [&_blockquote]:!my-8 [&_blockquote]:!italic
             [&_ul]:!space-y-2 [&_ol]:!space-y-2
@@ -418,7 +470,8 @@ export default function BlogPost() {
             [&_li::marker]:!text-primary/60
             [&_hr]:!border-gray-200 [&_hr]:!my-10
             [&_table]:!border-collapse [&_th]:!text-left [&_th]:!text-gray-900 [&_th]:!border-b [&_th]:!border-gray-200 [&_th]:!pb-3 [&_td]:!py-3 [&_td]:!border-b [&_td]:!border-gray-100"
-          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          onClick={handleArticleClick}
+          dangerouslySetInnerHTML={{ __html: renderedContent }}
         />
       </motion.article>
 
