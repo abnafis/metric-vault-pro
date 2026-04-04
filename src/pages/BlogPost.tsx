@@ -147,7 +147,7 @@ export default function BlogPost() {
         wrapper.appendChild(pre);
 
         // Style pre for internal scroll
-        pre.style.cssText = 'margin:0;border-radius:12px;overflow:auto;max-height:400px;padding:20px;padding-top:20px;background:#1a1b26;border:1px solid #2f3349;box-shadow:0 4px 24px rgba(0,0,0,0.3);';
+        pre.style.cssText = 'margin:0 !important;border-radius:12px !important;overflow:auto !important;max-height:400px !important;padding:20px !important;background:#1a1b26 !important;border:1px solid #2f3349 !important;box-shadow:0 4px 24px rgba(0,0,0,0.3) !important;';
 
         // Create copy button OUTSIDE the scrollable pre
         const btn = document.createElement('button');
