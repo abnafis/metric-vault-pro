@@ -68,7 +68,7 @@ function FormFieldEditor({ fields, onChange }: { fields: FormField[]; onChange: 
   const removeField = (i: number) => onChange(fields.filter((_, idx) => idx !== i));
   const updateField = (i: number, key: string, value: unknown) => {
     const updated = [...fields];
-    (updated[i] as Record<string, unknown>)[key] = value;
+    (updated[i] as unknown as Record<string, unknown>)[key] = value;
     onChange(updated);
   };
 
@@ -155,16 +155,16 @@ export default function AdminFunnelEditor() {
     const { error } = await supabase.from("funnel_steps").insert({
       funnel_id: funnelId,
       step_type: type,
-      title: defaultContent(type).heading as string || "New Step",
-      content: defaultContent(type),
+      title: (defaultContent(type).heading as string) || "New Step",
+      content: defaultContent(type) as unknown as Record<string, never>,
       sort_order: steps.length,
-    });
+    } as never);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
     fetchData();
   };
 
   const updateStep = async (id: string, updates: Partial<FunnelStep>) => {
-    await supabase.from("funnel_steps").update(updates).eq("id", id);
+    await supabase.from("funnel_steps").update(updates as never).eq("id", id);
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...updates } : s)));
   };
 
