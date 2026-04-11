@@ -337,6 +337,116 @@ export type Database = {
         }
         Relationships: []
       }
+      funnel_leads: {
+        Row: {
+          created_at: string
+          data: Json
+          funnel_id: string
+          id: string
+          step_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          funnel_id: string
+          id?: string
+          step_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          funnel_id?: string
+          id?: string
+          step_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_leads_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "funnel_leads_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "funnel_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnel_steps: {
+        Row: {
+          content: Json
+          created_at: string
+          funnel_id: string
+          id: string
+          sort_order: number
+          step_type: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          funnel_id: string
+          id?: string
+          sort_order?: number
+          step_type?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          funnel_id?: string
+          id?: string
+          sort_order?: number
+          step_type?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_steps_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnels: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          redirect_url: string
+          slug: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          redirect_url?: string
+          slug: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          redirect_url?: string
+          slug?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           badge_text: string

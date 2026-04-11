@@ -2,7 +2,7 @@ import {
   LayoutDashboard, Image, Wrench, BookOpen, Monitor,
   MessageSquareQuote, UserCircle, PhoneCall, PanelBottom,
   Settings, FileText, Code, ClipboardList, Palette, Blocks,
-  GitBranch, BarChart3, ImageIcon,
+  GitBranch, BarChart3, ImageIcon, Filter,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -28,6 +28,7 @@ const contentItems = [
   { title: "Scripts", url: "/admin/scripts", icon: Code },
   { title: "Audit Requests", url: "/admin/audit-requests", icon: ClipboardList },
   { title: "Page Builder", url: "/admin/pages", icon: Blocks },
+  { title: "Lead Funnels", url: "/admin/funnels", icon: Filter },
 ];
 
 const settingsItems = [

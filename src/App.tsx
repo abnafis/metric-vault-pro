@@ -31,9 +31,13 @@ import AdminProcessEditor from "./pages/AdminProcessEditor";
 import AdminDashboardShowcaseEditor from "./pages/AdminDashboardShowcaseEditor";
 import AdminFooterEditor from "./pages/AdminFooterEditor";
 import AdminMediaLibrary from "./pages/AdminMediaLibrary";
+import AdminFunnels from "./pages/AdminFunnels";
+import AdminFunnelEditor from "./pages/AdminFunnelEditor";
+import AdminFunnelLeads from "./pages/AdminFunnelLeads";
 import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 import DynamicPage from "./pages/DynamicPage";
+import FunnelPage from "./pages/FunnelPage";
 
 const queryClient = new QueryClient();
 
@@ -74,9 +78,13 @@ function AppRoutes() {
               <Route path="pages" element={<AdminPageBuilder />} />
               <Route path="pages/:pageId" element={<AdminPageEditor />} />
               <Route path="media" element={<AdminMediaLibrary />} />
+              <Route path="funnels" element={<AdminFunnels />} />
+              <Route path="funnels/:funnelId" element={<AdminFunnelEditor />} />
+              <Route path="funnels/:funnelId/leads" element={<AdminFunnelLeads />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/f/:slug" element={<FunnelPage />} />
             <Route path="/p/:slug" element={<DynamicPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
