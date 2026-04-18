@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Clock, ArrowRight, Calendar } from "lucide-react";
+import { ArrowUpRight, Clock } from "lucide-react";
 
 interface Post {
   id: string; title: string; slug: string; excerpt: string;
@@ -27,59 +25,73 @@ export default function BlogSection() {
     })();
   }, []);
 
-  const getCatName = (id: string | null) => categories.find(c => c.id === id)?.name || "";
+  const getCatName = (id: string | null) => categories.find((c) => c.id === id)?.name || "";
 
   if (posts.length === 0) return null;
 
   return (
-    <section id="blog" className="py-24 relative">
-      <div className="absolute inset-0 bg-radial-glow opacity-30 pointer-events-none" />
-      <div className="section-container relative z-10">
-        <div className="text-center mb-14">
-          <Badge variant="outline" className="mb-4 border-primary/30 text-primary">
-            Latest Insights
-          </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            From the <span className="gradient-text">Blog</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Expert articles on analytics, tracking, and data-driven marketing.
-          </p>
+    <section id="blog" className="py-32 relative border-t border-border">
+      <div className="section-container">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div className="space-y-4">
+            <p className="pill-eyebrow">— Journal</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight max-w-2xl">
+              From the <span className="font-serif-display text-primary">blog</span>.
+            </h2>
+          </div>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 text-sm story-link self-start md:self-end"
+          >
+            View all articles
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {posts.map(post => (
-            <Link key={post.id} to={`/blog/${post.slug}`} className="glass-card-hover overflow-hidden group flex flex-col">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <Link
+              key={post.id}
+              to={`/blog/${post.slug}`}
+              className="group flex flex-col rounded-2xl border border-border overflow-hidden bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-300"
+            >
               {post.featured_image_url ? (
-                <img src={post.featured_image_url} alt={post.title} className="w-full h-48 object-cover" loading="lazy" />
-              ) : (
-                <div className="w-full h-48 bg-muted flex items-center justify-center text-muted-foreground text-sm">No image</div>
-              )}
-              <div className="p-5 flex flex-col flex-1">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                  {post.category_id && <Badge variant="secondary" className="text-xs">{getCatName(post.category_id)}</Badge>}
-                  <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{post.read_time_minutes} min</span>
+                <div className="overflow-hidden aspect-[16/10]">
+                  <img
+                    src={post.featured_image_url}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
-                <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">{post.title}</h3>
-                <p className="text-muted-foreground text-sm line-clamp-3 flex-1">{post.excerpt}</p>
-                <div className="flex items-center justify-between mt-4 text-sm">
-                  <span className="text-muted-foreground flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {post.publish_date ? new Date(post.publish_date).toLocaleDateString() : ""}
+              ) : (
+                <div className="aspect-[16/10] bg-muted flex items-center justify-center text-muted-foreground text-sm">
+                  No image
+                </div>
+              )}
+
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
+                  {post.category_id && <span>{getCatName(post.category_id)}</span>}
+                  {post.category_id && <span>·</span>}
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {post.read_time_minutes} min
                   </span>
-                  <span className="text-primary font-medium flex items-center gap-1">Read <ArrowRight className="h-3 w-3" /></span>
+                </div>
+
+                <h3 className="text-xl font-semibold tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                  {post.title}
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-3 flex-1">{post.excerpt}</p>
+
+                <div className="flex items-center gap-2 mt-5 text-sm text-foreground">
+                  Read article
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </div>
             </Link>
           ))}
-        </div>
-
-        <div className="text-center">
-          <Link to="/blog">
-            <Button variant="outline" size="lg" className="gap-2">
-              View All Articles <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </div>
       </div>
     </section>
