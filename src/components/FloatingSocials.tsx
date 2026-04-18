@@ -28,33 +28,26 @@ const FloatingSocials = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.5, duration: 0.5 }}
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden md:flex flex-row items-center gap-3 px-5 py-3 rounded-full bg-card/60 backdrop-blur-xl border border-border/30 shadow-[0_4px_30px_rgba(0,0,0,0.15)]"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.5, duration: 0.6 }}
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden md:flex flex-row items-center gap-1 px-2 py-2 rounded-full border border-border bg-background/70 backdrop-blur-xl"
     >
-      {visible.map((link, i) => {
+      {visible.map((link) => {
         const Icon = getIcon(link.label);
         return (
-          <motion.a
+          <a
             key={link.label}
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
             title={link.label}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.6 + i * 0.1 }}
-            className="group relative w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[hsl(var(--glow-blue))]/50 hover:shadow-[0_0_12px_hsl(var(--glow-blue)/0.3)] transition-all duration-300"
+            className="group relative w-9 h-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary-foreground hover:bg-primary transition-all duration-200"
           >
             <Icon className="w-4 h-4" />
-            <span className="absolute left-12 px-2 py-1 rounded bg-card/90 border border-border/50 text-xs text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-              {link.label}
-            </span>
-          </motion.a>
+          </a>
         );
       })}
-      <div className="h-px w-8 bg-border/50 my-auto" />
     </motion.div>
   );
 };

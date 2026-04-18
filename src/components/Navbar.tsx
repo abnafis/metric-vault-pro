@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, BarChart3 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { trackNavigationClick, trackCTAClick } from "@/lib/dataLayer";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { settings } = useSiteSettings();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
@@ -21,6 +22,13 @@ const Navbar = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
 
   const handleNavClick = (href: string, label?: string) => {
@@ -28,33 +36,40 @@ const Navbar = () => {
     if (label) trackNavigationClick(label);
     if (href.startsWith("#")) {
       const el = document.querySelector(href);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 backdrop-blur-xl bg-background/70">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "border-b border-border bg-background/80 backdrop-blur-xl" : "bg-transparent"
+      }`}
+    >
       <div className="section-container flex items-center justify-between h-16">
-        <a href="/" className="flex items-center gap-2 font-bold text-lg text-foreground shrink-0">
-          {avatarUrl && (
-            <img src={avatarUrl} alt="Avatar" className="w-8 h-8 rounded-full object-cover border-2 border-[hsl(var(--glow-blue))]/50" />
-          )}
-          {settings.logo_url ? (
+        <a href="/" className="flex items-center gap-2.5 shrink-0 group">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt="Avatar"
+              className="w-8 h-8 rounded-full object-cover border border-border"
+            />
+          ) : settings.logo_url ? (
             <img
               src={settings.logo_url}
               alt={settings.site_name}
-              className="h-8 max-w-[140px] object-contain"
+              className="h-7 max-w-[120px] object-contain"
               loading="eager"
             />
-          ) : !avatarUrl ? (
-            <BarChart3 className="w-6 h-6 text-glow-blue" />
-          ) : null}
-          <span>{settings.site_name}</span>
+          ) : (
+            <div className="w-7 h-7 rounded-full bg-primary" />
+          )}
+          <span className="font-mono text-sm font-medium text-foreground tracking-tight">
+            {settings.site_name}
+          </span>
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-1">
           {visibleLinks.map((l) => (
             <a
               key={l.href}
@@ -67,22 +82,30 @@ const Navbar = () => {
                   trackNavigationClick(l.label);
                 }
               }}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
             >
               {l.label}
             </a>
           ))}
-          <a href="#cta" onClick={(e) => { e.preventDefault(); trackCTAClick("nav_get_audit"); handleNavClick("#cta"); }} className="btn-primary-glow text-sm px-5 py-2">
+          <a
+            href="#cta"
+            onClick={(e) => {
+              e.preventDefault();
+              trackCTAClick("nav_get_audit");
+              handleNavClick("#cta");
+            }}
+            className="ml-3 btn-primary-glow !px-5 !py-2 !text-xs"
+          >
             Get Audit
           </a>
         </div>
 
         <button
-          className="md:hidden text-foreground"
+          className="md:hidden text-foreground p-2 -mr-2"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X size={24} /> : <Menu size={24} />}
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
@@ -92,9 +115,9 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl"
+            className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl"
           >
-            <div className="section-container py-4 flex flex-col gap-3">
+            <div className="section-container py-6 flex flex-col gap-1">
               {visibleLinks.map((l) => (
                 <a
                   key={l.href}
@@ -108,15 +131,19 @@ const Navbar = () => {
                       setOpen(false);
                     }
                   }}
-                  className="text-sm text-muted-foreground hover:text-foreground py-2"
+                  className="text-base text-muted-foreground hover:text-foreground py-3 border-b border-border/50"
                 >
                   {l.label}
                 </a>
               ))}
               <a
                 href="#cta"
-                onClick={(e) => { e.preventDefault(); trackCTAClick("mobile_nav_get_audit"); handleNavClick("#cta"); }}
-                className="btn-primary-glow text-sm px-5 py-2 text-center mt-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  trackCTAClick("mobile_nav_get_audit");
+                  handleNavClick("#cta");
+                }}
+                className="btn-primary-glow text-center mt-4"
               >
                 Get Audit
               </a>

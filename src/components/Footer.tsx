@@ -1,57 +1,108 @@
-import { BarChart3 } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Linkedin, Twitter, Github, Youtube, Globe, Facebook, Instagram, ArrowUpRight } from "lucide-react";
+
+const iconMap: Record<string, React.ElementType> = {
+  linkedin: Linkedin,
+  twitter: Twitter,
+  x: Twitter,
+  github: Github,
+  youtube: Youtube,
+  facebook: Facebook,
+  instagram: Instagram,
+};
+
+function getIcon(label: string) {
+  const key = label.toLowerCase().replace(/[^a-z]/g, "");
+  for (const [k, Icon] of Object.entries(iconMap)) {
+    if (key.includes(k)) return Icon;
+  }
+  return Globe;
+}
 
 const Footer = () => {
   const { settings } = useSiteSettings();
-
-  const visibleSocial = settings.social_links.filter((l) => l.visible);
+  const visibleSocial = settings.social_links.filter((l) => l.visible && l.href !== "#");
+  const visibleNav = settings.nav_links.filter((l) => l.visible !== false);
   const year = new Date().getFullYear();
   const copyright = settings.copyright_text.replace("{year}", String(year));
 
   return (
-    <footer className="border-t border-border/50 py-12">
-      <div className="section-container">
-        <div className="grid sm:grid-cols-3 gap-8">
-          <div className="space-y-3">
-            <a href="#" className="flex items-center gap-2 font-bold text-lg text-foreground">
-              {settings.logo_url ? (
-                <img src={settings.logo_url} alt={settings.site_name} className="h-7 max-w-[120px] object-contain" />
-              ) : (
-                <BarChart3 className="w-5 h-5 text-glow-blue" />
-              )}
-              {settings.site_name}
+    <footer className="relative border-t border-border bg-background overflow-hidden">
+      {/* Massive brand wordmark */}
+      <div className="section-container pt-20 pb-12">
+        <div className="grid lg:grid-cols-12 gap-12 mb-16">
+          <div className="lg:col-span-5 space-y-6">
+            <p className="pill-eyebrow">— Get in touch</p>
+            <h2 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight">
+              Let's build <span className="font-serif-display text-primary">accurate</span> data together.
+            </h2>
+            <a
+              href={`mailto:${settings.contact_email}`}
+              className="inline-flex items-center gap-2 text-base story-link"
+            >
+              {settings.contact_email}
+              <ArrowUpRight className="w-4 h-4" />
             </a>
-            <p className="text-sm text-muted-foreground">{settings.footer_description}</p>
-            <p className="text-xs text-muted-foreground">{settings.contact_email}</p>
           </div>
 
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-3">Navigation</h4>
-            <div className="space-y-2">
-              {settings.nav_links.filter(l => l.visible !== false).map((l) => (
-                <a key={l.href} href={l.href} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <div className="lg:col-span-3">
+            <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
+              Navigate
+            </p>
+            <div className="flex flex-col gap-3">
+              {visibleNav.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className="text-sm text-foreground hover:text-primary transition-colors w-fit"
+                >
                   {l.label}
                 </a>
               ))}
             </div>
           </div>
 
-          {visibleSocial.length > 0 && (
-            <div>
-              <h4 className="text-sm font-semibold text-foreground mb-3">Social</h4>
-              <div className="space-y-2">
-                {visibleSocial.map((l) => (
-                  <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <div className="lg:col-span-4">
+            <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
+              Elsewhere
+            </p>
+            <div className="flex flex-col gap-3">
+              {visibleSocial.map((l) => {
+                const Icon = getIcon(l.label);
+                return (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors w-fit group"
+                  >
+                    <Icon className="w-4 h-4" />
                     {l.label}
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="border-t border-border/50 mt-8 pt-6 text-center">
-          <p className="text-xs text-muted-foreground">{copyright}</p>
+        {/* Massive wordmark */}
+        <div className="border-t border-border pt-8">
+          <p
+            className="font-serif-display text-foreground/[0.06] leading-none select-none whitespace-nowrap overflow-hidden"
+            style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
+            aria-hidden="true"
+          >
+            {settings.site_name}
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-6">
+          <p className="text-xs font-mono text-muted-foreground">{copyright}</p>
+          <p className="text-xs font-mono text-muted-foreground">
+            Crafted with precision · {year}
+          </p>
         </div>
       </div>
     </footer>

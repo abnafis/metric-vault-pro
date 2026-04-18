@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { ArrowUpRight } from "lucide-react";
 
 interface Metric { label: string; value: string; }
 interface CaseStudy {
@@ -57,66 +58,116 @@ const CaseStudiesSection = () => {
   }, []);
 
   return (
-    <section id="cases" className="py-24 relative">
+    <section id="cases" className="py-32 relative">
       <div className="section-container">
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
         >
-          <p className="text-sm text-glow-cyan uppercase tracking-widest mb-3 font-semibold">Case Studies</p>
-          <h2 className="text-3xl sm:text-4xl font-bold">
-            Real Results,{" "}
-            <span className="gradient-text">Proven Impact</span>
-          </h2>
+          <div className="space-y-4">
+            <p className="pill-eyebrow">— Selected work</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight max-w-2xl">
+              Real results,{" "}
+              <span className="font-serif-display text-primary">proven</span> impact.
+            </h2>
+          </div>
+          <p className="text-muted-foreground max-w-sm md:text-right">
+            A handful of projects where measurement clarity unlocked meaningful growth.
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Case study list */}
+        <div className="space-y-px border-t border-b border-border">
           {cases.map((c, i) => (
-            <motion.div
+            <motion.article
               key={c.title + i}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="glass-card-hover p-6 flex flex-col gap-4"
+              transition={{ delay: i * 0.06 }}
+              className="group relative grid md:grid-cols-12 gap-6 py-10 border-b border-border last:border-b-0 hover:bg-card/30 transition-colors duration-300 px-2 -mx-2"
             >
-              {c.image_url && (
-                <img src={c.image_url} alt={c.title} className="rounded-lg border border-border h-36 w-full object-cover" />
-              )}
-              <h3 className="font-bold text-lg text-foreground">{c.title}</h3>
-              {c.client_name && <p className="text-xs text-muted-foreground">Client: {c.client_name}</p>}
-              <div className="space-y-2 text-sm">
-                <p className="text-muted-foreground"><span className="text-chart-red font-medium">Problem:</span> {c.problem}</p>
-                <p className="text-muted-foreground"><span className="text-chart-green font-medium">Solution:</span> {c.solution}</p>
+              {/* Index */}
+              <div className="md:col-span-1 font-mono text-xs text-muted-foreground">
+                ({String(i + 1).padStart(2, "0")})
               </div>
 
-              <div className="flex gap-3">
-                {(c.metrics as Metric[])?.map((m) => (
-                  <div key={m.label} className="metric-card flex-1 text-center">
-                    <p className="text-lg font-bold gradient-text-blue">{m.value}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1">{m.label}</p>
-                  </div>
-                ))}
+              {/* Title + client */}
+              <div className="md:col-span-3 space-y-2">
+                <h3 className="text-2xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                  {c.title}
+                </h3>
+                {c.client_name && (
+                  <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                    {c.client_name}
+                  </p>
+                )}
+                {c.platform_used && (
+                  <p className="text-xs text-muted-foreground">{c.platform_used}</p>
+                )}
               </div>
 
-              {c.chart_data && (c.chart_data as { v: number }[]).length > 0 && (
-                <div className="mt-auto">
-                  <ResponsiveContainer width="100%" height={60}>
-                    <AreaChart data={c.chart_data as { v: number }[]}>
-                      <defs>
-                        <linearGradient id={`caseGrad${i}`} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="hsl(150 60% 50%)" stopOpacity={0.3} />
-                          <stop offset="100%" stopColor="hsl(150 60% 50%)" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <Area type="monotone" dataKey="v" stroke="hsl(150 60% 50%)" fill={`url(#caseGrad${i})`} strokeWidth={2} dot={false} />
-                    </AreaChart>
-                  </ResponsiveContainer>
+              {/* Problem + solution */}
+              <div className="md:col-span-4 space-y-3 text-sm">
+                <div>
+                  <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-1">
+                    Problem
+                  </p>
+                  <p className="text-foreground/80 leading-relaxed">{c.problem}</p>
                 </div>
-              )}
-            </motion.div>
+                <div>
+                  <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-1">
+                    Solution
+                  </p>
+                  <p className="text-foreground/80 leading-relaxed">{c.solution}</p>
+                </div>
+              </div>
+
+              {/* Metrics + chart */}
+              <div className="md:col-span-4 flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {(c.metrics as Metric[])?.map((m) => (
+                    <div key={m.label} className="border border-border rounded-lg p-3">
+                      <p className="font-serif-display text-3xl text-primary leading-none">
+                        {m.value}
+                      </p>
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
+                        {m.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {c.chart_data && (c.chart_data as { v: number }[]).length > 0 && (
+                  <div className="h-12">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={c.chart_data as { v: number }[]}>
+                        <defs>
+                          <linearGradient id={`caseGrad${i}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <Area
+                          type="monotone"
+                          dataKey="v"
+                          stroke="hsl(var(--primary))"
+                          fill={`url(#caseGrad${i})`}
+                          strokeWidth={1.5}
+                          dot={false}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </div>
+
+              {/* Hover arrow */}
+              <ArrowUpRight className="absolute right-4 top-10 w-5 h-5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+            </motion.article>
           ))}
         </div>
       </div>

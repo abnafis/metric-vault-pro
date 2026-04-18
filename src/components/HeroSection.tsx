@@ -1,16 +1,8 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import HeroDashboard from "./HeroDashboard";
-import { Star } from "lucide-react";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { trackCTAClick } from "@/lib/dataLayer";
-
-import googleAdsLogo from "@/assets/platforms/google-ads.png";
-import metaAdsLogo from "@/assets/platforms/meta-ads.png";
-import gtmLogo from "@/assets/platforms/gtm-official.svg";
-import ga4Logo from "@/assets/platforms/ga4-official.svg";
-import serverSideLogo from "@/assets/platforms/server-side.png";
-import conversionsLogo from "@/assets/platforms/conversions.png";
 
 interface HeroData {
   headline: string;
@@ -25,164 +17,20 @@ interface HeroData {
 
 const fallback: HeroData = {
   headline: "Accurate Data. Better Marketing Decisions.",
-  subheadline: "Expert GA4, Google Tag Manager, Server-Side Tracking, Meta CAPI & Conversion Tracking implementation — so every click, conversion and dollar is measured correctly.",
+  subheadline:
+    "Expert GA4, Google Tag Manager, Server-Side Tracking, Meta CAPI & Conversion Tracking implementation — so every click, conversion and dollar is measured correctly.",
   primary_cta_text: "Get Tracking Audit",
   primary_cta_link: "#cta",
-  secondary_cta_text: "View Case Studies →",
+  secondary_cta_text: "View Case Studies",
   secondary_cta_link: "#cases",
-  badge_text: "Trusted by 100+ businesses",
+  badge_text: "Available for new projects",
   hero_image_url: null,
-};
-
-const orbitItems = [
-  { logo: googleAdsLogo, label: "Google Ads" },
-  { logo: metaAdsLogo, label: "Meta Ads" },
-  { logo: gtmLogo, label: "GTM" },
-  { logo: ga4Logo, label: "GA4" },
-  { logo: serverSideLogo, label: "Server-Side" },
-  { logo: conversionsLogo, label: "Conversions" },
-];
-
-const HeroPortraitWithIcons = ({ profileImageUrl }: { profileImageUrl: string }) => {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.7, delay: 0.3 }}
-      className="relative cursor-pointer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Orbiting platform logos */}
-      {orbitItems.map((item, i) => {
-        const angle = (360 / orbitItems.length) * i;
-        const radius = 220;
-        const rad = (angle * Math.PI) / 180;
-        const x = Math.cos(rad) * radius;
-        const y = Math.sin(rad) * radius;
-
-        return (
-          <motion.div
-            key={item.label}
-            className="absolute left-1/2 top-1/2 z-20"
-            initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
-            animate={
-              hovered
-                ? { opacity: 1, scale: 1, x: x - 22, y: y - 22 }
-                : { opacity: 0, scale: 0, x: 0, y: 0 }
-            }
-            transition={{
-              duration: 0.4,
-              delay: hovered ? i * 0.06 : 0,
-              type: "spring",
-              stiffness: 200,
-              damping: 15,
-            }}
-          >
-            <motion.div
-              className="glass-card w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center shadow-lg p-2"
-              animate={hovered ? { rotate: [0, 5, -5, 0] } : {}}
-              transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
-            >
-              <img src={item.logo} alt={item.label} className="w-full h-full object-contain" />
-            </motion.div>
-            <p className="text-[10px] text-muted-foreground text-center mt-1 font-medium whitespace-nowrap">
-              {item.label}
-            </p>
-          </motion.div>
-        );
-      })}
-
-      {/* Portrait */}
-      <motion.div
-        className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full glow-border overflow-hidden shadow-2xl relative z-10"
-        whileHover={{ boxShadow: "0 0 40px 10px hsl(var(--glow-blue) / 0.3)" }}
-        transition={{ duration: 0.3 }}
-      >
-        <img src={profileImageUrl} alt="Portrait" className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-      </motion.div>
-
-      {/* Background glow */}
-      <motion.div
-        className="absolute -inset-4 rounded-full bg-[hsl(var(--glow-blue))]/10 blur-2xl -z-10"
-        animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </motion.div>
-  );
-};
-
-interface ReviewSnippet {
-  name: string;
-  text: string;
-  rating: number;
-}
-
-const fallbackReviews: ReviewSnippet[] = [
-  { name: "Sarah M.", text: "Tracking accuracy improved by 40%", rating: 5 },
-  { name: "David C.", text: "Finally, data we can trust", rating: 5 },
-  { name: "Emily R.", text: "Best GA4 setup I've seen", rating: 5 },
-  { name: "James C.", text: "ROI visible within weeks", rating: 5 },
-  { name: "Olivia T.", text: "Server-side tracking game changer", rating: 5 },
-  { name: "Michael B.", text: "Attribution issues solved overnight", rating: 5 },
-];
-
-const FloatingReviews = ({ reviews }: { reviews: ReviewSnippet[] }) => {
-  // Position cards at fixed spots scattered across the background
-  const positions = [
-    { top: "8%", left: "5%", delay: 0 },
-    { top: "65%", left: "2%", delay: 2.5 },
-    { top: "30%", right: "3%", delay: 1.2 },
-    { top: "75%", right: "5%", delay: 3.8 },
-    { top: "15%", right: "15%", delay: 5 },
-    { top: "85%", left: "12%", delay: 6.5 },
-  ];
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {reviews.slice(0, positions.length).map((review, i) => {
-        const pos = positions[i];
-        return (
-          <motion.div
-            key={i}
-            className="absolute max-w-[200px]"
-            style={{ top: pos.top, left: pos.left, right: (pos as any).right }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: [0, 0.45, 0.45, 0],
-              y: [20, 0, 0, -10],
-            }}
-            transition={{
-              duration: 6,
-              delay: pos.delay,
-              repeat: Infinity,
-              repeatDelay: 2,
-              ease: "easeInOut",
-            }}
-          >
-            <div className="glass-card rounded-xl p-3 border border-border/30 bg-background/40 backdrop-blur-sm">
-              <div className="flex gap-0.5 mb-1">
-                {Array.from({ length: review.rating }).map((_, s) => (
-                  <Star key={s} className="w-3 h-3 fill-[hsl(var(--chart-green))] text-[hsl(var(--chart-green))]" />
-                ))}
-              </div>
-              <p className="text-[11px] text-muted-foreground leading-snug italic">"{review.text}"</p>
-              <p className="text-[10px] text-muted-foreground/60 mt-1 font-medium">— {review.name}</p>
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
 };
 
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
-  const [reviews, setReviews] = useState<ReviewSnippet[]>(fallbackReviews);
+  const [profileTitle, setProfileTitle] = useState<string>("Analytics Engineer");
 
   useEffect(() => {
     supabase
@@ -195,88 +43,155 @@ const HeroSection = () => {
       });
     supabase
       .from("about_content")
-      .select("profile_image_url")
+      .select("profile_image_url, profile_title")
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data && (data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
-        setProfileLoading(false);
-      });
-    supabase
-      .from("testimonials")
-      .select("name, text, rating")
-      .order("sort_order")
-      .limit(6)
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setReviews(data.map((t) => ({ name: t.name.split(" ")[0] + " " + (t.name.split(" ")[1]?.[0] || "") + ".", text: t.text.length > 45 ? t.text.slice(0, 45) + "…" : t.text, rating: t.rating })));
+        if (data) {
+          if ((data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
+          if ((data as any).profile_title) setProfileTitle((data as any).profile_title);
         }
       });
   }, []);
 
+  // Split headline: first sentence in normal weight, rest in serif italic
   const headlineParts = hero.headline.includes(".")
     ? [hero.headline.split(".")[0] + ".", hero.headline.split(".").slice(1).join(".").trim()]
     : [hero.headline, ""];
 
   return (
     <section
-      className="relative min-h-screen flex items-center pt-16 overflow-hidden"
-      style={
-        hero.hero_image_url
-          ? { backgroundImage: `url(${hero.hero_image_url})`, backgroundSize: "cover", backgroundPosition: "center" }
-          : undefined
-      }
+      id="home"
+      className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-noise"
     >
-      {/* Floating review snippets */}
-      <FloatingReviews reviews={reviews} />
+      {/* Subtle grid + radial */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-50 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-radial-glow pointer-events-none" />
 
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-30" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-radial-glow pointer-events-none" />
-      {hero.hero_image_url && <div className="absolute inset-0 bg-background/70" />}
+      <div className="section-container relative z-10 w-full">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left: Big typography */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-7 space-y-8"
+          >
+            <div className="pill-eyebrow">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              {hero.badge_text}
+            </div>
 
-      <div className="section-container relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-20">
-        {/* Left */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="space-y-6"
-        >
-          <div className="inline-flex items-center gap-2 glass-card px-3 py-1.5 text-xs text-muted-foreground rounded-full">
-            <span className="w-2 h-2 rounded-full bg-chart-green animate-pulse" />
-            {hero.badge_text}
-          </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95] tracking-tight">
+              {headlineParts[0]}
+              {headlineParts[1] && (
+                <>
+                  <br />
+                  <span className="font-serif-display font-normal text-primary">
+                    {headlineParts[1]}
+                  </span>
+                </>
+              )}
+            </h1>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-            {headlineParts[0]}{" "}
-            {headlineParts[1] && <span className="gradient-text">{headlineParts[1]}</span>}
-          </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-xl leading-relaxed">
+              {hero.subheadline}
+            </p>
 
-          <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-            {hero.subheadline}
-          </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <a
+                href={hero.primary_cta_link}
+                onClick={() => trackCTAClick("hero_get_tracking_audit")}
+                className="btn-primary-glow group"
+              >
+                {hero.primary_cta_text}
+                <ArrowUpRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+              <a
+                href={hero.secondary_cta_link}
+                onClick={() => trackCTAClick("hero_view_case_studies")}
+                className="btn-secondary-glass"
+              >
+                {hero.secondary_cta_text}
+              </a>
+            </div>
+          </motion.div>
 
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a href={hero.primary_cta_link} onClick={() => trackCTAClick("hero_get_tracking_audit")} className="btn-primary-glow text-sm">
-              {hero.primary_cta_text}
-            </a>
-            <a href={hero.secondary_cta_link} onClick={() => trackCTAClick("hero_view_case_studies")} className="btn-secondary-glass text-sm">
-              {hero.secondary_cta_text}
-            </a>
-          </div>
-        </motion.div>
+          {/* Right: Refined portrait card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:col-span-5 relative"
+          >
+            <div className="relative max-w-sm mx-auto lg:ml-auto lg:mr-0">
+              {/* Portrait card */}
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-border bg-card">
+                {profileImageUrl ? (
+                  <img
+                    src={profileImageUrl}
+                    alt={profileTitle}
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-secondary to-card flex items-center justify-center">
+                    <span className="font-serif-display text-7xl text-primary">A</span>
+                  </div>
+                )}
 
-        {/* Right */}
-        <div className="flex justify-center lg:justify-end">
-          {profileLoading ? (
-            <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full bg-muted/20 animate-pulse" />
-          ) : profileImageUrl ? (
-            <HeroPortraitWithIcons profileImageUrl={profileImageUrl} />
-          ) : (
-            <HeroDashboard />
-          )}
+                {/* Bottom gradient overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background/90 to-transparent" />
+
+                {/* Status row pinned bottom */}
+                <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between">
+                  <div>
+                    <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                      Currently
+                    </p>
+                    <p className="text-sm font-medium text-foreground">{profileTitle}</p>
+                  </div>
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                </div>
+              </div>
+
+              {/* Floating year/location card */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="absolute -bottom-4 -left-4 sm:-left-8 glass-card px-4 py-3 rounded-xl"
+              >
+                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  Since
+                </p>
+                <p className="font-serif-display text-2xl text-foreground leading-none">2019</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+                className="absolute -top-4 -right-4 sm:-right-6 glass-card px-4 py-3 rounded-xl"
+              >
+                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  Projects
+                </p>
+                <p className="font-serif-display text-2xl text-primary leading-none">100+</p>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="hidden lg:flex items-center gap-2 mt-20 text-xs font-mono uppercase tracking-widest text-muted-foreground"
+        >
+          <ArrowDown className="w-3 h-3 animate-bounce" />
+          Scroll to explore
+        </motion.div>
       </div>
     </section>
   );
