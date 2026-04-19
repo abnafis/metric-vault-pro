@@ -193,6 +193,45 @@ const AdminCTAEditor = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Bullets */}
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-base">Bullet Points</CardTitle>
+            <CardDescription>Selling points shown beside the form (max 10)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {data.bullets.map((b, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={b}
+                  maxLength={120}
+                  placeholder="e.g. Free 30-minute audit call"
+                  onChange={(e) => {
+                    const next = [...data.bullets];
+                    next[i] = e.target.value;
+                    setData({ ...data, bullets: next });
+                  }}
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setData({ ...data, bullets: data.bullets.filter((_, idx) => idx !== i) })}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => data.bullets.length < 10 && setData({ ...data, bullets: [...data.bullets, ""] })}
+              disabled={data.bullets.length >= 10}
+            >
+              <Plus className="mr-1 h-3 w-3" /> Add Bullet
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Live Preview */}
