@@ -18,6 +18,12 @@ interface HeroData {
   secondary_cta_link: string;
   badge_text: string;
   hero_image_url: string | null;
+  status_label: string;
+  status_value: string;
+  since_label: string;
+  since_value: string;
+  projects_label: string;
+  projects_value: string;
 }
 
 const defaults: Omit<HeroData, "id"> = {
@@ -29,6 +35,12 @@ const defaults: Omit<HeroData, "id"> = {
   secondary_cta_link: "#cases",
   badge_text: "Trusted by 100+ businesses",
   hero_image_url: null,
+  status_label: "Currently",
+  status_value: "Analytics Engineer",
+  since_label: "Since",
+  since_value: "2019",
+  projects_label: "Projects",
+  projects_value: "100+",
 };
 
 const AdminHeroEditor = () => {
@@ -228,6 +240,88 @@ const AdminHeroEditor = () => {
                   onChange={(e) => handleChange("secondary_cta_link", e.target.value)}
                   className="mt-1 bg-secondary border-border"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Tiles + Status (new redesign) */}
+          <div className="glass-card p-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Portrait Status & Floating Tiles</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Editable badges around your portrait card.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Status (under portrait)</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Label</Label>
+                  <Input
+                    value={data.status_label}
+                    maxLength={30}
+                    onChange={(e) => handleChange("status_label", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Value</Label>
+                  <Input
+                    value={data.status_value}
+                    maxLength={50}
+                    onChange={(e) => handleChange("status_value", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Bottom-left tile</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Label</Label>
+                  <Input
+                    value={data.since_label}
+                    maxLength={20}
+                    onChange={(e) => handleChange("since_label", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Value</Label>
+                  <Input
+                    value={data.since_value}
+                    maxLength={20}
+                    onChange={(e) => handleChange("since_value", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Top-right tile</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Label</Label>
+                  <Input
+                    value={data.projects_label}
+                    maxLength={20}
+                    onChange={(e) => handleChange("projects_label", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Value</Label>
+                  <Input
+                    value={data.projects_value}
+                    maxLength={20}
+                    onChange={(e) => handleChange("projects_value", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
               </div>
             </div>
           </div>

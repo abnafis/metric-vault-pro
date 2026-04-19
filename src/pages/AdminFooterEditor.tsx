@@ -17,6 +17,12 @@ interface FooterData {
   copyright_text: string;
   contact_email: string;
   social_links: SocialLink[];
+  footer_eyebrow: string;
+  footer_headline: string;
+  footer_headline_highlight: string;
+  footer_headline_suffix: string;
+  footer_navigate_label: string;
+  footer_elsewhere_label: string;
 }
 
 export default function AdminFooterEditor() {
@@ -37,6 +43,12 @@ export default function AdminFooterEditor() {
         copyright_text: r.copyright_text,
         contact_email: r.contact_email,
         social_links: r.social_links as SocialLink[],
+        footer_eyebrow: r.footer_eyebrow ?? "— Get in touch",
+        footer_headline: r.footer_headline ?? "Let's build",
+        footer_headline_highlight: r.footer_headline_highlight ?? "accurate",
+        footer_headline_suffix: r.footer_headline_suffix ?? "data together.",
+        footer_navigate_label: r.footer_navigate_label ?? "Navigate",
+        footer_elsewhere_label: r.footer_elsewhere_label ?? "Elsewhere",
       });
     }
     setLoading(false);
@@ -52,6 +64,12 @@ export default function AdminFooterEditor() {
         copyright_text: data.copyright_text,
         contact_email: data.contact_email,
         social_links: data.social_links,
+        footer_eyebrow: data.footer_eyebrow.slice(0, 60),
+        footer_headline: data.footer_headline.slice(0, 80),
+        footer_headline_highlight: data.footer_headline_highlight.slice(0, 40),
+        footer_headline_suffix: data.footer_headline_suffix.slice(0, 80),
+        footer_navigate_label: data.footer_navigate_label.slice(0, 30),
+        footer_elsewhere_label: data.footer_elsewhere_label.slice(0, 30),
         updated_at: new Date().toISOString(),
       } as any)
       .eq("id", data.id);

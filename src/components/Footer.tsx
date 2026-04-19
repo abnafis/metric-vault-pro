@@ -32,9 +32,11 @@ const Footer = () => {
       <div className="section-container pt-20 pb-12">
         <div className="grid lg:grid-cols-12 gap-12 mb-16">
           <div className="lg:col-span-5 space-y-6">
-            <p className="pill-eyebrow">— Get in touch</p>
+            <p className="pill-eyebrow">{settings.footer_eyebrow}</p>
             <h2 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight">
-              Let's build <span className="font-serif-display text-primary">accurate</span> data together.
+              {settings.footer_headline}{" "}
+              <span className="font-serif-display text-primary">{settings.footer_headline_highlight}</span>{" "}
+              {settings.footer_headline_suffix}
             </h2>
             <a
               href={`mailto:${settings.contact_email}`}
@@ -47,7 +49,7 @@ const Footer = () => {
 
           <div className="lg:col-span-3">
             <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
-              Navigate
+              {settings.footer_navigate_label}
             </p>
             <div className="flex flex-col gap-3">
               {visibleNav.map((l) => (
@@ -64,7 +66,7 @@ const Footer = () => {
 
           <div className="lg:col-span-4">
             <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">
-              Elsewhere
+              {settings.footer_elsewhere_label}
             </p>
             <div className="flex flex-col gap-3">
               {visibleSocial.map((l) => {

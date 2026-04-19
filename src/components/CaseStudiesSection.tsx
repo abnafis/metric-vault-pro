@@ -44,8 +44,25 @@ const fallback: Omit<CaseStudy, "id">[] = [
   },
 ];
 
+interface MetaData {
+  eyebrow: string;
+  title: string;
+  title_highlight: string;
+  title_suffix: string;
+  subtitle: string;
+}
+
+const fallbackMeta: MetaData = {
+  eyebrow: "— Selected work",
+  title: "Real results,",
+  title_highlight: "proven",
+  title_suffix: "impact.",
+  subtitle: "A handful of projects where measurement clarity unlocked meaningful growth.",
+};
+
 const CaseStudiesSection = () => {
   const [cases, setCases] = useState<Omit<CaseStudy, "id">[]>(fallback);
+  const [meta, setMeta] = useState<MetaData>(fallbackMeta);
 
   useEffect(() => {
     supabase
@@ -54,6 +71,14 @@ const CaseStudiesSection = () => {
       .order("sort_order", { ascending: true })
       .then(({ data }) => {
         if (data && data.length > 0) setCases(data as unknown as CaseStudy[]);
+      });
+    supabase
+      .from("case_studies_meta" as any)
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }: any) => {
+        if (data) setMeta({ ...fallbackMeta, ...(data as MetaData) });
       });
   }, []);
 
@@ -68,14 +93,15 @@ const CaseStudiesSection = () => {
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
         >
           <div className="space-y-4">
-            <p className="pill-eyebrow">— Selected work</p>
+            <p className="pill-eyebrow">{meta.eyebrow}</p>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight max-w-2xl">
-              Real results,{" "}
-              <span className="font-serif-display text-primary">proven</span> impact.
+              {meta.title}{" "}
+              <span className="font-serif-display text-primary">{meta.title_highlight}</span>{" "}
+              {meta.title_suffix}
             </h2>
           </div>
           <p className="text-muted-foreground max-w-sm md:text-right">
-            A handful of projects where measurement clarity unlocked meaningful growth.
+            {meta.subtitle}
           </p>
         </motion.div>
 

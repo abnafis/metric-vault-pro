@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Save, Send, Eye } from "lucide-react";
+import { Save, Send, Eye, Plus, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CTAData {
@@ -17,6 +17,8 @@ interface CTAData {
   button_text: string;
   success_title: string;
   success_description: string;
+  eyebrow: string;
+  bullets: string[];
 }
 
 const AdminCTAEditor = () => {
@@ -45,6 +47,8 @@ const AdminCTAEditor = () => {
         button_text: r.button_text,
         success_title: r.success_title,
         success_description: r.success_description,
+        eyebrow: r.eyebrow ?? "— Contact",
+        bullets: Array.isArray(r.bullets) && r.bullets.length > 0 ? r.bullets : ["Free 30-minute audit call", "Detailed loom walkthrough", "No obligation, no spam"],
       });
     }
     setLoading(false);
@@ -62,6 +66,8 @@ const AdminCTAEditor = () => {
         button_text: data.button_text.slice(0, 50),
         success_title: data.success_title.slice(0, 100),
         success_description: data.success_description.slice(0, 300),
+        eyebrow: data.eyebrow.slice(0, 60),
+        bullets: data.bullets.filter((b) => b.trim()).slice(0, 10),
         updated_at: new Date().toISOString(),
       } as any)
       .eq("id", data.id);
@@ -103,6 +109,15 @@ const AdminCTAEditor = () => {
             <CardDescription>Displays as "Headline <span className="text-primary">Highlight</span>"</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Eyebrow (above headline)</Label>
+              <Input
+                value={data.eyebrow}
+                maxLength={60}
+                placeholder="— Contact"
+                onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
+              />
+            </div>
             <div className="space-y-2">
               <Label>Main Text</Label>
               <Input
@@ -176,6 +191,45 @@ const AdminCTAEditor = () => {
               <p className="text-sm font-bold text-foreground">{data.success_title}</p>
               <p className="text-xs text-muted-foreground mt-1">{data.success_description}</p>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Bullets */}
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-base">Bullet Points</CardTitle>
+            <CardDescription>Selling points shown beside the form (max 10)</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {data.bullets.map((b, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={b}
+                  maxLength={120}
+                  placeholder="e.g. Free 30-minute audit call"
+                  onChange={(e) => {
+                    const next = [...data.bullets];
+                    next[i] = e.target.value;
+                    setData({ ...data, bullets: next });
+                  }}
+                />
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setData({ ...data, bullets: data.bullets.filter((_, idx) => idx !== i) })}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => data.bullets.length < 10 && setData({ ...data, bullets: [...data.bullets, ""] })}
+              disabled={data.bullets.length >= 10}
+            >
+              <Plus className="mr-1 h-3 w-3" /> Add Bullet
+            </Button>
           </CardContent>
         </Card>
       </div>

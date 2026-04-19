@@ -13,6 +13,12 @@ interface HeroData {
   secondary_cta_link: string;
   badge_text: string;
   hero_image_url: string | null;
+  status_label: string;
+  status_value: string;
+  since_label: string;
+  since_value: string;
+  projects_label: string;
+  projects_value: string;
 }
 
 const fallback: HeroData = {
@@ -25,12 +31,17 @@ const fallback: HeroData = {
   secondary_cta_link: "#cases",
   badge_text: "Available for new projects",
   hero_image_url: null,
+  status_label: "Currently",
+  status_value: "Analytics Engineer",
+  since_label: "Since",
+  since_value: "2019",
+  projects_label: "Projects",
+  projects_value: "100+",
 };
 
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [profileTitle, setProfileTitle] = useState<string>("Analytics Engineer");
 
   useEffect(() => {
     supabase
@@ -39,17 +50,16 @@ const HeroSection = () => {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setHero(data as HeroData);
+        if (data) setHero({ ...fallback, ...(data as any) });
       });
     supabase
       .from("about_content")
-      .select("profile_image_url, profile_title")
+      .select("profile_image_url")
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) {
-          if ((data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
-          if ((data as any).profile_title) setProfileTitle((data as any).profile_title);
+        if (data && (data as any).profile_image_url) {
+          setProfileImageUrl((data as any).profile_image_url);
         }
       });
   }, []);
@@ -130,7 +140,7 @@ const HeroSection = () => {
                 {profileImageUrl ? (
                   <img
                     src={profileImageUrl}
-                    alt={profileTitle}
+                    alt={hero.status_value}
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   />
                 ) : (
@@ -146,9 +156,9 @@ const HeroSection = () => {
                 <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between">
                   <div>
                     <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-                      Currently
+                      {hero.status_label}
                     </p>
-                    <p className="text-sm font-medium text-foreground">{profileTitle}</p>
+                    <p className="text-sm font-medium text-foreground">{hero.status_value}</p>
                   </div>
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 </div>
@@ -162,9 +172,9 @@ const HeroSection = () => {
                 className="absolute -bottom-8 -left-4 sm:-left-10 glass-card px-4 py-3 rounded-xl z-10 bg-background/95"
               >
                 <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                  Since
+                  {hero.since_label}
                 </p>
-                <p className="font-serif-display text-2xl text-foreground leading-none">2019</p>
+                <p className="font-serif-display text-2xl text-foreground leading-none">{hero.since_value}</p>
               </motion.div>
 
               <motion.div
@@ -174,9 +184,9 @@ const HeroSection = () => {
                 className="absolute -top-4 -right-4 sm:-right-6 glass-card px-4 py-3 rounded-xl"
               >
                 <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                  Projects
+                  {hero.projects_label}
                 </p>
-                <p className="font-serif-display text-2xl text-primary leading-none">100+</p>
+                <p className="font-serif-display text-2xl text-primary leading-none">{hero.projects_value}</p>
               </motion.div>
             </div>
           </motion.div>
