@@ -159,7 +159,7 @@ const HeroSection = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="absolute -bottom-6 -left-4 sm:-left-10 glass-card px-4 py-3 rounded-xl z-10"
+                className="absolute -bottom-8 -left-4 sm:-left-10 glass-card px-4 py-3 rounded-xl z-10 bg-background/95"
               >
                 <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                   Since
