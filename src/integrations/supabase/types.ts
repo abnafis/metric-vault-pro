@@ -187,6 +187,36 @@ export type Database = {
           },
         ]
       }
+      blog_section_meta: {
+        Row: {
+          eyebrow: string
+          id: string
+          title: string
+          title_highlight: string
+          title_suffix: string
+          updated_at: string
+          view_all_text: string
+        }
+        Insert: {
+          eyebrow?: string
+          id?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
+          updated_at?: string
+          view_all_text?: string
+        }
+        Update: {
+          eyebrow?: string
+          id?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
+          updated_at?: string
+          view_all_text?: string
+        }
+        Relationships: []
+      }
       case_studies: {
         Row: {
           chart_data: Json | null
@@ -232,10 +262,42 @@ export type Database = {
         }
         Relationships: []
       }
+      case_studies_meta: {
+        Row: {
+          eyebrow: string
+          id: string
+          subtitle: string
+          title: string
+          title_highlight: string
+          title_suffix: string
+          updated_at: string
+        }
+        Insert: {
+          eyebrow?: string
+          id?: string
+          subtitle?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
+          updated_at?: string
+        }
+        Update: {
+          eyebrow?: string
+          id?: string
+          subtitle?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cta_content: {
         Row: {
+          bullets: Json
           button_text: string
           description: string
+          eyebrow: string
           headline: string
           headline_highlight: string
           id: string
@@ -244,8 +306,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          bullets?: Json
           button_text?: string
           description?: string
+          eyebrow?: string
           headline?: string
           headline_highlight?: string
           id?: string
@@ -254,8 +318,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          bullets?: Json
           button_text?: string
           description?: string
+          eyebrow?: string
           headline?: string
           headline_highlight?: string
           id?: string
@@ -455,8 +521,14 @@ export type Database = {
           id: string
           primary_cta_link: string
           primary_cta_text: string
+          projects_label: string
+          projects_value: string
           secondary_cta_link: string
           secondary_cta_text: string
+          since_label: string
+          since_value: string
+          status_label: string
+          status_value: string
           subheadline: string
           updated_at: string
         }
@@ -467,8 +539,14 @@ export type Database = {
           id?: string
           primary_cta_link?: string
           primary_cta_text?: string
+          projects_label?: string
+          projects_value?: string
           secondary_cta_link?: string
           secondary_cta_text?: string
+          since_label?: string
+          since_value?: string
+          status_label?: string
+          status_value?: string
           subheadline?: string
           updated_at?: string
         }
@@ -479,8 +557,14 @@ export type Database = {
           id?: string
           primary_cta_link?: string
           primary_cta_text?: string
+          projects_label?: string
+          projects_value?: string
           secondary_cta_link?: string
           secondary_cta_text?: string
+          since_label?: string
+          since_value?: string
+          status_label?: string
+          status_value?: string
           subheadline?: string
           updated_at?: string
         }
@@ -664,6 +748,12 @@ export type Database = {
           dark_logo_url: string | null
           favicon_url: string | null
           footer_description: string
+          footer_elsewhere_label: string
+          footer_eyebrow: string
+          footer_headline: string
+          footer_headline_highlight: string
+          footer_headline_suffix: string
+          footer_navigate_label: string
           id: string
           logo_url: string | null
           nav_links: Json
@@ -683,6 +773,12 @@ export type Database = {
           dark_logo_url?: string | null
           favicon_url?: string | null
           footer_description?: string
+          footer_elsewhere_label?: string
+          footer_eyebrow?: string
+          footer_headline?: string
+          footer_headline_highlight?: string
+          footer_headline_suffix?: string
+          footer_navigate_label?: string
           id?: string
           logo_url?: string | null
           nav_links?: Json
@@ -702,6 +798,12 @@ export type Database = {
           dark_logo_url?: string | null
           favicon_url?: string | null
           footer_description?: string
+          footer_elsewhere_label?: string
+          footer_eyebrow?: string
+          footer_headline?: string
+          footer_headline_highlight?: string
+          footer_headline_suffix?: string
+          footer_navigate_label?: string
           id?: string
           logo_url?: string | null
           nav_links?: Json
@@ -751,6 +853,33 @@ export type Database = {
           role?: string
           sort_order?: number
           text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials_meta: {
+        Row: {
+          eyebrow: string
+          id: string
+          title: string
+          title_highlight: string
+          title_suffix: string
+          updated_at: string
+        }
+        Insert: {
+          eyebrow?: string
+          id?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
+          updated_at?: string
+        }
+        Update: {
+          eyebrow?: string
+          id?: string
+          title?: string
+          title_highlight?: string
+          title_suffix?: string
           updated_at?: string
         }
         Relationships: []
