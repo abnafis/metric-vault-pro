@@ -10,18 +10,37 @@ interface Post {
 }
 interface Category { id: string; name: string; }
 
+interface MetaData {
+  eyebrow: string;
+  title: string;
+  title_highlight: string;
+  title_suffix: string;
+  view_all_text: string;
+}
+
+const fallbackMeta: MetaData = {
+  eyebrow: "— Journal",
+  title: "From the",
+  title_highlight: "blog",
+  title_suffix: ".",
+  view_all_text: "View all articles",
+};
+
 export default function BlogSection() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [meta, setMeta] = useState<MetaData>(fallbackMeta);
 
   useEffect(() => {
     (async () => {
-      const [{ data: p }, { data: c }] = await Promise.all([
+      const [{ data: p }, { data: c }, { data: m }] = await Promise.all([
         supabase.from("blog_posts").select("*").eq("status", "published").order("publish_date", { ascending: false }).limit(3),
         supabase.from("blog_categories").select("id, name"),
+        supabase.from("blog_section_meta" as any).select("*").limit(1).maybeSingle(),
       ]);
       if (p) setPosts(p as any);
       if (c) setCategories(c as any);
+      if (m) setMeta({ ...fallbackMeta, ...(m as any) });
     })();
   }, []);
 
@@ -34,16 +53,16 @@ export default function BlogSection() {
       <div className="section-container">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="space-y-4">
-            <p className="pill-eyebrow">— Journal</p>
+            <p className="pill-eyebrow">{meta.eyebrow}</p>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight max-w-2xl">
-              From the <span className="font-serif-display text-primary">blog</span>.
+              {meta.title} <span className="font-serif-display text-primary">{meta.title_highlight}</span>{meta.title_suffix}
             </h2>
           </div>
           <Link
             to="/blog"
             className="inline-flex items-center gap-2 text-sm story-link self-start md:self-end"
           >
-            View all articles
+            {meta.view_all_text}
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
