@@ -84,7 +84,7 @@ const AboutSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-px bg-border rounded-2xl overflow-hidden border border-border"
+            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border"
           >
             {about.stats.map((s, i) => {
               const Icon = iconMap[s.icon] || BarChart3;
@@ -98,7 +98,7 @@ const AboutSection = () => {
                   className="bg-background p-8 sm:p-10 group hover:bg-card/40 transition-colors duration-300"
                 >
                   <Icon className="w-5 h-5 text-primary mb-6" />
-                  <p className="font-serif-display text-6xl text-foreground leading-none mb-2">
+                  <p className="font-serif-display text-5xl sm:text-6xl text-foreground leading-none mb-2">
                     {s.value}
                   </p>
                   <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
@@ -108,8 +108,8 @@ const AboutSection = () => {
               );
             })}
 
-            {/* Profile title cell — fills grid */}
-            <div className="bg-card p-8 sm:p-10 sm:col-span-2 flex items-center gap-6">
+            {/* Profile title cell — spans full width */}
+            <div className="bg-card p-8 sm:p-10 sm:col-span-3 flex items-center gap-6">
               {about.profile_image_url ? (
                 <img
                   src={about.profile_image_url}
