@@ -18,6 +18,12 @@ interface HeroData {
   secondary_cta_link: string;
   badge_text: string;
   hero_image_url: string | null;
+  status_label: string;
+  status_value: string;
+  since_label: string;
+  since_value: string;
+  projects_label: string;
+  projects_value: string;
 }
 
 const defaults: Omit<HeroData, "id"> = {
@@ -29,6 +35,12 @@ const defaults: Omit<HeroData, "id"> = {
   secondary_cta_link: "#cases",
   badge_text: "Trusted by 100+ businesses",
   hero_image_url: null,
+  status_label: "Currently",
+  status_value: "Analytics Engineer",
+  since_label: "Since",
+  since_value: "2019",
+  projects_label: "Projects",
+  projects_value: "100+",
 };
 
 const AdminHeroEditor = () => {
