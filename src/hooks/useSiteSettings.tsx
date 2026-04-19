@@ -36,6 +36,12 @@ export interface SiteSettings {
   favicon_url: string | null;
   title_format: string;
   page_titles: Record<string, PageTitle>;
+  footer_eyebrow: string;
+  footer_headline: string;
+  footer_headline_highlight: string;
+  footer_headline_suffix: string;
+  footer_navigate_label: string;
+  footer_elsewhere_label: string;
   updated_at: string;
 }
 
@@ -67,6 +73,12 @@ const defaults: SiteSettings = {
   favicon_url: null,
   title_format: "{page} | {site}",
   page_titles: {},
+  footer_eyebrow: "— Get in touch",
+  footer_headline: "Let's build",
+  footer_headline_highlight: "accurate",
+  footer_headline_suffix: "data together.",
+  footer_navigate_label: "Navigate",
+  footer_elsewhere_label: "Elsewhere",
   updated_at: "",
 };
 
@@ -84,23 +96,20 @@ export function useSiteSettings() {
       if (data) {
         const d = data as any;
         setSettings({
-          id: d.id,
+          ...defaults,
+          ...d,
           site_name: d.site_name || defaults.site_name,
           site_tagline: d.site_tagline || defaults.site_tagline,
-          logo_url: d.logo_url,
-          dark_logo_url: d.dark_logo_url,
-          footer_description: d.footer_description,
-          copyright_text: d.copyright_text,
-          contact_email: d.contact_email,
-          cta_form_email: d.cta_form_email,
-          seo_title: d.seo_title,
-          seo_description: d.seo_description,
-          nav_links: d.nav_links as NavLink[],
-          social_links: d.social_links as SocialLink[],
-          favicon_url: d.favicon_url,
+          nav_links: (d.nav_links as NavLink[]) || defaults.nav_links,
+          social_links: (d.social_links as SocialLink[]) || defaults.social_links,
           title_format: d.title_format || defaults.title_format,
           page_titles: d.page_titles || {},
-          updated_at: d.updated_at,
+          footer_eyebrow: d.footer_eyebrow || defaults.footer_eyebrow,
+          footer_headline: d.footer_headline || defaults.footer_headline,
+          footer_headline_highlight: d.footer_headline_highlight || defaults.footer_headline_highlight,
+          footer_headline_suffix: d.footer_headline_suffix || defaults.footer_headline_suffix,
+          footer_navigate_label: d.footer_navigate_label || defaults.footer_navigate_label,
+          footer_elsewhere_label: d.footer_elsewhere_label || defaults.footer_elsewhere_label,
         });
       }
       setLoading(false);

@@ -50,7 +50,14 @@ const CTASection = () => {
       .limit(1)
       .maybeSingle()
       .then(({ data }: any) => {
-        if (data) setCta(data as CTAData);
+        if (data) {
+          const d = data as any;
+          setCta({
+            ...fallback,
+            ...d,
+            bullets: Array.isArray(d.bullets) && d.bullets.length > 0 ? d.bullets : fallback.bullets,
+          });
+        }
       });
   }, []);
 
@@ -127,7 +134,7 @@ const CTASection = () => {
             viewport={{ once: true }}
             className="lg:col-span-5 space-y-6 lg:sticky lg:top-24 lg:self-start"
           >
-            <p className="pill-eyebrow">— Contact</p>
+            <p className="pill-eyebrow">{cta.eyebrow}</p>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
               {cta.headline}{" "}
               <span className="font-serif-display text-primary">
@@ -139,11 +146,7 @@ const CTASection = () => {
             </p>
 
             <div className="pt-4 space-y-3">
-              {[
-                "Free 30-minute audit call",
-                "Detailed loom walkthrough",
-                "No obligation, no spam",
-              ].map((b) => (
+              {cta.bullets.map((b) => (
                 <div key={b} className="flex items-center gap-3 text-sm text-foreground">
                   <Check className="w-4 h-4 text-primary shrink-0" />
                   {b}
