@@ -12,6 +12,8 @@ interface CTAData {
   button_text: string;
   success_title: string;
   success_description: string;
+  eyebrow: string;
+  bullets: string[];
 }
 
 const fallback: CTAData = {
@@ -21,6 +23,8 @@ const fallback: CTAData = {
   button_text: "Request Free Audit",
   success_title: "Request Received",
   success_description: "I'll review your setup and get back to you within 24 hours.",
+  eyebrow: "— Contact",
+  bullets: ["Free 30-minute audit call", "Detailed loom walkthrough", "No obligation, no spam"],
 };
 
 const auditSchema = z.object({
