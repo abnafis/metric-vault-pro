@@ -17,6 +17,8 @@ interface CTAData {
   button_text: string;
   success_title: string;
   success_description: string;
+  eyebrow: string;
+  bullets: string[];
 }
 
 const AdminCTAEditor = () => {
@@ -45,6 +47,8 @@ const AdminCTAEditor = () => {
         button_text: r.button_text,
         success_title: r.success_title,
         success_description: r.success_description,
+        eyebrow: r.eyebrow ?? "— Contact",
+        bullets: Array.isArray(r.bullets) && r.bullets.length > 0 ? r.bullets : ["Free 30-minute audit call", "Detailed loom walkthrough", "No obligation, no spam"],
       });
     }
     setLoading(false);
@@ -62,6 +66,8 @@ const AdminCTAEditor = () => {
         button_text: data.button_text.slice(0, 50),
         success_title: data.success_title.slice(0, 100),
         success_description: data.success_description.slice(0, 300),
+        eyebrow: data.eyebrow.slice(0, 60),
+        bullets: data.bullets.filter((b) => b.trim()).slice(0, 10),
         updated_at: new Date().toISOString(),
       } as any)
       .eq("id", data.id);
@@ -103,6 +109,15 @@ const AdminCTAEditor = () => {
             <CardDescription>Displays as "Headline <span className="text-primary">Highlight</span>"</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Eyebrow (above headline)</Label>
+              <Input
+                value={data.eyebrow}
+                maxLength={60}
+                placeholder="— Contact"
+                onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
+              />
+            </div>
             <div className="space-y-2">
               <Label>Main Text</Label>
               <Input
