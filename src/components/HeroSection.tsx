@@ -42,7 +42,6 @@ const fallback: HeroData = {
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [profileTitle, setProfileTitle] = useState<string>("Analytics Engineer");
 
   useEffect(() => {
     supabase
@@ -51,17 +50,16 @@ const HeroSection = () => {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setHero(data as HeroData);
+        if (data) setHero({ ...fallback, ...(data as any) });
       });
     supabase
       .from("about_content")
-      .select("profile_image_url, profile_title")
+      .select("profile_image_url")
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) {
-          if ((data as any).profile_image_url) setProfileImageUrl((data as any).profile_image_url);
-          if ((data as any).profile_title) setProfileTitle((data as any).profile_title);
+        if (data && (data as any).profile_image_url) {
+          setProfileImageUrl((data as any).profile_image_url);
         }
       });
   }, []);
