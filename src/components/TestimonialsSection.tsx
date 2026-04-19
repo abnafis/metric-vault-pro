@@ -28,8 +28,23 @@ const fallback: Testimonial[] = [
   { name: "Olivia Tran", role: "Founder, LeadHarvest", avatar_url: oliviaImg, platform: "Upwork", rating: 5, text: "We were sending duplicate form submissions. Cleaned up our GTM container, added deduplication, and our cost per lead dropped by 35%." },
 ];
 
+interface MetaData {
+  eyebrow: string;
+  title: string;
+  title_highlight: string;
+  title_suffix: string;
+}
+
+const fallbackMeta: MetaData = {
+  eyebrow: "— Voices",
+  title: "Trusted by teams",
+  title_highlight: "worldwide",
+  title_suffix: ".",
+};
+
 const TestimonialsSection = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(fallback);
+  const [meta, setMeta] = useState<MetaData>(fallbackMeta);
 
   useEffect(() => {
     supabase
@@ -38,6 +53,14 @@ const TestimonialsSection = () => {
       .order("sort_order", { ascending: true })
       .then(({ data }) => {
         if (data && data.length > 0) setTestimonials(data as Testimonial[]);
+      });
+    supabase
+      .from("testimonials_meta" as any)
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }: any) => {
+        if (data) setMeta({ ...fallbackMeta, ...(data as MetaData) });
       });
   }, []);
 
@@ -50,10 +73,10 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="max-w-3xl mb-20 space-y-4"
         >
-          <p className="pill-eyebrow">— Voices</p>
+          <p className="pill-eyebrow">{meta.eyebrow}</p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
-            Trusted by teams{" "}
-            <span className="font-serif-display text-primary">worldwide</span>.
+            {meta.title}{" "}
+            <span className="font-serif-display text-primary">{meta.title_highlight}</span>{meta.title_suffix}
           </h2>
         </motion.div>
 
