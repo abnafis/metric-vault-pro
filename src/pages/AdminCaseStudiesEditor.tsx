@@ -23,6 +23,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 interface Metric {
   label: string;
