@@ -175,6 +175,12 @@ const AdminCaseStudiesEditor = () => {
         </Button>
       </div>
 
+      <SectionHeaderEditor
+        table="case_studies_meta"
+        title="Case Studies — Section Header"
+        extraFields={[{ key: "subtitle", label: "Subtitle", placeholder: "Real engagements, measurable outcomes." }]}
+      />
+
       {items.length === 0 ? (
         <div className="glass-card p-12 text-center text-muted-foreground">No case studies yet.</div>
       ) : (
