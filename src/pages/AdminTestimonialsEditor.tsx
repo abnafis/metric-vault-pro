@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 const PLATFORMS = ["Fiverr", "LinkedIn", "Upwork", "Direct Client"];
 
