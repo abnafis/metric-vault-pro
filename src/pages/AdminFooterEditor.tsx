@@ -133,6 +133,41 @@ export default function AdminFooterEditor() {
       </Card>
 
       <Card className="bg-card border-border">
+        <CardHeader>
+          <CardTitle className="text-base">Footer Headline</CardTitle>
+          <p className="text-xs text-muted-foreground mt-1">Big call-to-action text displayed at the top of the footer.</p>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs text-muted-foreground">Eyebrow</Label>
+              <Input value={data.footer_eyebrow} onChange={(e) => setData({ ...data, footer_eyebrow: e.target.value })} placeholder="— Get in touch" />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Headline</Label>
+              <Input value={data.footer_headline} onChange={(e) => setData({ ...data, footer_headline: e.target.value })} placeholder="Let's build" />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Highlighted Word</Label>
+              <Input value={data.footer_headline_highlight} onChange={(e) => setData({ ...data, footer_headline_highlight: e.target.value })} placeholder="accurate" />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Headline Suffix</Label>
+              <Input value={data.footer_headline_suffix} onChange={(e) => setData({ ...data, footer_headline_suffix: e.target.value })} placeholder="data together." />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">"Navigate" Column Label</Label>
+              <Input value={data.footer_navigate_label} onChange={(e) => setData({ ...data, footer_navigate_label: e.target.value })} placeholder="Navigate" />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">"Elsewhere" Column Label</Label>
+              <Input value={data.footer_elsewhere_label} onChange={(e) => setData({ ...data, footer_elsewhere_label: e.target.value })} placeholder="Elsewhere" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-card border-border">
         <CardHeader><CardTitle className="text-base">Social Links</CardTitle></CardHeader>
         <CardContent className="space-y-3">
           {data.social_links.map((link, i) => (
