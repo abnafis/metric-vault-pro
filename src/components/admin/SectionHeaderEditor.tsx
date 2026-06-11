@@ -39,7 +39,7 @@ export default function SectionHeaderEditor({
   useEffect(() => {
     (async () => {
       const { data: row } = await supabase.from(table as any).select("*").limit(1).maybeSingle();
-      if (row) setData(row as MetaRow);
+      if (row) setData(row as unknown as MetaRow);
       setLoading(false);
     })();
   }, [table]);
