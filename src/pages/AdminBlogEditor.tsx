@@ -187,6 +187,12 @@ export default function AdminBlogEditor() {
         </div>
       </div>
 
+      <SectionHeaderEditor
+        table="blog_section_meta"
+        title="Blog — Homepage Section Header"
+        extraFields={[{ key: "view_all_text", label: "View All Button Text", placeholder: "View all posts" }]}
+      />
+
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
