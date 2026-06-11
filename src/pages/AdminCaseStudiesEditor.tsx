@@ -23,6 +23,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 interface Metric {
   label: string;
@@ -173,6 +174,12 @@ const AdminCaseStudiesEditor = () => {
           <Plus className="h-4 w-4 mr-1" /> Add Case Study
         </Button>
       </div>
+
+      <SectionHeaderEditor
+        table="case_studies_meta"
+        title="Case Studies — Section Header"
+        extraFields={[{ key: "subtitle", label: "Subtitle", placeholder: "Real engagements, measurable outcomes." }]}
+      />
 
       {items.length === 0 ? (
         <div className="glass-card p-12 text-center text-muted-foreground">No case studies yet.</div>

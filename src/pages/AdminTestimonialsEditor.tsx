@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 const PLATFORMS = ["Fiverr", "LinkedIn", "Upwork", "Direct Client"];
 
@@ -155,6 +156,8 @@ const AdminTestimonialsEditor = () => {
           <Plus className="h-4 w-4 mr-1" /> Add Testimonial
         </Button>
       </div>
+
+      <SectionHeaderEditor table="testimonials_meta" title="Testimonials — Section Header" />
 
       {items.length === 0 ? (
         <div className="glass-card p-12 text-center text-muted-foreground">No testimonials yet.</div>

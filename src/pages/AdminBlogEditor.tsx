@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, Eye, Search, X } from "lucide-react";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 interface Category { id: string; name: string; slug: string; sort_order: number; }
 interface BlogPost {
@@ -185,6 +186,12 @@ export default function AdminBlogEditor() {
           <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" />New Post</Button>
         </div>
       </div>
+
+      <SectionHeaderEditor
+        table="blog_section_meta"
+        title="Blog — Homepage Section Header"
+        extraFields={[{ key: "view_all_text", label: "View All Button Text", placeholder: "View all posts" }]}
+      />
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
