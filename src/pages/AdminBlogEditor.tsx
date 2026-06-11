@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, Eye, Search, X } from "lucide-react";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import SectionHeaderEditor from "@/components/admin/SectionHeaderEditor";
 
 interface Category { id: string; name: string; slug: string; sort_order: number; }
 interface BlogPost {
