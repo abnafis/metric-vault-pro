@@ -157,6 +157,8 @@ const AdminTestimonialsEditor = () => {
         </Button>
       </div>
 
+      <SectionHeaderEditor table="testimonials_meta" title="Testimonials — Section Header" />
+
       {items.length === 0 ? (
         <div className="glass-card p-12 text-center text-muted-foreground">No testimonials yet.</div>
       ) : (
