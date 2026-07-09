@@ -73,7 +73,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] flex items-center pt-32 sm:pt-36 pb-20 overflow-hidden"
+      className="relative flex items-center pt-32 sm:pt-40 pb-16 overflow-hidden"
     >
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-radial-glow pointer-events-none" />
 
