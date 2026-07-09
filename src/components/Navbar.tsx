@@ -30,6 +30,7 @@ const Navbar = () => {
   }, []);
 
   const visibleLinks = settings.nav_links.filter((l) => l.visible !== false);
+  const whatsappUrl = (settings as any)?.whatsapp_url || "#cta";
 
   const handleNavClick = (href: string, label?: string) => {
     setOpen(false);
@@ -42,34 +43,24 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "border-b border-border bg-background/80 backdrop-blur-xl" : "bg-transparent"
-      }`}
+      className={`fixed top-8 sm:top-10 left-0 right-0 z-50 transition-all duration-300 flex justify-center px-4`}
     >
-      <div className="section-container flex items-center justify-between h-16">
-        <a href="/" className="flex items-center gap-2.5 shrink-0 group">
+      <div className={`pill-nav flex items-center gap-2 pl-2 pr-2 py-2 ${scrolled ? "shadow-lg" : ""}`}>
+        <a
+          href="/"
+          className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-muted transition-colors shrink-0"
+        >
           {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt="Avatar"
-              className="w-8 h-8 rounded-full object-cover border border-border"
-            />
-          ) : settings.logo_url ? (
-            <img
-              src={settings.logo_url}
-              alt={settings.site_name}
-              className="h-7 max-w-[120px] object-contain"
-              loading="eager"
-            />
+            <img src={avatarUrl} alt="Avatar" className="w-7 h-7 rounded-full object-cover" />
           ) : (
-            <div className="w-7 h-7 rounded-full bg-primary" />
+            <div className="w-7 h-7 rounded-full bg-foreground" />
           )}
-          <span className="font-mono text-sm font-medium text-foreground tracking-tight">
+          <span className="text-sm font-medium text-foreground tracking-tight hidden sm:inline">
             {settings.site_name}
           </span>
         </a>
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center">
           {visibleLinks.map((l) => (
             <a
               key={l.href}
@@ -82,42 +73,42 @@ const Navbar = () => {
                   trackNavigationClick(l.label);
                 }
               }}
-              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className="px-4 py-2 text-sm text-foreground/70 hover:text-foreground transition-colors duration-200 rounded-full"
             >
               {l.label}
             </a>
           ))}
-          <a
-            href="#cta"
-            onClick={(e) => {
-              e.preventDefault();
-              trackCTAClick("nav_get_audit");
-              handleNavClick("#cta");
-            }}
-            className="ml-3 btn-primary-glow !px-5 !py-2 !text-xs"
-          >
-            Get Audit
-          </a>
         </div>
 
+        <a
+          href={whatsappUrl}
+          target={whatsappUrl.startsWith("http") ? "_blank" : undefined}
+          rel="noopener noreferrer"
+          onClick={() => trackCTAClick("nav_whatsapp")}
+          className="hidden sm:inline-flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-card border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+        >
+          <span className="w-2 h-2 rounded-full bg-[hsl(var(--accent-green))] animate-pulse" />
+          WhatsApp
+        </a>
+
         <button
-          className="md:hidden text-foreground p-2 -mr-2"
+          className="md:hidden text-foreground p-2"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden absolute top-full mt-3 left-4 right-4 rounded-2xl border border-border bg-card shadow-lg"
           >
-            <div className="section-container py-6 flex flex-col gap-1">
+            <div className="p-4 flex flex-col gap-1">
               {visibleLinks.map((l) => (
                 <a
                   key={l.href}
@@ -131,21 +122,22 @@ const Navbar = () => {
                       setOpen(false);
                     }
                   }}
-                  className="text-base text-muted-foreground hover:text-foreground py-3 border-b border-border/50"
+                  className="text-base text-foreground py-3 px-3 hover:bg-muted rounded-lg"
                 >
                   {l.label}
                 </a>
               ))}
               <a
-                href="#cta"
-                onClick={(e) => {
-                  e.preventDefault();
-                  trackCTAClick("mobile_nav_get_audit");
-                  handleNavClick("#cta");
+                href={whatsappUrl}
+                target={whatsappUrl.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                onClick={() => {
+                  trackCTAClick("mobile_nav_whatsapp");
+                  setOpen(false);
                 }}
-                className="btn-primary-glow text-center mt-4"
+                className="btn-primary-glow text-center mt-2"
               >
-                Get Audit
+                WhatsApp
               </a>
             </div>
           </motion.div>
