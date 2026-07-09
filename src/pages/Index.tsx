@@ -1,10 +1,15 @@
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import HeroSection from "@/components/HeroSection";
+import ClientProofRow from "@/components/ClientProofRow";
+import LogoMarquee from "@/components/LogoMarquee";
 import CaseStudiesSection from "@/components/CaseStudiesSection";
 import AboutSection from "@/components/AboutSection";
+import MetricsStrip from "@/components/MetricsStrip";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import BlogSection from "@/components/BlogSection";
+import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import FloatingSocials from "@/components/FloatingSocials";
@@ -32,13 +37,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AnnouncementBar />
       <Navbar />
       <FloatingSocials />
       <HeroSection />
+      <ClientProofRow />
+      <LogoMarquee />
       <CaseStudiesSection />
       <AboutSection />
+      <MetricsStrip />
       <TestimonialsSection />
       <BlogSection />
+      <FAQSection />
       <CTASection />
       <Footer />
     </div>
