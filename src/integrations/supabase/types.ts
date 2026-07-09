@@ -403,6 +403,36 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          created_at: string | null
+          id: string
+          question: string
+          sort_order: number | null
+          updated_at: string | null
+          visible: boolean | null
+        }
+        Insert: {
+          answer?: string
+          created_at?: string | null
+          id?: string
+          question: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          id?: string
+          question?: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
+        }
+        Relationships: []
+      }
       funnel_leads: {
         Row: {
           created_at: string
@@ -527,6 +557,8 @@ export type Database = {
           secondary_cta_text: string
           since_label: string
           since_value: string
+          social_proof_avatars: Json | null
+          social_proof_label: string | null
           status_label: string
           status_value: string
           subheadline: string
@@ -545,6 +577,8 @@ export type Database = {
           secondary_cta_text?: string
           since_label?: string
           since_value?: string
+          social_proof_avatars?: Json | null
+          social_proof_label?: string | null
           status_label?: string
           status_value?: string
           subheadline?: string
@@ -563,10 +597,42 @@ export type Database = {
           secondary_cta_text?: string
           since_label?: string
           since_value?: string
+          social_proof_avatars?: Json | null
+          social_proof_label?: string | null
           status_label?: string
           status_value?: string
           subheadline?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      hero_metrics: {
+        Row: {
+          created_at: string | null
+          id: string
+          label: string
+          sort_order: number | null
+          updated_at: string | null
+          value: string
+          visible: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          label: string
+          sort_order?: number | null
+          updated_at?: string | null
+          value: string
+          visible?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          label?: string
+          sort_order?: number | null
+          updated_at?: string | null
+          value?: string
+          visible?: boolean | null
         }
         Relationships: []
       }
@@ -644,6 +710,36 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      partner_logos: {
+        Row: {
+          alt: string | null
+          created_at: string | null
+          id: string
+          image_url: string
+          sort_order: number | null
+          updated_at: string | null
+          visible: boolean | null
+        }
+        Insert: {
+          alt?: string | null
+          created_at?: string | null
+          id?: string
+          image_url: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
+        }
+        Update: {
+          alt?: string | null
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
         }
         Relationships: []
       }
@@ -742,6 +838,7 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          announcement_text: string | null
           contact_email: string
           copyright_text: string
           cta_form_email: string
@@ -765,8 +862,10 @@ export type Database = {
           social_links: Json
           title_format: string
           updated_at: string
+          whatsapp_url: string | null
         }
         Insert: {
+          announcement_text?: string | null
           contact_email?: string
           copyright_text?: string
           cta_form_email?: string
@@ -790,8 +889,10 @@ export type Database = {
           social_links?: Json
           title_format?: string
           updated_at?: string
+          whatsapp_url?: string | null
         }
         Update: {
+          announcement_text?: string | null
           contact_email?: string
           copyright_text?: string
           cta_form_email?: string
@@ -815,6 +916,7 @@ export type Database = {
           social_links?: Json
           title_format?: string
           updated_at?: string
+          whatsapp_url?: string | null
         }
         Relationships: []
       }
@@ -822,6 +924,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          featured: boolean | null
           id: string
           name: string
           platform: string
@@ -830,10 +933,13 @@ export type Database = {
           sort_order: number
           text: string
           updated_at: string
+          video_duration: string | null
+          video_thumbnail_url: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          featured?: boolean | null
           id?: string
           name: string
           platform?: string
@@ -842,10 +948,13 @@ export type Database = {
           sort_order?: number
           text: string
           updated_at?: string
+          video_duration?: string | null
+          video_thumbnail_url?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          featured?: boolean | null
           id?: string
           name?: string
           platform?: string
@@ -854,6 +963,8 @@ export type Database = {
           sort_order?: number
           text?: string
           updated_at?: string
+          video_duration?: string | null
+          video_thumbnail_url?: string | null
         }
         Relationships: []
       }
@@ -881,6 +992,33 @@ export type Database = {
           title_highlight?: string
           title_suffix?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      why_features: {
+        Row: {
+          created_at: string | null
+          id: string
+          label: string
+          sort_order: number | null
+          updated_at: string | null
+          visible: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          label: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          label?: string
+          sort_order?: number | null
+          updated_at?: string | null
+          visible?: boolean | null
         }
         Relationships: []
       }
