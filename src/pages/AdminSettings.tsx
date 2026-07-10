@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import { Save, Globe, Mail } from "lucide-react";
+import { Save, Globe, Mail, Megaphone } from "lucide-react";
 
 interface Settings {
   id: string;
@@ -15,6 +15,8 @@ interface Settings {
   cta_form_email: string;
   seo_title: string;
   seo_description: string;
+  announcement_text: string;
+  whatsapp_url: string;
 }
 
 const AdminSettings = () => {
@@ -30,10 +32,12 @@ const AdminSettings = () => {
       const r = row as any;
       setData({
         id: r.id,
-        contact_email: r.contact_email,
-        cta_form_email: r.cta_form_email,
-        seo_title: r.seo_title,
-        seo_description: r.seo_description,
+        contact_email: r.contact_email ?? "",
+        cta_form_email: r.cta_form_email ?? "",
+        seo_title: r.seo_title ?? "",
+        seo_description: r.seo_description ?? "",
+        announcement_text: r.announcement_text ?? "",
+        whatsapp_url: r.whatsapp_url ?? "",
       });
     }
     setLoading(false);
@@ -49,6 +53,8 @@ const AdminSettings = () => {
         cta_form_email: data.cta_form_email.slice(0, 100),
         seo_title: data.seo_title.slice(0, 60),
         seo_description: data.seo_description.slice(0, 160),
+        announcement_text: data.announcement_text.slice(0, 200),
+        whatsapp_url: data.whatsapp_url.slice(0, 300),
         updated_at: new Date().toISOString(),
       } as any)
       .eq("id", data.id);
@@ -68,7 +74,7 @@ const AdminSettings = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-          <p className="text-sm text-muted-foreground">Contact emails & SEO configuration</p>
+          <p className="text-sm text-muted-foreground">Contact, announcement bar, WhatsApp & SEO</p>
         </div>
         <Button onClick={handleSave} disabled={saving}>
           <Save className="mr-2 h-4 w-4" />
@@ -76,11 +82,32 @@ const AdminSettings = () => {
         </Button>
       </div>
 
-      <Tabs defaultValue="contact" className="space-y-4">
-        <TabsList className="grid grid-cols-2 w-full max-w-sm">
+      <Tabs defaultValue="general" className="space-y-4">
+        <TabsList className="grid grid-cols-3 w-full max-w-lg">
+          <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="general">
+          <Card className="bg-card border-border">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2"><Megaphone className="h-4 w-4" /> Announcement Bar & WhatsApp</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Announcement Bar Text</Label>
+                <Input value={data.announcement_text} maxLength={200} onChange={(e) => setData({ ...data, announcement_text: e.target.value })} placeholder="🎉 Available for new projects — book a call" />
+                <p className="text-xs text-muted-foreground">Leave empty to hide the yellow bar at the top.</p>
+              </div>
+              <div className="space-y-2">
+                <Label>WhatsApp URL</Label>
+                <Input value={data.whatsapp_url} maxLength={300} onChange={(e) => setData({ ...data, whatsapp_url: e.target.value })} placeholder="https://wa.me/1234567890" />
+                <p className="text-xs text-muted-foreground">Used by the navbar and CTA pill buttons.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="contact">
           <Card className="bg-card border-border">

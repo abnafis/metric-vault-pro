@@ -6,7 +6,9 @@ import ClientProofRow from "@/components/ClientProofRow";
 import LogoMarquee from "@/components/LogoMarquee";
 import CaseStudiesSection from "@/components/CaseStudiesSection";
 import AboutSection from "@/components/AboutSection";
+import WhyNotScalingSection from "@/components/WhyNotScalingSection";
 import MetricsStrip from "@/components/MetricsStrip";
+import ProcessSection from "@/components/ProcessSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import BlogSection from "@/components/BlogSection";
 import FAQSection from "@/components/FAQSection";
@@ -45,8 +47,10 @@ const Index = () => {
       <LogoMarquee />
       <CaseStudiesSection />
       <AboutSection />
+      <WhyNotScalingSection />
       <MetricsStrip />
       <TestimonialsSection />
+      <ProcessSection />
       <BlogSection />
       <FAQSection />
       <CTASection />

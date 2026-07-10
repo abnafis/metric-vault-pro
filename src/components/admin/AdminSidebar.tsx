@@ -3,6 +3,7 @@ import {
   MessageSquareQuote, UserCircle, PhoneCall, PanelBottom,
   Settings, FileText, Code, ClipboardList, Palette, Blocks,
   GitBranch, BarChart3, ImageIcon, Filter,
+  HelpCircle, TrendingUp, Images, Sparkles,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -19,6 +20,10 @@ const contentItems = [
   { title: "Process Steps", url: "/admin/process", icon: GitBranch },
   { title: "Case Studies", url: "/admin/case-studies", icon: BookOpen },
   { title: "Dashboard Showcase", url: "/admin/dashboard-showcase", icon: BarChart3 },
+  { title: "Partner Logos", url: "/admin/partner-logos", icon: Images },
+  { title: "Metrics Strip", url: "/admin/metrics", icon: TrendingUp },
+  { title: "Why Features", url: "/admin/why-features", icon: Sparkles },
+  { title: "FAQs", url: "/admin/faqs", icon: HelpCircle },
   { title: "Platforms", url: "/admin/platforms", icon: Monitor },
   { title: "Testimonials", url: "/admin/testimonials", icon: MessageSquareQuote },
   { title: "About Section", url: "/admin/about", icon: UserCircle },
