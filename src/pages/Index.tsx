@@ -47,8 +47,10 @@ const Index = () => {
       <LogoMarquee />
       <CaseStudiesSection />
       <AboutSection />
+      <WhyNotScalingSection />
       <MetricsStrip />
       <TestimonialsSection />
+      <ProcessSection />
       <BlogSection />
       <FAQSection />
       <CTASection />
