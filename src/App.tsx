@@ -85,6 +85,10 @@ function AppRoutes() {
               <Route path="funnels" element={<AdminFunnels />} />
               <Route path="funnels/:funnelId" element={<AdminFunnelEditor />} />
               <Route path="funnels/:funnelId/leads" element={<AdminFunnelLeads />} />
+              <Route path="faqs" element={<AdminFAQEditor />} />
+              <Route path="metrics" element={<AdminMetricsEditor />} />
+              <Route path="partner-logos" element={<AdminPartnerLogosEditor />} />
+              <Route path="why-features" element={<AdminWhyFeaturesEditor />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
