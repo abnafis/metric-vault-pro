@@ -38,6 +38,10 @@ import ScriptInjector from "./components/ScriptInjector";
 import NotFound from "./pages/NotFound";
 import DynamicPage from "./pages/DynamicPage";
 import FunnelPage from "./pages/FunnelPage";
+import AdminFAQEditor from "./pages/AdminFAQEditor";
+import AdminMetricsEditor from "./pages/AdminMetricsEditor";
+import AdminPartnerLogosEditor from "./pages/AdminPartnerLogosEditor";
+import AdminWhyFeaturesEditor from "./pages/AdminWhyFeaturesEditor";
 
 const queryClient = new QueryClient();
 
