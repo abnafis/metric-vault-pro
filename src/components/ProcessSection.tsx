@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useSectionHeader } from "@/hooks/useSectionHeader";
 
 interface Step {
   id: string;
