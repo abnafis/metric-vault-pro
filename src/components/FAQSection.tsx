@@ -16,6 +16,11 @@ interface FAQ {
 
 const FAQSection = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const header = useSectionHeader("faqs", {
+    eyebrow: "FAQs",
+    title: "Questions you may Ask",
+    subtitle: "Any queries you have",
+  });
 
   useEffect(() => {
     supabase
@@ -34,11 +39,13 @@ const FAQSection = () => {
     <section id="faqs" className="py-24">
       <div className="section-container max-w-4xl">
         <div className="text-center mb-14">
-          <p className="text-sm text-muted-foreground mb-3">FAQs</p>
-          <h2 className="text-4xl sm:text-5xl font-display font-bold tracking-tight text-foreground">
-            Questions you may Ask
-          </h2>
-          <p className="text-muted-foreground mt-3">Any queries you have</p>
+          {header.eyebrow && <p className="text-sm text-muted-foreground mb-3">{header.eyebrow}</p>}
+          {header.title && (
+            <h2 className="text-4xl sm:text-5xl font-display font-bold tracking-tight text-foreground">
+              {header.title}
+            </h2>
+          )}
+          {header.subtitle && <p className="text-muted-foreground mt-3">{header.subtitle}</p>}
         </div>
 
         <Accordion type="single" collapsible className="space-y-3">
