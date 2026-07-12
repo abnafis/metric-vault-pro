@@ -803,6 +803,36 @@ export type Database = {
         }
         Relationships: []
       }
+      section_headers: {
+        Row: {
+          created_at: string
+          eyebrow: string | null
+          id: string
+          slug: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          slug: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          slug?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           created_at: string

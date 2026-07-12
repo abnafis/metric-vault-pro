@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSectionHeader } from "@/hooks/useSectionHeader";
 
 interface Logo {
   id: string;
@@ -18,6 +19,7 @@ const fallbackLogos: Logo[] = [
 
 const LogoMarquee = () => {
   const [logos, setLogos] = useState<Logo[]>([]);
+  const header = useSectionHeader("logo_marquee", { eyebrow: null, title: "Trusted by teams at", subtitle: null });
 
   useEffect(() => {
     supabase
@@ -35,6 +37,11 @@ const LogoMarquee = () => {
 
   return (
     <section className="py-12 border-y border-border">
+      {header.title && (
+        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground mb-8">
+          {header.title}
+        </p>
+      )}
       <div className="marquee">
         <div className="marquee-track">
           {doubled.map((l, i) => (

@@ -42,6 +42,7 @@ import AdminFAQEditor from "./pages/AdminFAQEditor";
 import AdminMetricsEditor from "./pages/AdminMetricsEditor";
 import AdminPartnerLogosEditor from "./pages/AdminPartnerLogosEditor";
 import AdminWhyFeaturesEditor from "./pages/AdminWhyFeaturesEditor";
+import AdminSectionHeadersEditor from "./pages/AdminSectionHeadersEditor";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ function AppRoutes() {
               <Route path="metrics" element={<AdminMetricsEditor />} />
               <Route path="partner-logos" element={<AdminPartnerLogosEditor />} />
               <Route path="why-features" element={<AdminWhyFeaturesEditor />} />
+              <Route path="section-headers" element={<AdminSectionHeadersEditor />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
