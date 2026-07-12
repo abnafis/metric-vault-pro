@@ -24,6 +24,8 @@ interface HeroData {
   since_value: string;
   projects_label: string;
   projects_value: string;
+  social_proof_avatars: string[] | null;
+  social_proof_label: string | null;
 }
 
 const defaults: Omit<HeroData, "id"> = {
