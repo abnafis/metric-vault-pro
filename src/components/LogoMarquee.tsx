@@ -19,6 +19,7 @@ const fallbackLogos: Logo[] = [
 
 const LogoMarquee = () => {
   const [logos, setLogos] = useState<Logo[]>([]);
+  const header = useSectionHeader("logo_marquee", { eyebrow: null, title: "Trusted by teams at", subtitle: null });
 
   useEffect(() => {
     supabase
