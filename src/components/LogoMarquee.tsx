@@ -36,6 +36,11 @@ const LogoMarquee = () => {
 
   return (
     <section className="py-12 border-y border-border">
+      {header.title && (
+        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground mb-8">
+          {header.title}
+        </p>
+      )}
       <div className="marquee">
         <div className="marquee-track">
           {doubled.map((l, i) => (
