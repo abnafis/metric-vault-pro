@@ -7,6 +7,11 @@ interface Feature { id: string; label: string; visible: boolean; }
 
 const WhyNotScalingSection = () => {
   const [items, setItems] = useState<Feature[]>([]);
+  const header = useSectionHeader("why_not_scaling", {
+    eyebrow: "Why your ads aren't scaling",
+    title: "Stop guessing. Start tracking every conversion.",
+    subtitle: null,
+  });
 
   useEffect(() => {
     supabase.from("why_features").select("*").order("sort_order").then(({ data }) => {
@@ -20,10 +25,13 @@ const WhyNotScalingSection = () => {
     <section className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Why your ads aren't scaling</p>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-            Stop guessing. Start tracking every conversion.
-          </h2>
+          {header.eyebrow && (
+            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{header.eyebrow}</p>
+          )}
+          {header.title && (
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">{header.title}</h2>
+          )}
+          {header.subtitle && <p className="text-muted-foreground mt-3">{header.subtitle}</p>}
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           {items.map((f) => (
