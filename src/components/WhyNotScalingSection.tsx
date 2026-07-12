@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Check } from "lucide-react";
+import { useSectionHeader } from "@/hooks/useSectionHeader";
 
 interface Feature { id: string; label: string; visible: boolean; }
 
