@@ -330,6 +330,48 @@ const AdminHeroEditor = () => {
             </div>
           </div>
 
+          {/* Social Proof Row */}
+          <div className="glass-card p-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Social Proof Row</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Small avatar cluster + stars + label shown under the hero.
+              </p>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Label (e.g. "250+ Happy clients")</Label>
+              <Input
+                value={data.social_proof_label ?? ""}
+                maxLength={80}
+                onChange={(e) =>
+                  setData((prev) => (prev ? { ...prev, social_proof_label: e.target.value } : null))
+                }
+                className="mt-1 bg-secondary border-border"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Avatar image URLs (one per line, up to 4 shown)</Label>
+              <Textarea
+                value={(data.social_proof_avatars ?? []).join("\n")}
+                onChange={(e) =>
+                  setData((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          social_proof_avatars: e.target.value
+                            .split("\n")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
+                        }
+                      : null,
+                  )
+                }
+                className="mt-1 bg-secondary border-border font-mono text-xs min-h-[100px]"
+                placeholder="https://…/avatar1.jpg&#10;https://…/avatar2.jpg"
+              />
+            </div>
+          </div>
+
           {/* Image Upload */}
           <div className="glass-card p-5 space-y-4">
             <h3 className="text-sm font-semibold text-foreground">Hero Image</h3>
