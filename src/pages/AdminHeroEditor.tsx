@@ -43,6 +43,8 @@ const defaults: Omit<HeroData, "id"> = {
   since_value: "2019",
   projects_label: "Projects",
   projects_value: "100+",
+  social_proof_avatars: [],
+  social_proof_label: "250+ Happy clients",
 };
 
 const AdminHeroEditor = () => {
