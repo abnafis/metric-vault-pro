@@ -24,6 +24,7 @@ const contentItems = [
   { title: "Metrics Strip", url: "/admin/metrics", icon: TrendingUp },
   { title: "Why Features", url: "/admin/why-features", icon: Sparkles },
   { title: "FAQs", url: "/admin/faqs", icon: HelpCircle },
+  { title: "Section Headers", url: "/admin/section-headers", icon: Heading },
   { title: "Platforms", url: "/admin/platforms", icon: Monitor },
   { title: "Testimonials", url: "/admin/testimonials", icon: MessageSquareQuote },
   { title: "About Section", url: "/admin/about", icon: UserCircle },
