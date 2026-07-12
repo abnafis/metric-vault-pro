@@ -3,7 +3,7 @@ import {
   MessageSquareQuote, UserCircle, PhoneCall, PanelBottom,
   Settings, FileText, Code, ClipboardList, Palette, Blocks,
   GitBranch, BarChart3, ImageIcon, Filter,
-  HelpCircle, TrendingUp, Images, Sparkles,
+  HelpCircle, TrendingUp, Images, Sparkles, Heading,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
