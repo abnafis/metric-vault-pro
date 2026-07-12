@@ -42,6 +42,7 @@ import AdminFAQEditor from "./pages/AdminFAQEditor";
 import AdminMetricsEditor from "./pages/AdminMetricsEditor";
 import AdminPartnerLogosEditor from "./pages/AdminPartnerLogosEditor";
 import AdminWhyFeaturesEditor from "./pages/AdminWhyFeaturesEditor";
+import AdminSectionHeadersEditor from "./pages/AdminSectionHeadersEditor";
 
 const queryClient = new QueryClient();
 
