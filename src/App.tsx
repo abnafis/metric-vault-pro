@@ -90,6 +90,7 @@ function AppRoutes() {
               <Route path="metrics" element={<AdminMetricsEditor />} />
               <Route path="partner-logos" element={<AdminPartnerLogosEditor />} />
               <Route path="why-features" element={<AdminWhyFeaturesEditor />} />
+              <Route path="section-headers" element={<AdminSectionHeadersEditor />} />
             </Route>
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
