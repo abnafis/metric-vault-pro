@@ -1,5 +1,5 @@
 import {
-  Wrench, BookOpen, MessageSquareQuote, Monitor, ArrowRight, FileText, ClipboardList,
+  Wrench, BookOpen, MessageSquareQuote, Monitor, ArrowRight, FileText, ClipboardList, GitBranch, Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,28 +12,47 @@ const quickLinks = [
   { label: "Manage Services", href: "/admin/services" },
   { label: "Edit Testimonials", href: "/admin/testimonials" },
   { label: "CTA Settings", href: "/admin/cta" },
+  { label: "Funnels", href: "/admin/funnels" },
   { label: "Process Steps", href: "/admin/process" },
-  { label: "Dashboard Showcase", href: "/admin/dashboard-showcase" },
   { label: "Blog Posts", href: "/admin/blog" },
   { label: "Page Builder", href: "/admin/pages" },
 ];
 
+interface FunnelLeadRow {
+  id: string;
+  funnel_id: string;
+  created_at: string;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  data: Record<string, unknown>;
+}
+
 const AdminDashboard = () => {
-  const [counts, setCounts] = useState({ services: 0, case_studies: 0, testimonials: 0, platforms: 0, blog_posts: 0, audit_requests: 0 });
+  const [counts, setCounts] = useState({
+    services: 0, case_studies: 0, testimonials: 0, platforms: 0,
+    blog_posts: 0, audit_requests: 0, funnels: 0, funnel_leads: 0,
+  });
   const [recentPosts, setRecentPosts] = useState<any[]>([]);
   const [recentAudits, setRecentAudits] = useState<any[]>([]);
+  const [recentLeads, setRecentLeads] = useState<FunnelLeadRow[]>([]);
+  const [funnelNames, setFunnelNames] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const [s, c, t, p, b, a, posts, audits] = await Promise.all([
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const [s, c, t, p, b, a, f, fl, posts, audits, leads, funnels] = await Promise.all([
         supabase.from("services").select("id", { count: "exact", head: true }),
         supabase.from("case_studies").select("id", { count: "exact", head: true }),
         supabase.from("testimonials").select("id", { count: "exact", head: true }),
         supabase.from("platforms").select("id", { count: "exact", head: true }),
         supabase.from("blog_posts").select("id", { count: "exact", head: true }),
         supabase.from("audit_requests").select("id", { count: "exact", head: true }),
+        supabase.from("funnels").select("id", { count: "exact", head: true }),
+        supabase.from("funnel_leads").select("id", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
         supabase.from("blog_posts").select("id,title,status,created_at").order("created_at", { ascending: false }).limit(5),
         supabase.from("audit_requests").select("id,name,email,status,created_at").order("created_at", { ascending: false }).limit(5),
+        supabase.from("funnel_leads").select("id,funnel_id,created_at,utm_source,utm_campaign,data").order("created_at", { ascending: false }).limit(5),
+        supabase.from("funnels").select("id,name"),
       ]);
       setCounts({
         services: s.count ?? 0,
@@ -42,9 +61,17 @@ const AdminDashboard = () => {
         platforms: p.count ?? 0,
         blog_posts: b.count ?? 0,
         audit_requests: a.count ?? 0,
+        funnels: f.count ?? 0,
+        funnel_leads: fl.count ?? 0,
       });
       if (posts.data) setRecentPosts(posts.data);
       if (audits.data) setRecentAudits(audits.data);
+      if (leads.data) setRecentLeads(leads.data as FunnelLeadRow[]);
+      if (funnels.data) {
+        const map: Record<string, string> = {};
+        for (const fn of funnels.data as { id: string; name: string }[]) map[fn.id] = fn.name;
+        setFunnelNames(map);
+      }
     };
     fetchData();
   }, []);
@@ -56,6 +83,8 @@ const AdminDashboard = () => {
     { label: "Platforms", value: String(counts.platforms), icon: Monitor, href: "/admin/platforms", color: "text-[hsl(var(--chart-green))]" },
     { label: "Blog Posts", value: String(counts.blog_posts), icon: FileText, href: "/admin/blog", color: "text-primary" },
     { label: "Audit Requests", value: String(counts.audit_requests), icon: ClipboardList, href: "/admin/audit-requests", color: "text-accent" },
+    { label: "Funnels", value: String(counts.funnels), icon: GitBranch, href: "/admin/funnels", color: "text-primary" },
+    { label: "Leads (7d)", value: String(counts.funnel_leads), icon: Users, href: "/admin/funnels", color: "text-[hsl(var(--chart-green))]" },
   ];
 
   return (
