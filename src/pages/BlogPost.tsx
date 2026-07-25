@@ -296,8 +296,29 @@ export default function BlogPost() {
       </div>
     );
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.meta_description || post.excerpt,
+    image: post.og_image_url || post.featured_image_url || undefined,
+    author: { "@type": "Person", name: post.author_name },
+    datePublished: post.publish_date || undefined,
+    mainEntityOfPage: `https://naftracks.lovable.app/blog/${post.slug}`,
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <SEO
+        title={post.meta_title || post.title}
+        description={post.meta_description || post.excerpt}
+        path={`/blog/${post.slug}`}
+        image={post.og_image_url || post.featured_image_url || undefined}
+        type="article"
+        publishedTime={post.publish_date || undefined}
+        author={post.author_name}
+        jsonLd={articleJsonLd}
+      />
       {/* ── Reading progress bar ── */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent">
         <motion.div
