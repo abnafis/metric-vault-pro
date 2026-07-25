@@ -35,6 +35,32 @@ interface FormField {
   options?: string[];
 }
 
+interface AttributionData {
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
+  referrer: string | null;
+  landing_page: string | null;
+}
+
+function captureAttribution(): AttributionData {
+  if (typeof window === "undefined") {
+    return { utm_source: null, utm_medium: null, utm_campaign: null, utm_term: null, utm_content: null, referrer: null, landing_page: null };
+  }
+  const params = new URLSearchParams(window.location.search);
+  return {
+    utm_source: params.get("utm_source"),
+    utm_medium: params.get("utm_medium"),
+    utm_campaign: params.get("utm_campaign"),
+    utm_term: params.get("utm_term"),
+    utm_content: params.get("utm_content"),
+    referrer: document.referrer || null,
+    landing_page: window.location.href,
+  };
+}
+
 export default function FunnelPage() {
   const { slug } = useParams<{ slug: string }>();
   const [funnel, setFunnel] = useState<Funnel | null>(null);
@@ -44,6 +70,7 @@ export default function FunnelPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [attribution] = useState<AttributionData>(() => captureAttribution());
 
   useEffect(() => {
     const fetchFunnel = async () => {
@@ -94,6 +121,7 @@ export default function FunnelPage() {
       funnel_id: funnel.id,
       step_id: step.id,
       data: formData,
+      ...attribution,
     });
 
     if (error) {

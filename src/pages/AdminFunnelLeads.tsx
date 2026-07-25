@@ -16,6 +16,13 @@ interface Lead {
   step_id: string | null;
   data: Record<string, unknown>;
   created_at: string;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
+  referrer: string | null;
+  landing_page: string | null;
 }
 
 export default function AdminFunnelLeads() {
@@ -49,14 +56,26 @@ export default function AdminFunnelLeads() {
     new Set(leads.flatMap((l) => Object.keys(l.data)))
   );
 
+  const utmCols: Array<{ key: keyof Lead; label: string }> = [
+    { key: "utm_source", label: "Source" },
+    { key: "utm_medium", label: "Medium" },
+    { key: "utm_campaign", label: "Campaign" },
+    { key: "utm_term", label: "Term" },
+    { key: "utm_content", label: "Content" },
+    { key: "referrer", label: "Referrer" },
+  ];
+  const visibleUtm = utmCols.filter((c) => leads.some((l) => l[c.key]));
+
   const exportCSV = () => {
     if (leads.length === 0) return;
-    const headers = ["Date", ...allKeys];
+    const headers = ["Date", ...allKeys, ...visibleUtm.map((c) => c.label), "Landing Page"];
     const rows = leads.map((l) => [
       format(new Date(l.created_at), "yyyy-MM-dd HH:mm"),
       ...allKeys.map((k) => String(l.data[k] ?? "")),
+      ...visibleUtm.map((c) => String(l[c.key] ?? "")),
+      String(l.landing_page ?? ""),
     ]);
-    const csv = [headers.join(","), ...rows.map((r) => r.map((c) => `"${c}"`).join(","))].join("\n");
+    const csv = [headers.join(","), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -102,6 +121,9 @@ export default function AdminFunnelLeads() {
                 {allKeys.map((k) => (
                   <TableHead key={k} className="capitalize">{k.replace(/_/g, " ")}</TableHead>
                 ))}
+                {visibleUtm.map((c) => (
+                  <TableHead key={c.key} className="text-xs">{c.label}</TableHead>
+                ))}
                 <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
@@ -113,6 +135,11 @@ export default function AdminFunnelLeads() {
                   </TableCell>
                   {allKeys.map((k) => (
                     <TableCell key={k} className="text-sm">{String(l.data[k] ?? "")}</TableCell>
+                  ))}
+                  {visibleUtm.map((c) => (
+                    <TableCell key={c.key} className="text-xs text-muted-foreground max-w-[160px] truncate">
+                      {String(l[c.key] ?? "—")}
+                    </TableCell>
                   ))}
                   <TableCell>
                     <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteLead(l.id)}>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import HeroSection from "@/components/HeroSection";
@@ -6,26 +6,26 @@ import ClientProofRow from "@/components/ClientProofRow";
 import LogoMarquee from "@/components/LogoMarquee";
 import CaseStudiesSection from "@/components/CaseStudiesSection";
 import AboutSection from "@/components/AboutSection";
-import WhyNotScalingSection from "@/components/WhyNotScalingSection";
-import MetricsStrip from "@/components/MetricsStrip";
-import ProcessSection from "@/components/ProcessSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import BlogSection from "@/components/BlogSection";
-import FAQSection from "@/components/FAQSection";
-import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
 import FloatingSocials from "@/components/FloatingSocials";
+import SEO from "@/components/SEO";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+
+// Below-the-fold sections — deferred so they don't block the initial paint
+const WhyNotScalingSection = lazy(() => import("@/components/WhyNotScalingSection"));
+const MetricsStrip = lazy(() => import("@/components/MetricsStrip"));
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const ProcessSection = lazy(() => import("@/components/ProcessSection"));
+const BlogSection = lazy(() => import("@/components/BlogSection"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
+const CTASection = lazy(() => import("@/components/CTASection"));
+const Footer = lazy(() => import("@/components/Footer"));
+
+const SectionFallback = () => <div className="min-h-[300px]" aria-hidden />;
 
 const Index = () => {
   const { settings } = useSiteSettings();
 
   useEffect(() => {
-    if (settings.seo_title) document.title = settings.seo_title;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && settings.seo_description) {
-      metaDesc.setAttribute("content", settings.seo_description);
-    }
     if (settings.favicon_url) {
       let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
       if (!link) {
@@ -37,8 +37,23 @@ const Index = () => {
     }
   }, [settings]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: settings.site_name || "Nafis Tracks",
+    url: "https://naftracks.lovable.app",
+    jobTitle: "Web Analytics Expert",
+    sameAs: [] as string[],
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={settings.seo_title}
+        description={settings.seo_description}
+        path="/"
+        jsonLd={jsonLd}
+      />
       <AnnouncementBar />
       <Navbar />
       <FloatingSocials />
@@ -47,14 +62,16 @@ const Index = () => {
       <LogoMarquee />
       <CaseStudiesSection />
       <AboutSection />
-      <WhyNotScalingSection />
-      <MetricsStrip />
-      <TestimonialsSection />
-      <ProcessSection />
-      <BlogSection />
-      <FAQSection />
-      <CTASection />
-      <Footer />
+      <Suspense fallback={<SectionFallback />}>
+        <WhyNotScalingSection />
+        <MetricsStrip />
+        <TestimonialsSection />
+        <ProcessSection />
+        <BlogSection />
+        <FAQSection />
+        <CTASection />
+        <Footer />
+      </Suspense>
     </div>
   );
 };
