@@ -152,6 +152,29 @@ const AdminDashboard = () => {
             </div>
           )}
         </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="glass-card p-6">
+          <h2 className="font-semibold text-foreground mb-4">Recent Funnel Leads</h2>
+          {recentLeads.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No funnel leads yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentLeads.map((l) => {
+                const name = (l.data?.name ?? l.data?.email ?? "New lead") as string;
+                const src = l.utm_source || l.utm_campaign;
+                return (
+                  <Link key={l.id} to={`/admin/funnels/${l.funnel_id}/leads`} className="block group">
+                    <p className="text-sm text-foreground group-hover:text-primary transition-colors truncate">{name}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {funnelNames[l.funnel_id] || "Funnel"} · {format(new Date(l.created_at), "MMM d")}
+                      {src ? ` · ${src}` : ""}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   );
