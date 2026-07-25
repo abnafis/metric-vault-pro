@@ -121,6 +121,9 @@ export default function AdminFunnelLeads() {
                 {allKeys.map((k) => (
                   <TableHead key={k} className="capitalize">{k.replace(/_/g, " ")}</TableHead>
                 ))}
+                {visibleUtm.map((c) => (
+                  <TableHead key={c.key} className="text-xs">{c.label}</TableHead>
+                ))}
                 <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
@@ -132,6 +135,11 @@ export default function AdminFunnelLeads() {
                   </TableCell>
                   {allKeys.map((k) => (
                     <TableCell key={k} className="text-sm">{String(l.data[k] ?? "")}</TableCell>
+                  ))}
+                  {visibleUtm.map((c) => (
+                    <TableCell key={c.key} className="text-xs text-muted-foreground max-w-[160px] truncate">
+                      {String(l[c.key] ?? "—")}
+                    </TableCell>
                   ))}
                   <TableCell>
                     <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteLead(l.id)}>
