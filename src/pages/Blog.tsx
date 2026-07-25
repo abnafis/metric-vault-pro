@@ -71,8 +71,18 @@ export default function Blog() {
     setSearchParams(p);
   };
 
+  const blogPage = settings.page_titles?.blog;
+  const seoTitle =
+    blogPage?.meta_title ||
+    settings.title_format?.replace("{page}", "Blog").replace("{site}", settings.site_name) ||
+    "Blog — Tracking With Nafis";
+  const seoDesc =
+    blogPage?.meta_description ||
+    "Expert guides on GA4, conversion tracking, server-side tagging, and marketing analytics.";
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO title={seoTitle} description={seoDesc} path="/blog" />
       <Navbar />
       <main className="section-container pt-32 pb-20">
         {/* Header */}
