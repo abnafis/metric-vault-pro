@@ -121,6 +121,7 @@ export default function FunnelPage() {
       funnel_id: funnel.id,
       step_id: step.id,
       data: formData,
+      ...attribution,
     });
 
     if (error) {
