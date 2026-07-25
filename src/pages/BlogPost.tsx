@@ -7,6 +7,7 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import { trackViewArticle } from "@/lib/dataLayer";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import {
