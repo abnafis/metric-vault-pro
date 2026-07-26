@@ -18,40 +18,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Plus,
-  Pencil,
-  Trash2,
-  GripVertical,
-  Loader2,
-  Save,
-  Settings,
-  Tag,
-  Target,
-  Server,
-  Plug,
-  Bug,
-  BarChart3,
-  Code,
-  Database,
-  Globe,
-  Shield,
-  Zap,
-  Search,
-  Layout,
-  Monitor,
-  Smartphone,
+  Plus, Pencil, Trash2, GripVertical, Loader2, Save,
+  Settings, Tag, Target, Server, Plug, Bug, BarChart3, Code, Database,
+  Globe, Shield, Zap, Search, Layout, Monitor, Smartphone,
+  Facebook, Linkedin, LineChart, Upload,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, Reorder } from "framer-motion";
 
 const ICON_OPTIONS = [
+  { value: "BarChart3", label: "Chart", icon: BarChart3 },
+  { value: "Facebook", label: "Facebook", icon: Facebook },
+  { value: "Linkedin", label: "LinkedIn", icon: Linkedin },
+  { value: "LineChart", label: "Line Chart", icon: LineChart },
+  { value: "Upload", label: "Upload", icon: Upload },
   { value: "Settings", label: "Settings", icon: Settings },
   { value: "Tag", label: "Tag", icon: Tag },
   { value: "Target", label: "Target", icon: Target },
   { value: "Server", label: "Server", icon: Server },
   { value: "Plug", label: "Plug", icon: Plug },
   { value: "Bug", label: "Bug", icon: Bug },
-  { value: "BarChart3", label: "Chart", icon: BarChart3 },
   { value: "Code", label: "Code", icon: Code },
   { value: "Database", label: "Database", icon: Database },
   { value: "Globe", label: "Globe", icon: Globe },
@@ -61,6 +47,17 @@ const ICON_OPTIONS = [
   { value: "Layout", label: "Layout", icon: Layout },
   { value: "Monitor", label: "Monitor", icon: Monitor },
   { value: "Smartphone", label: "Smartphone", icon: Smartphone },
+];
+
+const ACCENT_OPTIONS = [
+  { value: "amber",  label: "Amber",  swatch: "#F59E0B" },
+  { value: "blue",   label: "Blue",   swatch: "#3B82F6" },
+  { value: "pink",   label: "Pink",   swatch: "#EC4899" },
+  { value: "green",  label: "Green",  swatch: "#22C55E" },
+  { value: "purple", label: "Purple", swatch: "#8B5CF6" },
+  { value: "orange", label: "Orange", swatch: "#F97316" },
+  { value: "teal",   label: "Teal",   swatch: "#14B8A6" },
+  { value: "slate",  label: "Slate",  swatch: "#64748B" },
 ];
 
 export const iconMap: Record<string, React.ComponentType<any>> = Object.fromEntries(
@@ -74,13 +71,21 @@ interface Service {
   icon: string;
   features: string[];
   sort_order: number;
+  eyebrow: string | null;
+  badge: string | null;
+  accent: string;
+  cta_label: string;
 }
 
 const emptyService = (): Omit<Service, "id" | "sort_order"> => ({
   title: "",
   description: "",
-  icon: "Settings",
+  icon: "BarChart3",
   features: [],
+  eyebrow: "",
+  badge: "",
+  accent: "amber",
+  cta_label: "Book this service",
 });
 
 const AdminServicesEditor = () => {
@@ -117,7 +122,16 @@ const AdminServicesEditor = () => {
 
   const openEdit = (s: Service) => {
     setEditing(s);
-    setForm({ title: s.title, description: s.description, icon: s.icon, features: s.features || [] });
+    setForm({
+      title: s.title,
+      description: s.description,
+      icon: s.icon,
+      features: s.features || [],
+      eyebrow: s.eyebrow || "",
+      badge: s.badge || "",
+      accent: s.accent || "amber",
+      cta_label: s.cta_label || "Book this service",
+    });
     setFeatureInput("");
     setDialogOpen(true);
   };
@@ -203,6 +217,10 @@ const AdminServicesEditor = () => {
         </Button>
       </div>
 
+      <div className="text-xs text-muted-foreground bg-secondary/50 border border-border rounded-lg px-3 py-2">
+        Section eyebrow, title & subtitle are managed in <strong>Section Headers</strong> (slug: <code>services</code>).
+      </div>
+
       {services.length === 0 ? (
         <div className="glass-card p-12 text-center text-muted-foreground">
           No services yet. Click "Add Service" to get started.
@@ -251,7 +269,7 @@ const AdminServicesEditor = () => {
 
       {/* Create / Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-card border-border max-w-lg">
+        <DialogContent className="bg-card border-border max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-foreground">
               {editing ? "Edit Service" : "Add Service"}
@@ -259,6 +277,27 @@ const AdminServicesEditor = () => {
           </DialogHeader>
 
           <div className="space-y-4 pt-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Eyebrow</Label>
+                <Input
+                  value={form.eyebrow || ""}
+                  onChange={(e) => setForm((f) => ({ ...f, eyebrow: e.target.value }))}
+                  placeholder="01 / Paid search"
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Badge</Label>
+                <Input
+                  value={form.badge || ""}
+                  onChange={(e) => setForm((f) => ({ ...f, badge: e.target.value }))}
+                  placeholder="Most requested"
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+            </div>
+
             <div>
               <Label className="text-xs text-muted-foreground">Title</Label>
               <Input
@@ -275,6 +314,35 @@ const AdminServicesEditor = () => {
                 onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                 className="mt-1 bg-secondary border-border min-h-[80px]"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Accent color</Label>
+                <Select value={form.accent} onValueChange={(v) => setForm((f) => ({ ...f, accent: v }))}>
+                  <SelectTrigger className="mt-1 bg-secondary border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border">
+                    {ACCENT_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        <span className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full" style={{ background: opt.swatch }} />
+                          {opt.label}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">CTA label</Label>
+                <Input
+                  value={form.cta_label}
+                  onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))}
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
             </div>
 
             <div>

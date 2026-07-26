@@ -61,11 +61,13 @@ const Index = () => {
       <HeroSection />
       <ClientProofRow />
       <LogoMarquee />
+      <Suspense fallback={<SectionFallback />}>
+        <ServicesSection />
+      </Suspense>
       <CaseStudiesSection />
       <AboutSection />
       <Suspense fallback={<SectionFallback />}>
         <WhyNotScalingSection />
-        <ServicesSection />
         <MetricsStrip />
         <TestimonialsSection />
         <ProcessSection />
