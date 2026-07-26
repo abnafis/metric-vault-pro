@@ -856,8 +856,12 @@ export type Database = {
       }
       services: {
         Row: {
+          accent: string
+          badge: string | null
           created_at: string
+          cta_label: string
           description: string
+          eyebrow: string | null
           features: string[] | null
           icon: string
           id: string
@@ -866,8 +870,12 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          accent?: string
+          badge?: string | null
           created_at?: string
+          cta_label?: string
           description: string
+          eyebrow?: string | null
           features?: string[] | null
           icon?: string
           id?: string
@@ -876,8 +884,12 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          accent?: string
+          badge?: string | null
           created_at?: string
+          cta_label?: string
           description?: string
+          eyebrow?: string | null
           features?: string[] | null
           icon?: string
           id?: string
