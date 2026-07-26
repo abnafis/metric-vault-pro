@@ -12,6 +12,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 // Below-the-fold sections — deferred so they don't block the initial paint
 const WhyNotScalingSection = lazy(() => import("@/components/WhyNotScalingSection"));
+const ServicesSection = lazy(() => import("@/components/ServicesSection"));
 const MetricsStrip = lazy(() => import("@/components/MetricsStrip"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const ProcessSection = lazy(() => import("@/components/ProcessSection"));
@@ -64,6 +65,7 @@ const Index = () => {
       <AboutSection />
       <Suspense fallback={<SectionFallback />}>
         <WhyNotScalingSection />
+        <ServicesSection />
         <MetricsStrip />
         <TestimonialsSection />
         <ProcessSection />
