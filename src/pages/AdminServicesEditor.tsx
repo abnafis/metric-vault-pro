@@ -18,40 +18,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Plus,
-  Pencil,
-  Trash2,
-  GripVertical,
-  Loader2,
-  Save,
-  Settings,
-  Tag,
-  Target,
-  Server,
-  Plug,
-  Bug,
-  BarChart3,
-  Code,
-  Database,
-  Globe,
-  Shield,
-  Zap,
-  Search,
-  Layout,
-  Monitor,
-  Smartphone,
+  Plus, Pencil, Trash2, GripVertical, Loader2, Save,
+  Settings, Tag, Target, Server, Plug, Bug, BarChart3, Code, Database,
+  Globe, Shield, Zap, Search, Layout, Monitor, Smartphone,
+  Facebook, Linkedin, LineChart, Upload,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, Reorder } from "framer-motion";
 
 const ICON_OPTIONS = [
+  { value: "BarChart3", label: "Chart", icon: BarChart3 },
+  { value: "Facebook", label: "Facebook", icon: Facebook },
+  { value: "Linkedin", label: "LinkedIn", icon: Linkedin },
+  { value: "LineChart", label: "Line Chart", icon: LineChart },
+  { value: "Upload", label: "Upload", icon: Upload },
   { value: "Settings", label: "Settings", icon: Settings },
   { value: "Tag", label: "Tag", icon: Tag },
   { value: "Target", label: "Target", icon: Target },
   { value: "Server", label: "Server", icon: Server },
   { value: "Plug", label: "Plug", icon: Plug },
   { value: "Bug", label: "Bug", icon: Bug },
-  { value: "BarChart3", label: "Chart", icon: BarChart3 },
   { value: "Code", label: "Code", icon: Code },
   { value: "Database", label: "Database", icon: Database },
   { value: "Globe", label: "Globe", icon: Globe },
@@ -61,6 +47,17 @@ const ICON_OPTIONS = [
   { value: "Layout", label: "Layout", icon: Layout },
   { value: "Monitor", label: "Monitor", icon: Monitor },
   { value: "Smartphone", label: "Smartphone", icon: Smartphone },
+];
+
+const ACCENT_OPTIONS = [
+  { value: "amber",  label: "Amber",  swatch: "#F59E0B" },
+  { value: "blue",   label: "Blue",   swatch: "#3B82F6" },
+  { value: "pink",   label: "Pink",   swatch: "#EC4899" },
+  { value: "green",  label: "Green",  swatch: "#22C55E" },
+  { value: "purple", label: "Purple", swatch: "#8B5CF6" },
+  { value: "orange", label: "Orange", swatch: "#F97316" },
+  { value: "teal",   label: "Teal",   swatch: "#14B8A6" },
+  { value: "slate",  label: "Slate",  swatch: "#64748B" },
 ];
 
 export const iconMap: Record<string, React.ComponentType<any>> = Object.fromEntries(
@@ -74,13 +71,21 @@ interface Service {
   icon: string;
   features: string[];
   sort_order: number;
+  eyebrow: string | null;
+  badge: string | null;
+  accent: string;
+  cta_label: string;
 }
 
 const emptyService = (): Omit<Service, "id" | "sort_order"> => ({
   title: "",
   description: "",
-  icon: "Settings",
+  icon: "BarChart3",
   features: [],
+  eyebrow: "",
+  badge: "",
+  accent: "amber",
+  cta_label: "Book this service",
 });
 
 const AdminServicesEditor = () => {
