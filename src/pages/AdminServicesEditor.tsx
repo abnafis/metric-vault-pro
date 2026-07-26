@@ -122,7 +122,16 @@ const AdminServicesEditor = () => {
 
   const openEdit = (s: Service) => {
     setEditing(s);
-    setForm({ title: s.title, description: s.description, icon: s.icon, features: s.features || [] });
+    setForm({
+      title: s.title,
+      description: s.description,
+      icon: s.icon,
+      features: s.features || [],
+      eyebrow: s.eyebrow || "",
+      badge: s.badge || "",
+      accent: s.accent || "amber",
+      cta_label: s.cta_label || "Book this service",
+    });
     setFeatureInput("");
     setDialogOpen(true);
   };
