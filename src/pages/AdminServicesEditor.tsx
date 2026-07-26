@@ -265,7 +265,7 @@ const AdminServicesEditor = () => {
 
       {/* Create / Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-card border-border max-w-lg">
+        <DialogContent className="bg-card border-border max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-foreground">
               {editing ? "Edit Service" : "Add Service"}
@@ -273,6 +273,27 @@ const AdminServicesEditor = () => {
           </DialogHeader>
 
           <div className="space-y-4 pt-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Eyebrow</Label>
+                <Input
+                  value={form.eyebrow || ""}
+                  onChange={(e) => setForm((f) => ({ ...f, eyebrow: e.target.value }))}
+                  placeholder="01 / Paid search"
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Badge</Label>
+                <Input
+                  value={form.badge || ""}
+                  onChange={(e) => setForm((f) => ({ ...f, badge: e.target.value }))}
+                  placeholder="Most requested"
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+            </div>
+
             <div>
               <Label className="text-xs text-muted-foreground">Title</Label>
               <Input
@@ -289,6 +310,35 @@ const AdminServicesEditor = () => {
                 onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                 className="mt-1 bg-secondary border-border min-h-[80px]"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Accent color</Label>
+                <Select value={form.accent} onValueChange={(v) => setForm((f) => ({ ...f, accent: v }))}>
+                  <SelectTrigger className="mt-1 bg-secondary border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border">
+                    {ACCENT_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        <span className="flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full" style={{ background: opt.swatch }} />
+                          {opt.label}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">CTA label</Label>
+                <Input
+                  value={form.cta_label}
+                  onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))}
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
             </div>
 
             <div>
