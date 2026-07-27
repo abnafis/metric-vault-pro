@@ -858,13 +858,21 @@ export type Database = {
         Row: {
           accent: string
           badge: string | null
+          card_bg_color: string | null
+          card_bg_image_url: string | null
+          card_bg_preset: string
           created_at: string
           cta_label: string
+          cta_link: string
+          cta_style: string
           description: string
           eyebrow: string | null
+          featured: boolean
           features: string[] | null
           icon: string
+          icon_image_url: string | null
           id: string
+          price_label: string | null
           sort_order: number
           title: string
           updated_at: string
@@ -872,13 +880,21 @@ export type Database = {
         Insert: {
           accent?: string
           badge?: string | null
+          card_bg_color?: string | null
+          card_bg_image_url?: string | null
+          card_bg_preset?: string
           created_at?: string
           cta_label?: string
+          cta_link?: string
+          cta_style?: string
           description: string
           eyebrow?: string | null
+          featured?: boolean
           features?: string[] | null
           icon?: string
+          icon_image_url?: string | null
           id?: string
+          price_label?: string | null
           sort_order?: number
           title: string
           updated_at?: string
@@ -886,15 +902,53 @@ export type Database = {
         Update: {
           accent?: string
           badge?: string | null
+          card_bg_color?: string | null
+          card_bg_image_url?: string | null
+          card_bg_preset?: string
           created_at?: string
           cta_label?: string
+          cta_link?: string
+          cta_style?: string
           description?: string
           eyebrow?: string | null
+          featured?: boolean
           features?: string[] | null
           icon?: string
+          icon_image_url?: string | null
           id?: string
+          price_label?: string | null
           sort_order?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services_cta: {
+        Row: {
+          button_label: string
+          button_link: string
+          eyebrow: string
+          headline: string
+          headline_highlight: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          button_label?: string
+          button_link?: string
+          eyebrow?: string
+          headline?: string
+          headline_highlight?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          button_label?: string
+          button_link?: string
+          eyebrow?: string
+          headline?: string
+          headline_highlight?: string
+          id?: string
           updated_at?: string
         }
         Relationships: []
