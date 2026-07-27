@@ -1,54 +1,51 @@
-# Recommended Improvements
 
-Here are focused, high-impact changes I'd suggest. Pick any subset and I'll build them.
+## Goal
+Make the Services section richer visually and fully customizable from the admin panel — per-card CTA button (text + link), custom icon uploads, per-card background/accent styling, and a few polish upgrades.
 
-## 1. Performance & Polish
-- **Image optimization**: Convert hero portrait and case study images to WebP with responsive `srcset`; add explicit `width`/`height` to prevent CLS.
-- **Lazy-load below-the-fold sections** (FAQ, Testimonials, Process) via `React.lazy` + `Suspense` to shrink initial JS.
-- **Font loading**: Preload `Space Grotesk` and use `font-display: swap` to eliminate flash of invisible text.
-- **Route-level code splitting** for admin pages (they currently ship with the public bundle).
+## Design upgrades (frontend)
+- **Per-card CTA button**: Replace the shared "#contact" underline link with a real button per service (label + link editable). Support two styles: `link` (current underline) or `button` (filled pill).
+- **Custom icon support**: Allow either a Lucide icon name (current) OR an uploaded image/SVG URL. If `icon_image_url` is set, render it inside the chip instead of the Lucide icon.
+- **Background customization**: Per-card options for
+  - `card_bg` (solid color or preset: white / soft-tint / dark)
+  - `card_bg_image_url` (optional subtle pattern/image, low opacity)
+  - `accent` stays as the color family (chip + blob + ring)
+- **Optional price/starting-at line** under description (e.g. "From $499") — hidden when empty.
+- **Featured flag** — a "Most Popular" style ribbon on one card.
+- **Layout polish**: Softer inner shadow on hover, animated icon chip, subtle gradient border for featured card, and a stronger dark CTA tile with icon.
+- **Section-level CTA tile**: Make its heading, subheading, button label + link editable (currently hardcoded).
 
-## 2. SEO & Discoverability
-- Per-page `<title>` and meta description via `react-helmet-async` (currently only index.html has one).
-- Add JSON-LD: `Person`, `WebSite`, `BreadcrumbList`, and `Article` for blog posts.
-- Generate `sitemap.xml` and `robots.txt` dynamically from Supabase (blog posts, funnels, landing pages).
-- OpenGraph images per blog post (auto-generated from title, or admin-uploadable).
+## Admin customization (AdminServicesEditor)
+Add fields per service:
+- `cta_label` (exists) + `cta_link` (new) + `cta_style` (new: link | button)
+- `icon` (Lucide) + `icon_image_url` (new, upload via existing media/storage)
+- `card_bg_preset` (new: light | tint | dark | custom)
+- `card_bg_color` (new, hex, when custom)
+- `card_bg_image_url` (new, optional upload)
+- `price_label` (new, optional)
+- `featured` (new, boolean — only one at a time UX hint)
 
-## 3. Admin UX
-- **Unified dashboard home**: metric cards (leads this week, published posts, funnel conversion) instead of the blank landing.
-- **Global search** in admin to jump to any post/funnel/lead by name.
-- **Draft autosave** in Tiptap editor + revision history for blog posts.
-- **Media library improvements**: folders, search, bulk delete, alt-text enforcement.
-- **Reorder via drag-drop** for testimonials, case studies, FAQs (currently manual sort_order editing).
+Upload UI reuses the existing Supabase storage pattern (same as platform logos / testimonial avatars). New bucket: `service-icons` (public) — or reuse `platform-logos`.
 
-## 4. Lead & Funnel Enhancements
-- **Email notifications** to admin on new lead / funnel submission (Resend edge function).
-- **Webhook step** in the funnel builder (send lead data to Zapier/Make/CRM).
-- **UTM capture** on funnel_leads (source, medium, campaign, referrer).
-- **A/B testing** flag on funnels (two variants, random split, conversion tracking).
-- **Funnel analytics dashboard**: step-by-step drop-off chart.
+Add a new "Section CTA Tile" panel at the top of AdminServicesEditor to edit the dark tile (eyebrow, headline, headline highlight, button label, button link). Stored in a new `services_cta` single-row table (same pattern as `cta_content`, `testimonials_meta`).
 
-## 5. Content & Trust
-- **Case study detail pages** (`/work/:slug`) with problem → solution → results structure — currently only cards.
-- **Blog reading progress bar** and estimated read time.
-- **Related posts** at the end of each article.
-- **Newsletter signup** block (store in a `subscribers` table, later plug into email tool).
+## Database changes
+Single migration:
+- `ALTER TABLE services` add: `cta_link text`, `cta_style text default 'link'`, `icon_image_url text`, `card_bg_preset text default 'light'`, `card_bg_color text`, `card_bg_image_url text`, `price_label text`, `featured boolean default false`.
+- `CREATE TABLE services_cta` (single-row): `eyebrow`, `headline`, `headline_highlight`, `button_label`, `button_link`, timestamps. GRANTs + RLS (public read, admin write) matching existing `cta_content` pattern.
+- New storage bucket `service-icons` (public) — or confirm reuse of `platform-logos`.
 
-## 6. Accessibility
-- Audit color contrast on lavender theme (some muted text may fail WCAG AA).
-- Keyboard focus rings on all interactive elements (pill navbar, floating socials).
-- `prefers-reduced-motion` respected on marquee, orbits, floating tiles.
-- Skip-to-content link.
+## Files to change
+- `supabase migration` (schema + bucket)
+- `src/components/ServicesSection.tsx` — render new fields, per-card button, custom icon/bg, featured ribbon, dynamic CTA tile
+- `src/pages/AdminServicesEditor.tsx` — new fields, icon/bg uploaders, CTA tile panel
+- `src/integrations/supabase/types.ts` — regenerated after migration
 
-## 7. Security & Hardening
-- Rate limit funnel/CTA form submissions (edge function with IP-based throttle).
-- Add a honeypot field or hCaptcha on public forms to cut spam.
-- Review RLS on new tables (`funnels`, `funnel_steps`, `funnel_leads`, `faqs`, `metrics`, `partner_logos`, `why_features`) — confirm anon can read published rows only and only service-role can write.
+## Out of scope
+- Reordering UX (already exists via sort_order)
+- Per-card animations beyond current hover
+- Section header text (already editable via Section Headers admin)
 
-## 8. Analytics
-- Wire GA4 events for: funnel step view, funnel completion, CTA submit, blog post read (75% scroll).
-- Track outbound WhatsApp clicks from announcement bar and floating socials.
-
----
-
-Tell me which items to tackle (e.g. "1, 4, and 6") and I'll turn the selected ones into a concrete build plan.
+## Open questions
+1. Reuse `platform-logos` bucket or create dedicated `service-icons`?
+2. Should `featured` auto-enforce single card, or allow multiple?
+3. Keep the existing shared color `accent` palette, or replace entirely with free-form `card_bg_color`?
