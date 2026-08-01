@@ -2,7 +2,7 @@ import { motion, useInView, animate } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, ArrowDown, Check, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Metric { label: string; value: string; }
