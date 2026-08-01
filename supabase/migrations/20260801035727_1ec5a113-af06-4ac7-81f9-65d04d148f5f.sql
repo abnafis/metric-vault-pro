@@ -1,0 +1,17 @@
+ALTER TABLE public.case_studies
+  ADD COLUMN IF NOT EXISTS industry text,
+  ADD COLUMN IF NOT EXISTS hero_metric_value text,
+  ADD COLUMN IF NOT EXISTS hero_metric_label text,
+  ADD COLUMN IF NOT EXISTS headline text,
+  ADD COLUMN IF NOT EXISTS before_points jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS after_points jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS technologies jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS problem_stat text,
+  ADD COLUMN IF NOT EXISTS solution_stat text,
+  ADD COLUMN IF NOT EXISTS result_stat text,
+  ADD COLUMN IF NOT EXISTS challenge text,
+  ADD COLUMN IF NOT EXISTS audit_findings text,
+  ADD COLUMN IF NOT EXISTS implementation text,
+  ADD COLUMN IF NOT EXISTS architecture text,
+  ADD COLUMN IF NOT EXISTS business_outcome text,
+  ADD COLUMN IF NOT EXISTS cta_label text;

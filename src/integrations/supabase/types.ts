@@ -219,44 +219,92 @@ export type Database = {
       }
       case_studies: {
         Row: {
+          after_points: Json
+          architecture: string | null
+          audit_findings: string | null
+          before_points: Json
+          business_outcome: string | null
+          challenge: string | null
           chart_data: Json | null
           client_name: string | null
           created_at: string
+          cta_label: string | null
+          headline: string | null
+          hero_metric_label: string | null
+          hero_metric_value: string | null
           id: string
           image_url: string | null
+          implementation: string | null
+          industry: string | null
           metrics: Json
           platform_used: string | null
           problem: string
+          problem_stat: string | null
+          result_stat: string | null
           solution: string
+          solution_stat: string | null
           sort_order: number
+          technologies: Json
           title: string
           updated_at: string
         }
         Insert: {
+          after_points?: Json
+          architecture?: string | null
+          audit_findings?: string | null
+          before_points?: Json
+          business_outcome?: string | null
+          challenge?: string | null
           chart_data?: Json | null
           client_name?: string | null
           created_at?: string
+          cta_label?: string | null
+          headline?: string | null
+          hero_metric_label?: string | null
+          hero_metric_value?: string | null
           id?: string
           image_url?: string | null
+          implementation?: string | null
+          industry?: string | null
           metrics?: Json
           platform_used?: string | null
           problem: string
+          problem_stat?: string | null
+          result_stat?: string | null
           solution: string
+          solution_stat?: string | null
           sort_order?: number
+          technologies?: Json
           title: string
           updated_at?: string
         }
         Update: {
+          after_points?: Json
+          architecture?: string | null
+          audit_findings?: string | null
+          before_points?: Json
+          business_outcome?: string | null
+          challenge?: string | null
           chart_data?: Json | null
           client_name?: string | null
           created_at?: string
+          cta_label?: string | null
+          headline?: string | null
+          hero_metric_label?: string | null
+          hero_metric_value?: string | null
           id?: string
           image_url?: string | null
+          implementation?: string | null
+          industry?: string | null
           metrics?: Json
           platform_used?: string | null
           problem?: string
+          problem_stat?: string | null
+          result_stat?: string | null
           solution?: string
+          solution_stat?: string | null
           sort_order?: number
+          technologies?: Json
           title?: string
           updated_at?: string
         }

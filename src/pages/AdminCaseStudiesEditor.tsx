@@ -41,7 +41,27 @@ interface CaseStudy {
   client_name: string | null;
   platform_used: string | null;
   sort_order: number;
+  industry: string | null;
+  hero_metric_value: string | null;
+  hero_metric_label: string | null;
+  headline: string | null;
+  before_points: string[];
+  after_points: string[];
+  technologies: string[];
+  problem_stat: string | null;
+  solution_stat: string | null;
+  result_stat: string | null;
+  challenge: string | null;
+  audit_findings: string | null;
+  implementation: string | null;
+  architecture: string | null;
+  business_outcome: string | null;
+  cta_label: string | null;
 }
+
+const listToText = (v: unknown) => (Array.isArray(v) ? (v as string[]).join("\n") : "");
+const textToList = (v: string) =>
+  v.split("\n").map((s) => s.trim()).filter(Boolean);
 
 const emptyForm = () => ({
   title: "",
@@ -52,6 +72,23 @@ const emptyForm = () => ({
   image_url: null as string | null,
   client_name: "",
   platform_used: "",
+  industry: "",
+  hero_metric_value: "",
+  hero_metric_label: "",
+  headline: "",
+  before_text: "",
+  after_text: "",
+  tech_text: "",
+  problem_stat: "",
+  solution_stat: "",
+  result_stat: "",
+  challenge: "",
+  audit_findings: "",
+  implementation: "",
+  architecture: "",
+  business_outcome: "",
+  cta_label: "",
+  chart_text: "",
 });
 
 const AdminCaseStudiesEditor = () => {
@@ -86,6 +123,7 @@ const AdminCaseStudiesEditor = () => {
   const openEdit = (c: CaseStudy) => {
     setEditing(c);
     setForm({
+      ...emptyForm(),
       title: c.title,
       problem: c.problem,
       solution: c.solution,
@@ -94,9 +132,27 @@ const AdminCaseStudiesEditor = () => {
       image_url: c.image_url,
       client_name: c.client_name || "",
       platform_used: c.platform_used || "",
+      industry: c.industry || "",
+      hero_metric_value: c.hero_metric_value || "",
+      hero_metric_label: c.hero_metric_label || "",
+      headline: c.headline || "",
+      before_text: listToText(c.before_points),
+      after_text: listToText(c.after_points),
+      tech_text: Array.isArray(c.technologies) ? c.technologies.join(", ") : "",
+      problem_stat: c.problem_stat || "",
+      solution_stat: c.solution_stat || "",
+      result_stat: c.result_stat || "",
+      challenge: c.challenge || "",
+      audit_findings: c.audit_findings || "",
+      implementation: c.implementation || "",
+      architecture: c.architecture || "",
+      business_outcome: c.business_outcome || "",
+      cta_label: c.cta_label || "",
+      chart_text: (c.chart_data || []).map((d) => d.v).join(", "),
     });
     setDialogOpen(true);
   };
+
 
   const addMetric = () => setForm((f) => ({ ...f, metrics: [...f.metrics, { label: "", value: "" }] }));
   const removeMetric = (i: number) => setForm((f) => ({ ...f, metrics: f.metrics.filter((_, idx) => idx !== i) }));
@@ -127,17 +183,39 @@ const AdminCaseStudiesEditor = () => {
     }
     setSaving(true);
     const cleanMetrics = form.metrics.filter((m) => m.label.trim() && m.value.trim());
+    const chartFromText = form.chart_text
+      .split(/[,\s]+/)
+      .map((s) => parseFloat(s))
+      .filter((n) => !isNaN(n))
+      .map((v) => ({ v }));
     const payload: any = {
       title: form.title,
       problem: form.problem,
       solution: form.solution,
       metrics: cleanMetrics,
-      chart_data: form.chart_data,
+      chart_data: chartFromText.length ? chartFromText : form.chart_data,
       image_url: form.image_url || null,
       client_name: form.client_name || null,
       platform_used: form.platform_used || null,
+      industry: form.industry || null,
+      hero_metric_value: form.hero_metric_value || null,
+      hero_metric_label: form.hero_metric_label || null,
+      headline: form.headline || null,
+      before_points: textToList(form.before_text),
+      after_points: textToList(form.after_text),
+      technologies: form.tech_text.split(/[,\n]/).map((s) => s.trim()).filter(Boolean),
+      problem_stat: form.problem_stat || null,
+      solution_stat: form.solution_stat || null,
+      result_stat: form.result_stat || null,
+      challenge: form.challenge || null,
+      audit_findings: form.audit_findings || null,
+      implementation: form.implementation || null,
+      architecture: form.architecture || null,
+      business_outcome: form.business_outcome || null,
+      cta_label: form.cta_label || null,
       updated_at: new Date().toISOString(),
     };
+
 
     if (editing) {
       const { error } = await supabase.from("case_studies").update(payload).eq("id", editing.id);
@@ -236,6 +314,70 @@ const AdminCaseStudiesEditor = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
+                <Label className="text-xs text-muted-foreground">Industry badge</Label>
+                <Input placeholder="Shopify Store" value={form.industry} onChange={(e) => setForm((f) => ({ ...f, industry: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">CTA label</Label>
+                <Input placeholder="View Case Study" value={form.cta_label} onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Hero metric value</Label>
+                <Input placeholder="+32%" value={form.hero_metric_value} onChange={(e) => setForm((f) => ({ ...f, hero_metric_value: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Hero metric label</Label>
+                <Input placeholder="Tracking Accuracy" value={form.hero_metric_label} onChange={(e) => setForm((f) => ({ ...f, hero_metric_label: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">One-line headline</Label>
+              <Input placeholder="Recovered missing purchase events with server-side tracking." value={form.headline} onChange={(e) => setForm((f) => ({ ...f, headline: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Before points (one per line)</Label>
+                <Textarea value={form.before_text} onChange={(e) => setForm((f) => ({ ...f, before_text: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">After points (one per line)</Label>
+                <Textarea value={form.after_text} onChange={(e) => setForm((f) => ({ ...f, after_text: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Technologies (comma separated)</Label>
+              <Input placeholder="GA4, GTM, Meta CAPI, Stape" value={form.tech_text} onChange={(e) => setForm((f) => ({ ...f, tech_text: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Problem stat</Label>
+                <Input placeholder="40% purchases missing" value={form.problem_stat} onChange={(e) => setForm((f) => ({ ...f, problem_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Solution stat</Label>
+                <Input placeholder="Server-side GTM" value={form.solution_stat} onChange={(e) => setForm((f) => ({ ...f, solution_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Result stat</Label>
+                <Input placeholder="+32% tracked purchases" value={form.result_stat} onChange={(e) => setForm((f) => ({ ...f, result_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Chart values (comma separated numbers)</Label>
+              <Input placeholder="30, 25, 35, 50, 65, 80" value={form.chart_text} onChange={(e) => setForm((f) => ({ ...f, chart_text: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <div>
                 <Label className="text-xs text-muted-foreground">Client Name</Label>
                 <Input value={form.client_name || ""} onChange={(e) => setForm((f) => ({ ...f, client_name: e.target.value }))} className="mt-1 bg-secondary border-border" />
               </div>
@@ -254,6 +396,28 @@ const AdminCaseStudiesEditor = () => {
               <Label className="text-xs text-muted-foreground">Solution *</Label>
               <Textarea value={form.solution} onChange={(e) => setForm((f) => ({ ...f, solution: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
             </div>
+
+            <div className="rounded-lg border border-border p-3 space-y-3">
+              <p className="text-xs font-medium text-foreground">Expanded detail (shown in the modal)</p>
+              {([
+                ["challenge", "Client challenge"],
+                ["audit_findings", "Audit findings"],
+                ["implementation", "Implementation process"],
+                ["architecture", "Tracking architecture"],
+                ["business_outcome", "Key business outcome"],
+              ] as const).map(([key, label]) => (
+                <div key={key}>
+                  <Label className="text-xs text-muted-foreground">{label}</Label>
+                  <Textarea
+                    value={(form as any)[key]}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                    className="mt-1 bg-secondary border-border min-h-[70px]"
+                  />
+                </div>
+              ))}
+            </div>
+
+
 
             {/* Metrics */}
             <div>
