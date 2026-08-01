@@ -314,6 +314,70 @@ const AdminCaseStudiesEditor = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
+                <Label className="text-xs text-muted-foreground">Industry badge</Label>
+                <Input placeholder="Shopify Store" value={form.industry} onChange={(e) => setForm((f) => ({ ...f, industry: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">CTA label</Label>
+                <Input placeholder="View Case Study" value={form.cta_label} onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Hero metric value</Label>
+                <Input placeholder="+32%" value={form.hero_metric_value} onChange={(e) => setForm((f) => ({ ...f, hero_metric_value: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Hero metric label</Label>
+                <Input placeholder="Tracking Accuracy" value={form.hero_metric_label} onChange={(e) => setForm((f) => ({ ...f, hero_metric_label: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">One-line headline</Label>
+              <Input placeholder="Recovered missing purchase events with server-side tracking." value={form.headline} onChange={(e) => setForm((f) => ({ ...f, headline: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Before points (one per line)</Label>
+                <Textarea value={form.before_text} onChange={(e) => setForm((f) => ({ ...f, before_text: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">After points (one per line)</Label>
+                <Textarea value={form.after_text} onChange={(e) => setForm((f) => ({ ...f, after_text: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Technologies (comma separated)</Label>
+              <Input placeholder="GA4, GTM, Meta CAPI, Stape" value={form.tech_text} onChange={(e) => setForm((f) => ({ ...f, tech_text: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Problem stat</Label>
+                <Input placeholder="40% purchases missing" value={form.problem_stat} onChange={(e) => setForm((f) => ({ ...f, problem_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Solution stat</Label>
+                <Input placeholder="Server-side GTM" value={form.solution_stat} onChange={(e) => setForm((f) => ({ ...f, solution_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Result stat</Label>
+                <Input placeholder="+32% tracked purchases" value={form.result_stat} onChange={(e) => setForm((f) => ({ ...f, result_stat: e.target.value }))} className="mt-1 bg-secondary border-border" />
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Chart values (comma separated numbers)</Label>
+              <Input placeholder="30, 25, 35, 50, 65, 80" value={form.chart_text} onChange={(e) => setForm((f) => ({ ...f, chart_text: e.target.value }))} className="mt-1 bg-secondary border-border" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <div>
                 <Label className="text-xs text-muted-foreground">Client Name</Label>
                 <Input value={form.client_name || ""} onChange={(e) => setForm((f) => ({ ...f, client_name: e.target.value }))} className="mt-1 bg-secondary border-border" />
               </div>
