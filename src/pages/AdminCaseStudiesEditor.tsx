@@ -41,7 +41,27 @@ interface CaseStudy {
   client_name: string | null;
   platform_used: string | null;
   sort_order: number;
+  industry: string | null;
+  hero_metric_value: string | null;
+  hero_metric_label: string | null;
+  headline: string | null;
+  before_points: string[];
+  after_points: string[];
+  technologies: string[];
+  problem_stat: string | null;
+  solution_stat: string | null;
+  result_stat: string | null;
+  challenge: string | null;
+  audit_findings: string | null;
+  implementation: string | null;
+  architecture: string | null;
+  business_outcome: string | null;
+  cta_label: string | null;
 }
+
+const listToText = (v: unknown) => (Array.isArray(v) ? (v as string[]).join("\n") : "");
+const textToList = (v: string) =>
+  v.split("\n").map((s) => s.trim()).filter(Boolean);
 
 const emptyForm = () => ({
   title: "",
@@ -52,6 +72,23 @@ const emptyForm = () => ({
   image_url: null as string | null,
   client_name: "",
   platform_used: "",
+  industry: "",
+  hero_metric_value: "",
+  hero_metric_label: "",
+  headline: "",
+  before_text: "",
+  after_text: "",
+  tech_text: "",
+  problem_stat: "",
+  solution_stat: "",
+  result_stat: "",
+  challenge: "",
+  audit_findings: "",
+  implementation: "",
+  architecture: "",
+  business_outcome: "",
+  cta_label: "",
+  chart_text: "",
 });
 
 const AdminCaseStudiesEditor = () => {
