@@ -123,6 +123,7 @@ const AdminCaseStudiesEditor = () => {
   const openEdit = (c: CaseStudy) => {
     setEditing(c);
     setForm({
+      ...emptyForm(),
       title: c.title,
       problem: c.problem,
       solution: c.solution,
@@ -131,9 +132,27 @@ const AdminCaseStudiesEditor = () => {
       image_url: c.image_url,
       client_name: c.client_name || "",
       platform_used: c.platform_used || "",
+      industry: c.industry || "",
+      hero_metric_value: c.hero_metric_value || "",
+      hero_metric_label: c.hero_metric_label || "",
+      headline: c.headline || "",
+      before_text: listToText(c.before_points),
+      after_text: listToText(c.after_points),
+      tech_text: Array.isArray(c.technologies) ? c.technologies.join(", ") : "",
+      problem_stat: c.problem_stat || "",
+      solution_stat: c.solution_stat || "",
+      result_stat: c.result_stat || "",
+      challenge: c.challenge || "",
+      audit_findings: c.audit_findings || "",
+      implementation: c.implementation || "",
+      architecture: c.architecture || "",
+      business_outcome: c.business_outcome || "",
+      cta_label: c.cta_label || "",
+      chart_text: (c.chart_data || []).map((d) => d.v).join(", "),
     });
     setDialogOpen(true);
   };
+
 
   const addMetric = () => setForm((f) => ({ ...f, metrics: [...f.metrics, { label: "", value: "" }] }));
   const removeMetric = (i: number) => setForm((f) => ({ ...f, metrics: f.metrics.filter((_, idx) => idx !== i) }));
