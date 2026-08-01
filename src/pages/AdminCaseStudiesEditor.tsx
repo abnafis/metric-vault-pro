@@ -397,6 +397,28 @@ const AdminCaseStudiesEditor = () => {
               <Textarea value={form.solution} onChange={(e) => setForm((f) => ({ ...f, solution: e.target.value }))} className="mt-1 bg-secondary border-border min-h-[80px]" />
             </div>
 
+            <div className="rounded-lg border border-border p-3 space-y-3">
+              <p className="text-xs font-medium text-foreground">Expanded detail (shown in the modal)</p>
+              {([
+                ["challenge", "Client challenge"],
+                ["audit_findings", "Audit findings"],
+                ["implementation", "Implementation process"],
+                ["architecture", "Tracking architecture"],
+                ["business_outcome", "Key business outcome"],
+              ] as const).map(([key, label]) => (
+                <div key={key}>
+                  <Label className="text-xs text-muted-foreground">{label}</Label>
+                  <Textarea
+                    value={(form as any)[key]}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                    className="mt-1 bg-secondary border-border min-h-[70px]"
+                  />
+                </div>
+              ))}
+            </div>
+
+
+
             {/* Metrics */}
             <div>
               <div className="flex items-center justify-between mb-2">
