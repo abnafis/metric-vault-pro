@@ -221,7 +221,9 @@ const CaseStudiesSection = () => {
                 <h3 className="mt-4 text-lg font-semibold tracking-tight leading-snug text-foreground">
                   {c.headline || c.title}
                 </h3>
-                <p className="mt-1 text-xs text-muted-foreground">{c.title}</p>
+                {c.headline && c.headline !== c.title && (
+                  <p className="mt-1 text-xs text-muted-foreground">{c.title}</p>
+                )}
 
                 {/* Mini analytics chart */}
                 {chart.length > 0 && (
