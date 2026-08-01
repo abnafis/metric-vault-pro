@@ -183,17 +183,39 @@ const AdminCaseStudiesEditor = () => {
     }
     setSaving(true);
     const cleanMetrics = form.metrics.filter((m) => m.label.trim() && m.value.trim());
+    const chartFromText = form.chart_text
+      .split(/[,\s]+/)
+      .map((s) => parseFloat(s))
+      .filter((n) => !isNaN(n))
+      .map((v) => ({ v }));
     const payload: any = {
       title: form.title,
       problem: form.problem,
       solution: form.solution,
       metrics: cleanMetrics,
-      chart_data: form.chart_data,
+      chart_data: chartFromText.length ? chartFromText : form.chart_data,
       image_url: form.image_url || null,
       client_name: form.client_name || null,
       platform_used: form.platform_used || null,
+      industry: form.industry || null,
+      hero_metric_value: form.hero_metric_value || null,
+      hero_metric_label: form.hero_metric_label || null,
+      headline: form.headline || null,
+      before_points: textToList(form.before_text),
+      after_points: textToList(form.after_text),
+      technologies: form.tech_text.split(/[,\n]/).map((s) => s.trim()).filter(Boolean),
+      problem_stat: form.problem_stat || null,
+      solution_stat: form.solution_stat || null,
+      result_stat: form.result_stat || null,
+      challenge: form.challenge || null,
+      audit_findings: form.audit_findings || null,
+      implementation: form.implementation || null,
+      architecture: form.architecture || null,
+      business_outcome: form.business_outcome || null,
+      cta_label: form.cta_label || null,
       updated_at: new Date().toISOString(),
     };
+
 
     if (editing) {
       const { error } = await supabase.from("case_studies").update(payload).eq("id", editing.id);
