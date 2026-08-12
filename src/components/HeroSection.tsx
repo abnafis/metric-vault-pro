@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { ArrowRight, Check, Globe, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackCTAClick } from "@/lib/dataLayer";
 
@@ -8,29 +9,64 @@ interface HeroData {
   subheadline: string;
   primary_cta_text: string;
   primary_cta_link: string;
+  secondary_cta_text?: string | null;
+  secondary_cta_link?: string | null;
   badge_text: string;
   social_proof_label: string;
   social_proof_avatars: string[];
 }
 
 const fallback: HeroData = {
-  headline: "Same ad spend\nTrack 60% more Conversion",
-  subheadline: "I make sure your ads get the complete data.",
-  primary_cta_text: "Book a call with me",
+  headline: "Fix Your Tracking.\nGet Better Ad Data.\nMake Better Decisions.",
+  subheadline:
+    "I help businesses send accurate conversion data back to Google & Meta using GA4, GTM, Enhanced Conversions and Server-Side Tracking — so every click, conversion and dollar is measured correctly.",
+  primary_cta_text: "Get Free Tracking Audit",
   primary_cta_link: "#cta",
-  badge_text: "Available for New Projects",
+  secondary_cta_text: "View Case Studies",
+  secondary_cta_link: "#case-studies",
+  badge_text: "Trusted by 200+ businesses worldwide",
   social_proof_label: "250+ Happy clients",
   social_proof_avatars: [],
 };
 
-// Inline platform icons (SVG data URIs / simple emoji-ish blocks)
-const platformTiles = [
-  { name: "Shopify", bg: "#95BF47", label: "S" },
-  { name: "TikTok", bg: "#000", label: "♪" },
-  { name: "Google Ads", bg: "#fff", label: "G", color: "#4285F4" },
-  { name: "Meta", bg: "#0866FF", label: "∞" },
-  { name: "GA4", bg: "#F9AB00", label: "⌾" },
+const platformChips = [
+  { name: "Google Ads", color: "#4285F4", mark: "A" },
+  { name: "Meta Ads", color: "#0866FF", mark: "M" },
+  { name: "Google Analytics 4", color: "#F9AB00", mark: "G" },
+  { name: "Shopify", color: "#95BF47", mark: "S" },
+  { name: "HubSpot", color: "#FF7A59", mark: "H" },
 ];
+
+const trackedItems = [
+  { label: "Purchase", sub: "Tracked" },
+  { label: "Lead", sub: "Tracked" },
+  { label: "Add to Cart", sub: "Tracked" },
+  { label: "Enhanced Conversions", sub: "Active" },
+  { label: "Event Match Quality", sub: "8.7 / 10" },
+];
+
+const Arrow = () => (
+  <div className="flex justify-center py-1.5" aria-hidden>
+    <svg width="12" height="22" viewBox="0 0 12 22" fill="none">
+      <path
+        d="M6 0v18M1 14l5 6 5-6"
+        stroke="hsl(220 12% 65%)"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </div>
+);
+
+const Mark = ({ color, children }: { color: string; children: string }) => (
+  <span
+    className="inline-flex h-5 w-5 items-center justify-center rounded-md text-[10px] font-bold text-white"
+    style={{ background: color }}
+  >
+    {children}
+  </span>
+);
 
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
@@ -64,48 +100,55 @@ const HeroSection = () => {
       });
   }, []);
 
-  const [line1, line2] = hero.headline.includes("\n")
-    ? hero.headline.split("\n")
-    : hero.headline.includes(".")
-    ? [hero.headline.split(".")[0], hero.headline.split(".").slice(1).join(".").trim()]
-    : [hero.headline, ""];
+  const lines = (hero.headline || "")
+    .split(/\n|(?<=\.)\s+/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  const secondaryText = hero.secondary_cta_text || fallback.secondary_cta_text!;
+  const secondaryLink = hero.secondary_cta_link || fallback.secondary_cta_link!;
 
   return (
-    <section
-      id="home"
-      className="relative flex items-center pt-32 sm:pt-40 pb-16 overflow-hidden"
-    >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-radial-glow pointer-events-none" />
+    <section id="home" className="relative overflow-hidden pt-14 sm:pt-20 pb-14">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[600px] bg-radial-glow pointer-events-none" />
 
       <div className="section-container relative z-10 w-full">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-14 items-center">
           {/* Left */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 space-y-8"
+            className="space-y-7"
           >
             <div className="pill-eyebrow pill-eyebrow-green">{hero.badge_text}</div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-display leading-[0.95] tracking-tight">
-              <span className="text-muted-foreground">{line1}</span>
-              {line2 && (
-                <>
-                  <br />
-                  <span className="text-foreground">{line2}</span>
-                </>
-              )}
+            <h1 className="text-[2.6rem] sm:text-5xl lg:text-[3.6rem] font-display leading-[1.05] tracking-tight text-foreground">
+              {lines.map((l, i) => (
+                <span key={i} className={`block ${i === 1 ? "text-brand-blue" : ""}`}>
+                  {l}
+                </span>
+              ))}
             </h1>
 
-            <p className="text-lg sm:text-xl text-foreground font-semibold max-w-xl leading-snug">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
               {hero.subheadline}
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap gap-2.5">
+              {platformChips.map((p) => (
+                <span key={p.name} className="platform-chip">
+                  <Mark color={p.color}>{p.mark}</Mark>
+                  {p.name}
+                </span>
+              ))}
+              <span className="platform-chip text-muted-foreground">+ More</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <a
                 href={hero.primary_cta_link}
-                onClick={() => trackCTAClick("hero_book_call")}
+                onClick={() => trackCTAClick("hero_primary")}
                 className="pill-cta"
               >
                 {profileImageUrl ? (
@@ -115,91 +158,87 @@ const HeroSection = () => {
                 )}
                 <span>{hero.primary_cta_text}</span>
               </a>
+              <a
+                href={secondaryLink}
+                onClick={() => trackCTAClick("hero_secondary")}
+                className="btn-secondary-glass gap-2"
+              >
+                {secondaryText}
+                <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
           </motion.div>
 
-          {/* Right: floating dashboard cards */}
+          {/* Right: data flow diagram */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 relative h-[400px] sm:h-[460px]"
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="flow-panel"
           >
-            {/* Back card */}
-            <motion.div
-              initial={{ rotate: 0, y: 20 }}
-              animate={{ rotate: 6, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="dashboard-card absolute top-6 right-0 w-[85%] h-[280px] sm:h-[320px] p-6 opacity-70"
-            >
-              <div className="grid grid-cols-2 gap-3 h-full">
-                <div className="rounded-lg bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-widest text-white/50">Setup</div>
-                  <div className="text-xs text-white/80 mt-1">Compliant</div>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="h-2 w-2 rounded-full bg-[hsl(var(--brand-blue))]" />
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                Accurate Data Flow
+              </span>
+            </div>
+
+            <div className="grid sm:grid-cols-[1fr_auto] gap-5">
+              <div>
+                <div className="flow-node">
+                  <Globe className="h-4 w-4 text-muted-foreground" /> Your Website
                 </div>
-                <div className="rounded-lg bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-widest text-white/50">Tags</div>
-                  <div className="text-xs text-white/80 mt-1">Active</div>
+                <Arrow />
+                <div className="flow-node">
+                  <Mark color="#4285F4">T</Mark> Google Tag Manager
                 </div>
-                <div className="rounded-lg bg-white/5 p-3 col-span-2">
-                  <div className="text-[10px] uppercase tracking-widest text-white/50">Privacy</div>
-                  <div className="text-xs text-white/80 mt-1">Extends</div>
+                <Arrow />
+                <div className="flow-node border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]">
+                  <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" /> Server Container
+                </div>
+                <Arrow />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flow-node text-xs sm:text-sm">
+                    <Mark color="#F9AB00">G</Mark> Analytics 4
+                  </div>
+                  <div className="flow-node text-xs sm:text-sm">
+                    <Mark color="#0866FF">M</Mark> Meta CAPI
+                  </div>
+                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
+                    <span className="flex items-center gap-2">
+                      <Mark color="#4285F4">A</Mark> Google Ads
+                    </span>
+                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
+                  </div>
+                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
+                    <span className="flex items-center gap-2">
+                      <Mark color="#0866FF">M</Mark> Meta Ads
+                    </span>
+                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
+                  </div>
                 </div>
               </div>
-            </motion.div>
 
-            {/* Front card */}
-            <motion.div
-              initial={{ rotate: 0, y: -10 }}
-              animate={{ rotate: -3, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="dashboard-card absolute top-0 left-0 w-[90%] h-[300px] sm:h-[340px] p-6 flex flex-col justify-between"
-            >
-              <div className="relative flex-1 flex items-center justify-center">
-                {/* Center portrait */}
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden ring-4 ring-white/10 z-10 bg-white/5">
-                  {profileImageUrl ? (
-                    <img src={profileImageUrl} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-white/20 to-white/5" />
-                  )}
-                </div>
-
-                {/* Floating platform tiles */}
-                {platformTiles.map((t, i) => {
-                  const angle = (i / platformTiles.length) * Math.PI * 2 - Math.PI / 2;
-                  const r = 110;
-                  const x = Math.cos(angle) * r;
-                  const y = Math.sin(angle) * r * 0.7;
-                  return (
-                    <motion.div
-                      key={t.name}
-                      initial={{ opacity: 0, scale: 0.6 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.7 + i * 0.08 }}
-                      className="absolute w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold shadow-lg"
-                      style={{
-                        background: t.bg,
-                        color: t.color || (t.bg === "#fff" ? "#000" : "#fff"),
-                        left: `calc(50% + ${x}px - 22px)`,
-                        top: `calc(50% + ${y}px - 22px)`,
-                      }}
-                    >
-                      {t.label}
-                    </motion.div>
-                  );
-                })}
+              <div className="rounded-2xl border border-border bg-card p-4 space-y-4 sm:w-[190px]">
+                {trackedItems.map((t) => (
+                  <div key={t.label} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    </span>
+                    <span>
+                      <span className="block text-xs font-semibold text-foreground leading-tight">{t.label}</span>
+                      <span className="block text-[11px] text-muted-foreground">{t.sub}</span>
+                    </span>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div className="pt-3 border-t border-white/10">
-                <div className="text-[11px] uppercase tracking-widest text-white/50">
-                  Tracking & Analytics Setup
-                </div>
-                <div className="text-xs text-white/70 mt-1 leading-relaxed">
-                  Setup paid ads conversion tracking for 3x better results — Google Ads, Meta Pixel, GA4, and more.
-                </div>
-              </div>
-            </motion.div>
+            <div className="mt-5 pt-4 border-t border-border flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground">
+              <span>Deduplicated Events</span>
+              <span>More Accurate Data</span>
+              <span>Better Ad Optimization</span>
+            </div>
           </motion.div>
         </div>
       </div>

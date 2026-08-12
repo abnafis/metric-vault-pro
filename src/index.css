@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Light lavender-blue base */
-    --background: 225 60% 97%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 6%;
 
     --card: 0 0% 100%;
@@ -20,23 +20,25 @@
     --primary: 0 0% 6%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 225 30% 93%;
+    --secondary: 220 20% 96%;
     --secondary-foreground: 0 0% 6%;
 
-    --muted: 225 30% 94%;
+    --muted: 220 20% 96%;
     --muted-foreground: 0 0% 40%;
 
     --accent: 0 0% 6%;
     --accent-foreground: 0 0% 100%;
 
     --accent-yellow: 48 100% 70%;
+    --brand-blue: 221 83% 53%;
+    --accent-soft-green: 140 60% 95%;
     --accent-green: 142 71% 45%;
     --surface-dark: 220 15% 10%;
 
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 225 25% 88%;
+    --border: 220 16% 90%;
     --input: 225 25% 92%;
     --ring: 0 0% 6%;
 
@@ -142,8 +144,26 @@
 
   /* Announcement bar */
   .announcement-bar {
-    background: hsl(var(--accent-yellow));
-    color: hsl(0 0% 8%);
+    background: hsl(var(--accent-soft-green));
+    color: hsl(150 60% 22%);
+  }
+
+  .text-brand-blue { color: hsl(var(--brand-blue)); }
+
+  .platform-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-foreground;
+    box-shadow: 0 1px 2px hsl(220 40% 20% / 0.04);
+  }
+
+  .flow-node {
+    @apply flex items-center justify-center gap-2.5 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium text-foreground;
+    box-shadow: 0 1px 2px hsl(220 40% 20% / 0.05);
+  }
+
+  .flow-panel {
+    @apply rounded-3xl border border-border p-5 sm:p-6;
+    background: linear-gradient(180deg, hsl(220 40% 99%), hsl(225 45% 97%));
+    box-shadow: 0 24px 60px -30px hsl(220 40% 20% / 0.25);
   }
 
   /* Pill navbar */
@@ -220,7 +240,7 @@
   .bg-radial-glow {
     background: radial-gradient(
       ellipse 60% 50% at 50% 0%,
-      hsl(225 90% 70% / 0.15),
+      hsl(225 90% 70% / 0.07),
       transparent
     );
   }

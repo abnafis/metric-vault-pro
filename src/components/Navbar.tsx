@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageCircle } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { trackNavigationClick, trackCTAClick } from "@/lib/dataLayer";
@@ -43,24 +43,26 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-8 sm:top-10 left-0 right-0 z-50 transition-all duration-300 flex justify-center px-4`}
+      className={`sticky top-0 z-50 w-full border-b border-border bg-card/90 backdrop-blur-md transition-shadow duration-300 ${
+        scrolled ? "shadow-[0_8px_24px_-20px_hsl(220_40%_20%_/_0.5)]" : ""
+      }`}
     >
-      <div className={`pill-nav flex items-center gap-2 pl-2 pr-2 py-2 ${scrolled ? "shadow-lg" : ""}`}>
+      <div className="section-container flex items-center justify-between gap-4 py-3.5">
         <a
           href="/"
-          className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-muted transition-colors shrink-0"
+          className="flex items-center gap-2.5 shrink-0"
         >
           {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="w-7 h-7 rounded-full object-cover" />
+            <img src={avatarUrl} alt="Avatar" className="w-9 h-9 rounded-full object-cover ring-2 ring-border" />
           ) : (
-            <div className="w-7 h-7 rounded-full bg-foreground" />
+            <div className="w-9 h-9 rounded-full bg-foreground" />
           )}
-          <span className="text-sm font-medium text-foreground tracking-tight hidden sm:inline">
+          <span className="text-base sm:text-lg font-bold text-foreground tracking-tight">
             {settings.site_name}
           </span>
         </a>
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-1">
           {visibleLinks.map((l) => (
             <a
               key={l.href}
@@ -73,7 +75,7 @@ const Navbar = () => {
                   trackNavigationClick(l.label);
                 }
               }}
-              className="px-4 py-2 text-sm text-foreground/70 hover:text-foreground transition-colors duration-200 rounded-full"
+              className="px-3.5 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors duration-200 rounded-full"
             >
               {l.label}
             </a>
@@ -85,9 +87,11 @@ const Navbar = () => {
           target={whatsappUrl.startsWith("http") ? "_blank" : undefined}
           rel="noopener noreferrer"
           onClick={() => trackCTAClick("nav_whatsapp")}
-          className="hidden sm:inline-flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-card border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+          className="hidden sm:inline-flex items-center gap-2 pl-2.5 pr-5 py-2 rounded-full bg-card border border-border text-sm font-semibold text-foreground hover:bg-muted transition-colors"
         >
-          <span className="w-2 h-2 rounded-full bg-[hsl(var(--accent-green))] animate-pulse" />
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
+            <MessageCircle className="h-3.5 w-3.5" strokeWidth={2.5} />
+          </span>
           WhatsApp
         </a>
 
@@ -106,7 +110,7 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden absolute top-full mt-3 left-4 right-4 rounded-2xl border border-border bg-card shadow-lg"
+            className="md:hidden absolute top-full mt-2 left-4 right-4 rounded-2xl border border-border bg-card shadow-lg"
           >
             <div className="p-4 flex flex-col gap-1">
               {visibleLinks.map((l) => (

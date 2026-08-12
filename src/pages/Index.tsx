@@ -59,7 +59,10 @@ const Index = () => {
       <Navbar />
       <FloatingSocials />
       <HeroSection />
-      <ClientProofRow />
+      <Suspense fallback={<SectionFallback />}>
+        <MetricsStrip />
+        <WhyNotScalingSection />
+      </Suspense>
       <LogoMarquee />
       <Suspense fallback={<SectionFallback />}>
         <ServicesSection />
@@ -67,8 +70,7 @@ const Index = () => {
       <CaseStudiesSection />
       <AboutSection />
       <Suspense fallback={<SectionFallback />}>
-        <WhyNotScalingSection />
-        <MetricsStrip />
+        <ClientProofRow />
         <TestimonialsSection />
         <ProcessSection />
         <BlogSection />
