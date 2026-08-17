@@ -26,6 +26,12 @@ interface HeroData {
   projects_value: string;
   social_proof_avatars: string[] | null;
   social_proof_label: string | null;
+  platform_chips: { name: string; color: string; mark: string }[];
+  tracked_items: { label: string; sub: string }[];
+  flow_title: string;
+  flow_nodes: { label: string; mark?: string; color?: string; style?: string }[];
+  flow_destinations: { label: string; mark?: string; color?: string; sub?: string }[];
+  flow_footer: string[];
 }
 
 const defaults: Omit<HeroData, "id"> = {
