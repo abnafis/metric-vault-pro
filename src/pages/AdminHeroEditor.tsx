@@ -164,6 +164,30 @@ const AdminHeroEditor = () => {
     );
   }
 
+  type ListKey = "platform_chips" | "tracked_items" | "flow_nodes" | "flow_destinations";
+
+  const updateItem = (key: ListKey, index: number, field: string, value: string) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      const list = [...(prev[key] as any[])];
+      list[index] = { ...list[index], [field]: value };
+      return { ...prev, [key]: list };
+    });
+    setSaved(false);
+  };
+
+  const addItem = (key: ListKey, blank: Record<string, string>) => {
+    setData((prev) => (prev ? { ...prev, [key]: [...(prev[key] as any[]), blank] } : prev));
+    setSaved(false);
+  };
+
+  const removeItem = (key: ListKey, index: number) => {
+    setData((prev) =>
+      prev ? { ...prev, [key]: (prev[key] as any[]).filter((_, i) => i !== index) } : prev,
+    );
+    setSaved(false);
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
