@@ -211,49 +211,54 @@ const HeroSection = () => {
             <div className="flex items-center gap-2 mb-5">
               <span className="h-2 w-2 rounded-full bg-[hsl(var(--brand-blue))]" />
               <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Accurate Data Flow
+                {hero.flow_title}
               </span>
             </div>
 
             <div className="grid sm:grid-cols-[1fr_auto] gap-5">
               <div>
-                <div className="flow-node">
-                  <Globe className="h-4 w-4 text-muted-foreground" /> Your Website
-                </div>
-                <Arrow />
-                <div className="flow-node">
-                  <Mark color="#4285F4">T</Mark> Google Tag Manager
-                </div>
-                <Arrow />
-                <div className="flow-node border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]">
-                  <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" /> Server Container
-                </div>
-                <Arrow />
+                {hero.flow_nodes.map((n, i) => (
+                  <div key={`${n.label}-${i}`}>
+                    <div
+                      className={`flow-node ${
+                        n.style === "green"
+                          ? "border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]"
+                          : ""
+                      }`}
+                    >
+                      {n.mark ? (
+                        <Mark color={n.color || "#4285F4"}>{n.mark}</Mark>
+                      ) : n.style === "green" ? (
+                        <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" />
+                      ) : (
+                        <Globe className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      {n.label}
+                    </div>
+                    <Arrow />
+                  </div>
+                ))}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="flow-node text-xs sm:text-sm">
-                    <Mark color="#F9AB00">G</Mark> Analytics 4
-                  </div>
-                  <div className="flow-node text-xs sm:text-sm">
-                    <Mark color="#0866FF">M</Mark> Meta CAPI
-                  </div>
-                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
-                    <span className="flex items-center gap-2">
-                      <Mark color="#4285F4">A</Mark> Google Ads
-                    </span>
-                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
-                  </div>
-                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
-                    <span className="flex items-center gap-2">
-                      <Mark color="#0866FF">M</Mark> Meta Ads
-                    </span>
-                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
-                  </div>
+                  {hero.flow_destinations.map((d, i) => (
+                    <div
+                      key={`${d.label}-${i}`}
+                      className={`flow-node text-xs sm:text-sm ${d.sub ? "flex-col items-start" : ""}`}
+                    >
+                      <span className="flex items-center gap-2">
+                        {d.mark && <Mark color={d.color || "#4285F4"}>{d.mark}</Mark>}
+                        {d.label}
+                      </span>
+                      {d.sub && (
+                        <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">{d.sub}</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="rounded-2xl border border-border bg-card p-4 space-y-4 sm:w-[190px]">
-                {trackedItems.map((t) => (
-                  <div key={t.label} className="flex items-start gap-2.5">
+                {hero.tracked_items.map((t, i) => (
+                  <div key={`${t.label}-${i}`} className="flex items-start gap-2.5">
                     <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </span>
@@ -267,9 +272,9 @@ const HeroSection = () => {
             </div>
 
             <div className="mt-5 pt-4 border-t border-border flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground">
-              <span>Deduplicated Events</span>
-              <span>More Accurate Data</span>
-              <span>Better Ad Optimization</span>
+              {hero.flow_footer.map((f, i) => (
+                <span key={i}>{f}</span>
+              ))}
             </div>
           </motion.div>
         </div>
