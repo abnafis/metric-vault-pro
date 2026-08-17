@@ -51,6 +51,12 @@ const defaults: Omit<HeroData, "id"> = {
   projects_value: "100+",
   social_proof_avatars: [],
   social_proof_label: "250+ Happy clients",
+  platform_chips: [],
+  tracked_items: [],
+  flow_title: "Accurate Data Flow",
+  flow_nodes: [],
+  flow_destinations: [],
+  flow_footer: [],
 };
 
 const AdminHeroEditor = () => {
