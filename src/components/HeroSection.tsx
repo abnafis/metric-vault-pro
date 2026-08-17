@@ -4,6 +4,11 @@ import { ArrowRight, Check, Globe, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackCTAClick } from "@/lib/dataLayer";
 
+interface Chip { name: string; color: string; mark: string; }
+interface Tracked { label: string; sub: string; }
+interface FlowNode { label: string; mark?: string; color?: string; style?: string; }
+interface FlowDest { label: string; mark?: string; color?: string; sub?: string; }
+
 interface HeroData {
   headline: string;
   subheadline: string;
@@ -14,6 +19,12 @@ interface HeroData {
   badge_text: string;
   social_proof_label: string;
   social_proof_avatars: string[];
+  platform_chips: Chip[];
+  tracked_items: Tracked[];
+  flow_title: string;
+  flow_nodes: FlowNode[];
+  flow_destinations: FlowDest[];
+  flow_footer: string[];
 }
 
 const fallback: HeroData = {
@@ -27,23 +38,38 @@ const fallback: HeroData = {
   badge_text: "Trusted by 200+ businesses worldwide",
   social_proof_label: "250+ Happy clients",
   social_proof_avatars: [],
+  platform_chips: [
+    { name: "Google Ads", color: "#4285F4", mark: "A" },
+    { name: "Meta Ads", color: "#0866FF", mark: "M" },
+    { name: "Google Analytics 4", color: "#F9AB00", mark: "G" },
+    { name: "Shopify", color: "#95BF47", mark: "S" },
+    { name: "HubSpot", color: "#FF7A59", mark: "H" },
+  ],
+  tracked_items: [
+    { label: "Purchase", sub: "Tracked" },
+    { label: "Lead", sub: "Tracked" },
+    { label: "Add to Cart", sub: "Tracked" },
+    { label: "Enhanced Conversions", sub: "Active" },
+    { label: "Event Match Quality", sub: "8.7 / 10" },
+  ],
+  flow_title: "Accurate Data Flow",
+  flow_nodes: [
+    { label: "Your Website", style: "plain" },
+    { label: "Google Tag Manager", mark: "T", color: "#4285F4", style: "plain" },
+    { label: "Server Container", style: "green" },
+  ],
+  flow_destinations: [
+    { label: "Analytics 4", mark: "G", color: "#F9AB00" },
+    { label: "Meta CAPI", mark: "M", color: "#0866FF" },
+    { label: "Google Ads", mark: "A", color: "#4285F4", sub: "Conversions" },
+    { label: "Meta Ads", mark: "M", color: "#0866FF", sub: "Conversions" },
+  ],
+  flow_footer: ["Deduplicated Events", "More Accurate Data", "Better Ad Optimization"],
 };
 
-const platformChips = [
-  { name: "Google Ads", color: "#4285F4", mark: "A" },
-  { name: "Meta Ads", color: "#0866FF", mark: "M" },
-  { name: "Google Analytics 4", color: "#F9AB00", mark: "G" },
-  { name: "Shopify", color: "#95BF47", mark: "S" },
-  { name: "HubSpot", color: "#FF7A59", mark: "H" },
-];
+const asArray = <T,>(v: unknown, fb: T[]): T[] =>
+  Array.isArray(v) && v.length > 0 ? (v as T[]) : fb;
 
-const trackedItems = [
-  { label: "Purchase", sub: "Tracked" },
-  { label: "Lead", sub: "Tracked" },
-  { label: "Add to Cart", sub: "Tracked" },
-  { label: "Enhanced Conversions", sub: "Active" },
-  { label: "Event Match Quality", sub: "8.7 / 10" },
-];
 
 const Arrow = () => (
   <div className="flex justify-center py-1.5" aria-hidden>
