@@ -111,6 +111,12 @@ const HeroSection = () => {
             ...fallback,
             ...d,
             social_proof_avatars: Array.isArray(d.social_proof_avatars) ? d.social_proof_avatars : [],
+            platform_chips: asArray<Chip>(d.platform_chips, fallback.platform_chips),
+            tracked_items: asArray<Tracked>(d.tracked_items, fallback.tracked_items),
+            flow_title: d.flow_title || fallback.flow_title,
+            flow_nodes: asArray<FlowNode>(d.flow_nodes, fallback.flow_nodes),
+            flow_destinations: asArray<FlowDest>(d.flow_destinations, fallback.flow_destinations),
+            flow_footer: asArray<string>(d.flow_footer, fallback.flow_footer),
           });
         }
       });
