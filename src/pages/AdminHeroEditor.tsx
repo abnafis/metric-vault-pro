@@ -83,7 +83,20 @@ const AdminHeroEditor = () => {
     if (error) {
       toast({ title: "Error loading hero content", description: error.message, variant: "destructive" });
     }
-    setData(rows as HeroData | null);
+    const r = rows as any;
+    setData(
+      r
+        ? ({
+            ...r,
+            platform_chips: Array.isArray(r.platform_chips) ? r.platform_chips : [],
+            tracked_items: Array.isArray(r.tracked_items) ? r.tracked_items : [],
+            flow_nodes: Array.isArray(r.flow_nodes) ? r.flow_nodes : [],
+            flow_destinations: Array.isArray(r.flow_destinations) ? r.flow_destinations : [],
+            flow_footer: Array.isArray(r.flow_footer) ? r.flow_footer : [],
+            flow_title: r.flow_title ?? "Accurate Data Flow",
+          } as HeroData)
+        : null,
+    );
     setLoading(false);
   };
 
