@@ -168,7 +168,7 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-wrap gap-2.5">
-              {platformChips.map((p) => (
+              {hero.platform_chips.map((p) => (
                 <span key={p.name} className="platform-chip">
                   <Mark color={p.color}>{p.mark}</Mark>
                   {p.name}
