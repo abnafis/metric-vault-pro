@@ -4,6 +4,11 @@ import { ArrowRight, Check, Globe, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackCTAClick } from "@/lib/dataLayer";
 
+interface Chip { name: string; color: string; mark: string; }
+interface Tracked { label: string; sub: string; }
+interface FlowNode { label: string; mark?: string; color?: string; style?: string; }
+interface FlowDest { label: string; mark?: string; color?: string; sub?: string; }
+
 interface HeroData {
   headline: string;
   subheadline: string;
@@ -14,6 +19,12 @@ interface HeroData {
   badge_text: string;
   social_proof_label: string;
   social_proof_avatars: string[];
+  platform_chips: Chip[];
+  tracked_items: Tracked[];
+  flow_title: string;
+  flow_nodes: FlowNode[];
+  flow_destinations: FlowDest[];
+  flow_footer: string[];
 }
 
 const fallback: HeroData = {
@@ -27,23 +38,38 @@ const fallback: HeroData = {
   badge_text: "Trusted by 200+ businesses worldwide",
   social_proof_label: "250+ Happy clients",
   social_proof_avatars: [],
+  platform_chips: [
+    { name: "Google Ads", color: "#4285F4", mark: "A" },
+    { name: "Meta Ads", color: "#0866FF", mark: "M" },
+    { name: "Google Analytics 4", color: "#F9AB00", mark: "G" },
+    { name: "Shopify", color: "#95BF47", mark: "S" },
+    { name: "HubSpot", color: "#FF7A59", mark: "H" },
+  ],
+  tracked_items: [
+    { label: "Purchase", sub: "Tracked" },
+    { label: "Lead", sub: "Tracked" },
+    { label: "Add to Cart", sub: "Tracked" },
+    { label: "Enhanced Conversions", sub: "Active" },
+    { label: "Event Match Quality", sub: "8.7 / 10" },
+  ],
+  flow_title: "Accurate Data Flow",
+  flow_nodes: [
+    { label: "Your Website", style: "plain" },
+    { label: "Google Tag Manager", mark: "T", color: "#4285F4", style: "plain" },
+    { label: "Server Container", style: "green" },
+  ],
+  flow_destinations: [
+    { label: "Analytics 4", mark: "G", color: "#F9AB00" },
+    { label: "Meta CAPI", mark: "M", color: "#0866FF" },
+    { label: "Google Ads", mark: "A", color: "#4285F4", sub: "Conversions" },
+    { label: "Meta Ads", mark: "M", color: "#0866FF", sub: "Conversions" },
+  ],
+  flow_footer: ["Deduplicated Events", "More Accurate Data", "Better Ad Optimization"],
 };
 
-const platformChips = [
-  { name: "Google Ads", color: "#4285F4", mark: "A" },
-  { name: "Meta Ads", color: "#0866FF", mark: "M" },
-  { name: "Google Analytics 4", color: "#F9AB00", mark: "G" },
-  { name: "Shopify", color: "#95BF47", mark: "S" },
-  { name: "HubSpot", color: "#FF7A59", mark: "H" },
-];
+const asArray = <T,>(v: unknown, fb: T[]): T[] =>
+  Array.isArray(v) && v.length > 0 ? (v as T[]) : fb;
 
-const trackedItems = [
-  { label: "Purchase", sub: "Tracked" },
-  { label: "Lead", sub: "Tracked" },
-  { label: "Add to Cart", sub: "Tracked" },
-  { label: "Enhanced Conversions", sub: "Active" },
-  { label: "Event Match Quality", sub: "8.7 / 10" },
-];
 
 const Arrow = () => (
   <div className="flex justify-center py-1.5" aria-hidden>
@@ -85,6 +111,12 @@ const HeroSection = () => {
             ...fallback,
             ...d,
             social_proof_avatars: Array.isArray(d.social_proof_avatars) ? d.social_proof_avatars : [],
+            platform_chips: asArray<Chip>(d.platform_chips, fallback.platform_chips),
+            tracked_items: asArray<Tracked>(d.tracked_items, fallback.tracked_items),
+            flow_title: d.flow_title || fallback.flow_title,
+            flow_nodes: asArray<FlowNode>(d.flow_nodes, fallback.flow_nodes),
+            flow_destinations: asArray<FlowDest>(d.flow_destinations, fallback.flow_destinations),
+            flow_footer: asArray<string>(d.flow_footer, fallback.flow_footer),
           });
         }
       });
@@ -136,7 +168,7 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-wrap gap-2.5">
-              {platformChips.map((p) => (
+              {hero.platform_chips.map((p) => (
                 <span key={p.name} className="platform-chip">
                   <Mark color={p.color}>{p.mark}</Mark>
                   {p.name}
@@ -179,49 +211,54 @@ const HeroSection = () => {
             <div className="flex items-center gap-2 mb-5">
               <span className="h-2 w-2 rounded-full bg-[hsl(var(--brand-blue))]" />
               <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Accurate Data Flow
+                {hero.flow_title}
               </span>
             </div>
 
             <div className="grid sm:grid-cols-[1fr_auto] gap-5">
               <div>
-                <div className="flow-node">
-                  <Globe className="h-4 w-4 text-muted-foreground" /> Your Website
-                </div>
-                <Arrow />
-                <div className="flow-node">
-                  <Mark color="#4285F4">T</Mark> Google Tag Manager
-                </div>
-                <Arrow />
-                <div className="flow-node border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]">
-                  <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" /> Server Container
-                </div>
-                <Arrow />
+                {hero.flow_nodes.map((n, i) => (
+                  <div key={`${n.label}-${i}`}>
+                    <div
+                      className={`flow-node ${
+                        n.style === "green"
+                          ? "border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]"
+                          : ""
+                      }`}
+                    >
+                      {n.mark ? (
+                        <Mark color={n.color || "#4285F4"}>{n.mark}</Mark>
+                      ) : n.style === "green" ? (
+                        <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" />
+                      ) : (
+                        <Globe className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      {n.label}
+                    </div>
+                    <Arrow />
+                  </div>
+                ))}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="flow-node text-xs sm:text-sm">
-                    <Mark color="#F9AB00">G</Mark> Analytics 4
-                  </div>
-                  <div className="flow-node text-xs sm:text-sm">
-                    <Mark color="#0866FF">M</Mark> Meta CAPI
-                  </div>
-                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
-                    <span className="flex items-center gap-2">
-                      <Mark color="#4285F4">A</Mark> Google Ads
-                    </span>
-                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
-                  </div>
-                  <div className="flow-node flex-col items-start text-xs sm:text-sm">
-                    <span className="flex items-center gap-2">
-                      <Mark color="#0866FF">M</Mark> Meta Ads
-                    </span>
-                    <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">Conversions</span>
-                  </div>
+                  {hero.flow_destinations.map((d, i) => (
+                    <div
+                      key={`${d.label}-${i}`}
+                      className={`flow-node text-xs sm:text-sm ${d.sub ? "flex-col items-start" : ""}`}
+                    >
+                      <span className="flex items-center gap-2">
+                        {d.mark && <Mark color={d.color || "#4285F4"}>{d.mark}</Mark>}
+                        {d.label}
+                      </span>
+                      {d.sub && (
+                        <span className="text-[11px] text-[hsl(var(--accent-green))] pl-7">{d.sub}</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="rounded-2xl border border-border bg-card p-4 space-y-4 sm:w-[190px]">
-                {trackedItems.map((t) => (
-                  <div key={t.label} className="flex items-start gap-2.5">
+                {hero.tracked_items.map((t, i) => (
+                  <div key={`${t.label}-${i}`} className="flex items-start gap-2.5">
                     <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </span>
@@ -235,9 +272,9 @@ const HeroSection = () => {
             </div>
 
             <div className="mt-5 pt-4 border-t border-border flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground">
-              <span>Deduplicated Events</span>
-              <span>More Accurate Data</span>
-              <span>Better Ad Optimization</span>
+              {hero.flow_footer.map((f, i) => (
+                <span key={i}>{f}</span>
+              ))}
             </div>
           </motion.div>
         </div>

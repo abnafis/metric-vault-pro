@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Save, Upload, Eye, Loader2, Check } from "lucide-react";
+import { Save, Upload, Eye, Loader2, Check, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
@@ -26,6 +26,12 @@ interface HeroData {
   projects_value: string;
   social_proof_avatars: string[] | null;
   social_proof_label: string | null;
+  platform_chips: { name: string; color: string; mark: string }[];
+  tracked_items: { label: string; sub: string }[];
+  flow_title: string;
+  flow_nodes: { label: string; mark?: string; color?: string; style?: string }[];
+  flow_destinations: { label: string; mark?: string; color?: string; sub?: string }[];
+  flow_footer: string[];
 }
 
 const defaults: Omit<HeroData, "id"> = {
@@ -45,6 +51,12 @@ const defaults: Omit<HeroData, "id"> = {
   projects_value: "100+",
   social_proof_avatars: [],
   social_proof_label: "250+ Happy clients",
+  platform_chips: [],
+  tracked_items: [],
+  flow_title: "Accurate Data Flow",
+  flow_nodes: [],
+  flow_destinations: [],
+  flow_footer: [],
 };
 
 const AdminHeroEditor = () => {
@@ -71,7 +83,20 @@ const AdminHeroEditor = () => {
     if (error) {
       toast({ title: "Error loading hero content", description: error.message, variant: "destructive" });
     }
-    setData(rows as HeroData | null);
+    const r = rows as any;
+    setData(
+      r
+        ? ({
+            ...r,
+            platform_chips: Array.isArray(r.platform_chips) ? r.platform_chips : [],
+            tracked_items: Array.isArray(r.tracked_items) ? r.tracked_items : [],
+            flow_nodes: Array.isArray(r.flow_nodes) ? r.flow_nodes : [],
+            flow_destinations: Array.isArray(r.flow_destinations) ? r.flow_destinations : [],
+            flow_footer: Array.isArray(r.flow_footer) ? r.flow_footer : [],
+            flow_title: r.flow_title ?? "Accurate Data Flow",
+          } as HeroData)
+        : null,
+    );
     setLoading(false);
   };
 
@@ -138,6 +163,30 @@ const AdminHeroEditor = () => {
       </div>
     );
   }
+
+  type ListKey = "platform_chips" | "tracked_items" | "flow_nodes" | "flow_destinations";
+
+  const updateItem = (key: ListKey, index: number, field: string, value: string) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      const list = [...(prev[key] as any[])];
+      list[index] = { ...list[index], [field]: value };
+      return { ...prev, [key]: list };
+    });
+    setSaved(false);
+  };
+
+  const addItem = (key: ListKey, blank: Record<string, string>) => {
+    setData((prev) => (prev ? { ...prev, [key]: [...(prev[key] as any[]), blank] } : prev));
+    setSaved(false);
+  };
+
+  const removeItem = (key: ListKey, index: number) => {
+    setData((prev) =>
+      prev ? { ...prev, [key]: (prev[key] as any[]).filter((_, i) => i !== index) } : prev,
+    );
+    setSaved(false);
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -371,6 +420,237 @@ const AdminHeroEditor = () => {
               />
             </div>
           </div>
+
+          {/* Platform chips */}
+          <div className="glass-card p-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Platform Chips</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Small pills under the hero text. Mark = 1 letter shown in the coloured square.
+              </p>
+            </div>
+            {data.platform_chips.map((c, i) => (
+              <div key={i} className="flex items-end gap-2">
+                <div className="flex-1">
+                  <Label className="text-xs text-muted-foreground">Name</Label>
+                  <Input
+                    value={c.name ?? ""}
+                    onChange={(e) => updateItem("platform_chips", i, "name", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+                <div className="w-16">
+                  <Label className="text-xs text-muted-foreground">Mark</Label>
+                  <Input
+                    value={c.mark ?? ""}
+                    maxLength={2}
+                    onChange={(e) => updateItem("platform_chips", i, "mark", e.target.value)}
+                    className="mt-1 bg-secondary border-border"
+                  />
+                </div>
+                <div className="w-20">
+                  <Label className="text-xs text-muted-foreground">Color</Label>
+                  <Input
+                    type="color"
+                    value={c.color || "#4285F4"}
+                    onChange={(e) => updateItem("platform_chips", i, "color", e.target.value)}
+                    className="mt-1 h-10 bg-secondary border-border p-1"
+                  />
+                </div>
+                <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeItem("platform_chips", i)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-border"
+              onClick={() => addItem("platform_chips", { name: "", mark: "", color: "#4285F4" })}
+            >
+              <Plus className="h-4 w-4 mr-1" /> Add chip
+            </Button>
+          </div>
+
+          {/* Data flow diagram */}
+          <div className="glass-card p-5 space-y-5">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Data Flow Diagram</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                The card on the right of the hero: chain nodes, destinations, tracking checklist and footer notes.
+              </p>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Diagram title</Label>
+              <Input
+                value={data.flow_title}
+                onChange={(e) => handleChange("flow_title", e.target.value)}
+                className="mt-1 bg-secondary border-border"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Chain nodes</p>
+              {data.flow_nodes.map((n, i) => (
+                <div key={i} className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs text-muted-foreground">Label</Label>
+                    <Input
+                      value={n.label ?? ""}
+                      onChange={(e) => updateItem("flow_nodes", i, "label", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="w-16">
+                    <Label className="text-xs text-muted-foreground">Mark</Label>
+                    <Input
+                      value={n.mark ?? ""}
+                      maxLength={2}
+                      onChange={(e) => updateItem("flow_nodes", i, "mark", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="w-20">
+                    <Label className="text-xs text-muted-foreground">Color</Label>
+                    <Input
+                      type="color"
+                      value={n.color || "#4285F4"}
+                      onChange={(e) => updateItem("flow_nodes", i, "color", e.target.value)}
+                      className="mt-1 h-10 bg-secondary border-border p-1"
+                    />
+                  </div>
+                  <div className="w-28">
+                    <Label className="text-xs text-muted-foreground">Style</Label>
+                    <select
+                      value={n.style || "plain"}
+                      onChange={(e) => updateItem("flow_nodes", i, "style", e.target.value)}
+                      className="mt-1 h-10 w-full rounded-md bg-secondary border border-border text-sm px-2"
+                    >
+                      <option value="plain">Plain</option>
+                      <option value="green">Highlighted</option>
+                    </select>
+                  </div>
+                  <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeItem("flow_nodes", i)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-border"
+                onClick={() => addItem("flow_nodes", { label: "", mark: "", color: "#4285F4", style: "plain" })}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add node
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Destinations</p>
+              {data.flow_destinations.map((d, i) => (
+                <div key={i} className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs text-muted-foreground">Label</Label>
+                    <Input
+                      value={d.label ?? ""}
+                      onChange={(e) => updateItem("flow_destinations", i, "label", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="w-28">
+                    <Label className="text-xs text-muted-foreground">Sub-label</Label>
+                    <Input
+                      value={d.sub ?? ""}
+                      onChange={(e) => updateItem("flow_destinations", i, "sub", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="w-16">
+                    <Label className="text-xs text-muted-foreground">Mark</Label>
+                    <Input
+                      value={d.mark ?? ""}
+                      maxLength={2}
+                      onChange={(e) => updateItem("flow_destinations", i, "mark", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="w-20">
+                    <Label className="text-xs text-muted-foreground">Color</Label>
+                    <Input
+                      type="color"
+                      value={d.color || "#4285F4"}
+                      onChange={(e) => updateItem("flow_destinations", i, "color", e.target.value)}
+                      className="mt-1 h-10 bg-secondary border-border p-1"
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeItem("flow_destinations", i)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-border"
+                onClick={() => addItem("flow_destinations", { label: "", sub: "", mark: "", color: "#4285F4" })}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add destination
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Tracking checklist</p>
+              {data.tracked_items.map((t, i) => (
+                <div key={i} className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs text-muted-foreground">Label</Label>
+                    <Input
+                      value={t.label ?? ""}
+                      onChange={(e) => updateItem("tracked_items", i, "label", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label className="text-xs text-muted-foreground">Status</Label>
+                    <Input
+                      value={t.sub ?? ""}
+                      onChange={(e) => updateItem("tracked_items", i, "sub", e.target.value)}
+                      className="mt-1 bg-secondary border-border"
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeItem("tracked_items", i)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-border"
+                onClick={() => addItem("tracked_items", { label: "", sub: "Tracked" })}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add item
+              </Button>
+            </div>
+
+            <div>
+              <Label className="text-xs text-muted-foreground">Footer notes (one per line)</Label>
+              <Textarea
+                value={data.flow_footer.join("\n")}
+                onChange={(e) =>
+                  setData((prev) =>
+                    prev
+                      ? { ...prev, flow_footer: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean) }
+                      : prev,
+                  )
+                }
+                className="mt-1 bg-secondary border-border min-h-[80px]"
+              />
+            </div>
+          </div>
+
+
 
           {/* Image Upload */}
           <div className="glass-card p-5 space-y-4">

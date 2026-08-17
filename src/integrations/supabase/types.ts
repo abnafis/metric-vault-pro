@@ -615,9 +615,14 @@ export type Database = {
       hero_content: {
         Row: {
           badge_text: string
+          flow_destinations: Json
+          flow_footer: Json
+          flow_nodes: Json
+          flow_title: string
           headline: string
           hero_image_url: string | null
           id: string
+          platform_chips: Json
           primary_cta_link: string
           primary_cta_text: string
           projects_label: string
@@ -631,13 +636,19 @@ export type Database = {
           status_label: string
           status_value: string
           subheadline: string
+          tracked_items: Json
           updated_at: string
         }
         Insert: {
           badge_text?: string
+          flow_destinations?: Json
+          flow_footer?: Json
+          flow_nodes?: Json
+          flow_title?: string
           headline?: string
           hero_image_url?: string | null
           id?: string
+          platform_chips?: Json
           primary_cta_link?: string
           primary_cta_text?: string
           projects_label?: string
@@ -651,13 +662,19 @@ export type Database = {
           status_label?: string
           status_value?: string
           subheadline?: string
+          tracked_items?: Json
           updated_at?: string
         }
         Update: {
           badge_text?: string
+          flow_destinations?: Json
+          flow_footer?: Json
+          flow_nodes?: Json
+          flow_title?: string
           headline?: string
           hero_image_url?: string | null
           id?: string
+          platform_chips?: Json
           primary_cta_link?: string
           primary_cta_text?: string
           projects_label?: string
@@ -671,6 +688,7 @@ export type Database = {
           status_label?: string
           status_value?: string
           subheadline?: string
+          tracked_items?: Json
           updated_at?: string
         }
         Relationships: []
