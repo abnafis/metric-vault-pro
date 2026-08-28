@@ -15,15 +15,17 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   Facebook, Linkedin, LineChart, Upload,
 };
 
-const accentMap: Record<string, { chip: string; ring: string; blob: string; btn: string }> = {
-  amber:  { chip: "bg-[#FEF3C7] text-[#B45309]", ring: "group-hover:ring-[#F59E0B]/40", blob: "bg-[#FEF3C7]", btn: "bg-[#F59E0B] text-white hover:bg-[#D97706]" },
-  blue:   { chip: "bg-[#DBEAFE] text-[#1D4ED8]", ring: "group-hover:ring-[#3B82F6]/40", blob: "bg-[#DBEAFE]", btn: "bg-[#3B82F6] text-white hover:bg-[#1D4ED8]" },
-  pink:   { chip: "bg-[#FCE7F3] text-[#BE185D]", ring: "group-hover:ring-[#EC4899]/40", blob: "bg-[#FCE7F3]", btn: "bg-[#EC4899] text-white hover:bg-[#BE185D]" },
-  green:  { chip: "bg-[#DCFCE7] text-[#15803D]", ring: "group-hover:ring-[#22C55E]/40", blob: "bg-[#DCFCE7]", btn: "bg-[#22C55E] text-white hover:bg-[#15803D]" },
-  purple: { chip: "bg-[#EDE9FE] text-[#6D28D9]", ring: "group-hover:ring-[#8B5CF6]/40", blob: "bg-[#EDE9FE]", btn: "bg-[#8B5CF6] text-white hover:bg-[#6D28D9]" },
-  orange: { chip: "bg-[#FFEDD5] text-[#C2410C]", ring: "group-hover:ring-[#F97316]/40", blob: "bg-[#FFEDD5]", btn: "bg-[#F97316] text-white hover:bg-[#C2410C]" },
-  teal:   { chip: "bg-[#CCFBF1] text-[#0F766E]", ring: "group-hover:ring-[#14B8A6]/40", blob: "bg-[#CCFBF1]", btn: "bg-[#14B8A6] text-white hover:bg-[#0F766E]" },
-  slate:  { chip: "bg-[#E2E8F0] text-[#334155]", ring: "group-hover:ring-[#64748B]/40", blob: "bg-[#E2E8F0]", btn: "bg-[#334155] text-white hover:bg-[#0F172A]" },
+type AccentKey = "amber" | "blue" | "pink" | "green" | "purple" | "orange" | "teal" | "slate";
+
+const accentMap: Record<AccentKey, { bg: string; fg: string; btn: string }> = {
+  amber:  { bg: "var(--service-amber-bg)", fg: "var(--service-amber-fg)", btn: "var(--service-amber-btn)" },
+  blue:   { bg: "var(--service-blue-bg)", fg: "var(--service-blue-fg)", btn: "var(--service-blue-btn)" },
+  pink:   { bg: "var(--service-pink-bg)", fg: "var(--service-pink-fg)", btn: "var(--service-pink-btn)" },
+  green:  { bg: "var(--service-green-bg)", fg: "var(--service-green-fg)", btn: "var(--service-green-btn)" },
+  purple: { bg: "var(--service-purple-bg)", fg: "var(--service-purple-fg)", btn: "var(--service-purple-btn)" },
+  orange: { bg: "var(--service-orange-bg)", fg: "var(--service-orange-fg)", btn: "var(--service-orange-btn)" },
+  teal:   { bg: "var(--service-teal-bg)", fg: "var(--service-teal-fg)", btn: "var(--service-teal-btn)" },
+  slate:  { bg: "var(--service-slate-bg)", fg: "var(--service-slate-fg)", btn: "var(--service-slate-btn)" },
 };
 
 interface Service {
@@ -99,10 +101,10 @@ const ServicesSection = () => {
   const getCardStyle = (s: Service): React.CSSProperties => {
     const style: React.CSSProperties = {};
     if (s.card_bg_preset === "custom" && s.card_bg_color) {
-      style.backgroundColor = s.card_bg_color;
+      style.backgroundColor = `${s.card_bg_color}99`;
     }
     if (s.card_bg_image_url) {
-      style.backgroundImage = `url(${s.card_bg_image_url})`;
+      style.backgroundImage = `linear-gradient(hsl(var(--background) / 0.35), hsl(var(--background) / 0.35)), url(${s.card_bg_image_url})`;
       style.backgroundSize = "cover";
       style.backgroundPosition = "center";
     }
@@ -112,13 +114,13 @@ const ServicesSection = () => {
   const getCardClass = (s: Service) => {
     switch (s.card_bg_preset) {
       case "tint":
-        return "bg-secondary";
+        return "bg-secondary/80";
       case "dark":
-        return "bg-[hsl(var(--surface-dark))] text-white";
+        return "glass-dark text-white";
       case "custom":
-        return "";
+        return "glass";
       default:
-        return "bg-card";
+        return "glass";
     }
   };
 
@@ -163,7 +165,7 @@ const ServicesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((s, i) => {
             const Icon = iconMap[s.icon] || Settings;
-            const accent = accentMap[s.accent] || accentMap.amber;
+            const accent = accentMap[(s.accent as AccentKey) || "amber"] || accentMap.amber;
             const isDark = s.card_bg_preset === "dark";
             return (
               <motion.div
@@ -175,12 +177,11 @@ const ServicesSection = () => {
                 onMouseEnter={() => setHovered(s.id)}
                 onMouseLeave={() => setHovered(null)}
                 style={getCardStyle(s)}
-                className={`group relative overflow-hidden rounded-3xl border p-7 flex flex-col
+                className={`group relative overflow-hidden rounded-3xl border border-white/50 p-7 flex flex-col
                             ring-1 ring-transparent transition-all duration-500
                             hover:-translate-y-1 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.18)]
                             ${getCardClass(s)}
-                            ${s.featured ? "border-transparent ring-2 ring-primary/40" : "border-border"}
-                            ${accent.ring}`}
+                            ${s.featured ? "glass-card-glow ring-2 ring-primary/40" : "border-border"}`}
               >
                 {s.featured && (
                   <span className="absolute top-4 right-4 z-10 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.15em] bg-primary text-primary-foreground px-2.5 py-1 rounded-full shadow-sm">
@@ -190,13 +191,14 @@ const ServicesSection = () => {
 
                 <div
                   aria-hidden
-                  className={`pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-700 ${accent.blob}`}
+                  className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-700"
+                  style={{ background: `hsl(${accent.bg})` }}
                 />
 
                 <div className="relative flex items-start justify-between mb-6">
                   <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden ${accent.chip}
-                                transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6`}
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
+                    style={{ background: `hsl(${accent.bg})`, color: `hsl(${accent.fg})` }}
                   >
                     {s.icon_image_url ? (
                       <img src={s.icon_image_url} alt="" className="w-8 h-8 object-contain" />
@@ -205,7 +207,7 @@ const ServicesSection = () => {
                     )}
                   </div>
                   {s.badge && !s.featured && (
-                    <span className={`text-[10px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full ${isDark ? "bg-white/10 text-white/80" : "bg-secondary text-muted-foreground"}`}>
+                    <span className={`text-[10px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full ${isDark ? "bg-white/15 text-white/90" : "bg-secondary/80 text-muted-foreground"}`}>
                       {s.badge}
                     </span>
                   )}
@@ -235,7 +237,10 @@ const ServicesSection = () => {
                   <ul className="relative space-y-2.5 mb-8 mt-auto">
                     {s.features.map((b) => (
                       <li key={b} className={`flex items-start gap-2.5 text-sm ${isDark ? "text-white/80" : "text-foreground/80"}`}>
-                        <span className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${accent.chip}`}>
+                        <span
+                          className="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                          style={{ background: `hsl(${accent.bg})`, color: `hsl(${accent.fg})` }}
+                        >
                           <Check className="w-2.5 h-2.5" strokeWidth={3} />
                         </span>
                         <span>{b}</span>
@@ -247,7 +252,8 @@ const ServicesSection = () => {
                 {s.cta_style === "button" ? (
                   <a
                     href={s.cta_link || "#contact"}
-                    className={`relative inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-full transition-all mt-auto w-fit ${accent.btn}`}
+                    className="relative inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-full transition-all mt-auto w-fit text-white hover:-translate-y-0.5"
+                    style={{ background: `hsl(${accent.btn})` }}
                   >
                     {s.cta_label || "Book this service"}
                     <ArrowUpRight className={`w-4 h-4 transition-transform duration-300 ${hovered === s.id ? "translate-x-0.5 -translate-y-0.5" : ""}`} />
@@ -279,12 +285,13 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: services.length * 0.06 }}
-              className="group relative overflow-hidden rounded-3xl bg-[hsl(var(--surface-dark))] text-white p-7 flex flex-col justify-between min-h-[320px]
+              className="group relative overflow-hidden rounded-3xl glass-dark text-white p-7 flex flex-col justify-between min-h-[320px]
                          hover:-translate-y-1 transition-all duration-500 hover:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)]"
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute -bottom-32 -left-16 w-72 h-72 rounded-full blur-3xl bg-[hsl(var(--accent-yellow))] opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+                className="pointer-events-none absolute -bottom-32 -left-16 w-72 h-72 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-700"
+                style={{ background: `hsl(var(--glow-yellow-hsl))` }}
               />
               <div className="relative">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-white/60 mb-3">
@@ -292,7 +299,7 @@ const ServicesSection = () => {
                 </p>
                 <h3 className="font-display text-3xl md:text-4xl font-medium leading-tight">
                   {cta.headline}{" "}
-                  <span className="italic text-[hsl(var(--accent-yellow))]">{cta.headline_highlight}</span>
+                  <span className="italic" style={{ color: "hsl(var(--glow-yellow-hsl))" }}>{cta.headline_highlight}</span>
                 </h3>
               </div>
               <div className="relative flex items-center justify-between mt-6">
