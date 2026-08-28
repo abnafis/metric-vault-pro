@@ -1,51 +1,82 @@
-
 ## Goal
-Make the Services section richer visually and fully customizable from the admin panel — per-card CTA button (text + link), custom icon uploads, per-card background/accent styling, and a few polish upgrades.
+Apply a consistent glassmorphism polish across the public site and admin panel, focusing on the key sections the user flagged.
 
-## Design upgrades (frontend)
-- **Per-card CTA button**: Replace the shared "#contact" underline link with a real button per service (label + link editable). Support two styles: `link` (current underline) or `button` (filled pill).
-- **Custom icon support**: Allow either a Lucide icon name (current) OR an uploaded image/SVG URL. If `icon_image_url` is set, render it inside the chip instead of the Lucide icon.
-- **Background customization**: Per-card options for
-  - `card_bg` (solid color or preset: white / soft-tint / dark)
-  - `card_bg_image_url` (optional subtle pattern/image, low opacity)
-  - `accent` stays as the color family (chip + blob + ring)
-- **Optional price/starting-at line** under description (e.g. "From $499") — hidden when empty.
-- **Featured flag** — a "Most Popular" style ribbon on one card.
-- **Layout polish**: Softer inner shadow on hover, animated icon chip, subtle gradient border for featured card, and a stronger dark CTA tile with icon.
-- **Section-level CTA tile**: Make its heading, subheading, button label + link editable (currently hardcoded).
+## Design direction
+Glassmorphism — translucent frosted surfaces, soft backdrop blur, subtle light borders, low-opacity colored glows, and floating depth. Keep the existing light lavender-white base and Space Grotesk typography; only upgrade how surfaces feel and interact.
 
-## Admin customization (AdminServicesEditor)
-Add fields per service:
-- `cta_label` (exists) + `cta_link` (new) + `cta_style` (new: link | button)
-- `icon` (Lucide) + `icon_image_url` (new, upload via existing media/storage)
-- `card_bg_preset` (new: light | tint | dark | custom)
-- `card_bg_color` (new, hex, when custom)
-- `card_bg_image_url` (new, optional upload)
-- `price_label` (new, optional)
-- `featured` (new, boolean — only one at a time UX hint)
+## Public website improvements
 
-Upload UI reuses the existing Supabase storage pattern (same as platform logos / testimonial avatars). New bucket: `service-icons` (public) — or reuse `platform-logos`.
+### 1. Hero — floating glass data-flow
+- Wrap the “Accurate Data Flow” diagram in a strongly glass card (`bg-white/60 backdrop-blur-xl border-white/40`) with a soft radial gradient glow behind it.
+- Add a floating colored orb behind the diagram (brand blue / soft green) that shifts subtly on scroll.
+- Replace generic fallback icons in the flow with small colored platform marks matching the chips.
+- Make the primary CTA pill cast a colored shadow on hover and the secondary button become a glass variant.
 
-Add a new "Section CTA Tile" panel at the top of AdminServicesEditor to edit the dark tile (eyebrow, headline, headline highlight, button label, button link). Stored in a new `services_cta` single-row table (same pattern as `cta_content`, `testimonials_meta`).
+### 2. Services — frosted card system
+- Convert service cards to glass: `bg-white/50 backdrop-blur-md border-white/50` on light areas; for dark/tint presets, keep deeper translucency so the cards still feel layered.
+- Swap hardcoded hex colors in the accent map for HSL tokens added to `index.css` so they respect the design system.
+- Add a stronger colored inner glow behind the icon chip on hover.
+- Featured card: gradient border ring using the accent color and a subtle “Most Popular” ribbon with glass background.
+- CTA dark tile: glass-dark variant with blurred background and yellow accent glow.
 
-## Database changes
-Single migration:
-- `ALTER TABLE services` add: `cta_link text`, `cta_style text default 'link'`, `icon_image_url text`, `card_bg_preset text default 'light'`, `card_bg_color text`, `card_bg_image_url text`, `price_label text`, `featured boolean default false`.
-- `CREATE TABLE services_cta` (single-row): `eyebrow`, `headline`, `headline_highlight`, `button_label`, `button_link`, timestamps. GRANTs + RLS (public read, admin write) matching existing `cta_content` pattern.
-- New storage bucket `service-icons` (public) — or confirm reuse of `platform-logos`.
+### 3. Case Studies — glass story cards
+- Apply glass panels to the before/after boxes and metric cards.
+- Add a subtle shimmer reveal on the sparkline chart card.
+- Detail modal: glass header and metric grid with frosted separators.
+
+### 4. Testimonials — floating quote tiles
+- Turn each testimonial into a glass card with a blurred colored blob behind it on hover.
+- Replace the static quote icon with a subtle animated fade-in on scroll.
+- Add a “Read more” expand for long quotes instead of clamping at 6 lines.
+
+### 5. Why Not Scaling & Process — unified glass container
+- Keep the large bordered container but add backdrop blur and an inner gradient.
+- Process step mock panels become glass cards with colored status dots; add a thin connecting line between steps.
+
+### 6. CTA — glass form stage
+- Form panel: `bg-white/50 backdrop-blur-xl border-white/50` with a soft glow behind the submit button.
+- Success state: a glass celebration card with a confetti-like micro-animation.
+- Improve input focus rings to use a translucent primary glow.
+
+### 7. Footer — glass footer
+- Apply a frosted footer bar with subtle top border and a large blurred brand wordmark behind the links.
+
+## Admin panel improvements
+
+### 1. Glass admin chrome
+- `AdminLayout` header becomes a frosted strip (`bg-background/70 backdrop-blur-xl`).
+- `AdminSidebar` gets a translucent surface and active items receive a glass highlight with a colored left edge.
+
+### 2. Glass editor cards
+- Convert editor container cards (`glass-card`) to true glass surfaces with consistent blur/border tokens.
+- Add hover lift + soft shadow on editor list items (services, case studies, etc.).
+- Add a global “saving” shimmer state for buttons.
+
+### 3. Reorder & form polish
+- Make reorder handles more visible on hover.
+- Improve dialog backgrounds with stronger backdrop blur.
+
+## Token system (no hardcoded colors)
+- Add to `index.css`: `--glass-bg`, `--glass-border`, `--glass-highlight`, `--glass-dark-bg`, `--glow-blue`, `--glow-green`, and utility classes `.glass`, `.glass-dark`, `.glass-card-glow`.
+- Replace the service accent map hex values with references to these tokens so the theme stays consistent.
 
 ## Files to change
-- `supabase migration` (schema + bucket)
-- `src/components/ServicesSection.tsx` — render new fields, per-card button, custom icon/bg, featured ribbon, dynamic CTA tile
-- `src/pages/AdminServicesEditor.tsx` — new fields, icon/bg uploaders, CTA tile panel
-- `src/integrations/supabase/types.ts` — regenerated after migration
+- `src/index.css` — new glass tokens and utility classes.
+- `src/components/HeroSection.tsx` — glass diagram + floating glow.
+- `src/components/ServicesSection.tsx` — frosted cards, featured gradient, CTA tile.
+- `src/components/CaseStudiesSection.tsx` — glass metric/before-after panels + modal.
+- `src/components/TestimonialsSection.tsx` — glass cards + read more.
+- `src/components/WhyNotScalingSection.tsx` — glass container.
+- `src/components/ProcessSection.tsx` — glass mocks + connecting line.
+- `src/components/CTASection.tsx` — glass form + success state.
+- `src/components/Footer.tsx` — glass footer.
+- `src/components/admin/AdminLayout.tsx` — frosted header.
+- `src/components/admin/AdminSidebar.tsx` — translucent sidebar + active highlight.
 
 ## Out of scope
-- Reordering UX (already exists via sort_order)
-- Per-card animations beyond current hover
-- Section header text (already editable via Section Headers admin)
+- No structural layout changes (section order, grid columns remain the same).
+- No new backend tables or admin editors; this is a pure styling/polish pass.
+- No new sections or content.
 
-## Open questions
-1. Reuse `platform-logos` bucket or create dedicated `service-icons`?
-2. Should `featured` auto-enforce single card, or allow multiple?
-3. Keep the existing shared color `accent` palette, or replace entirely with free-form `card_bg_color`?
+## Success check
+After the pass, the public site and admin should share the same frosted-glass language, surfaces should lift on hover with colored glows, and no hardcoded hex colors should remain in the touched components.
