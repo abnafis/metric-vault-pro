@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, Globe, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, Globe, ShieldCheck, TrendingUp, MousePointer, ShoppingCart, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackCTAClick } from "@/lib/dataLayer";
 
@@ -70,7 +70,6 @@ const fallback: HeroData = {
 const asArray = <T,>(v: unknown, fb: T[]): T[] =>
   Array.isArray(v) && v.length > 0 ? (v as T[]) : fb;
 
-
 const Arrow = () => (
   <div className="flex justify-center py-1.5" aria-hidden>
     <svg width="12" height="22" viewBox="0 0 12 22" fill="none">
@@ -93,6 +92,20 @@ const Mark = ({ color, children }: { color: string; children: string }) => (
     {children}
   </span>
 );
+
+const nodeFallbackIcon = (style?: string) => {
+  if (style === "green") return ShieldCheck;
+  return Globe;
+};
+
+const trackedIcon = (label: string) => {
+  const l = label.toLowerCase();
+  if (l.includes("purchase")) return ShoppingCart;
+  if (l.includes("lead")) return Users;
+  if (l.includes("cart")) return MousePointer;
+  if (l.includes("quality")) return TrendingUp;
+  return Check;
+};
 
 const HeroSection = () => {
   const [hero, setHero] = useState<HeroData>(fallback);
@@ -142,7 +155,18 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="relative overflow-hidden pt-14 sm:pt-20 pb-14">
+      {/* Floating glass orbs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[600px] bg-radial-glow pointer-events-none" />
+      <div
+        aria-hidden
+        className="absolute top-24 right-[10%] w-64 h-64 rounded-full blur-[100px] opacity-40 animate-pulse-glow pointer-events-none"
+        style={{ background: "hsl(var(--glow-blue-hsl))" }}
+      />
+      <div
+        aria-hidden
+        className="absolute bottom-12 left-[5%] w-48 h-48 rounded-full blur-[80px] opacity-30 animate-float pointer-events-none"
+        style={{ background: "hsl(var(--glow-green-hsl))" }}
+      />
 
       <div className="section-container relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-14 items-center">
@@ -181,7 +205,7 @@ const HeroSection = () => {
               <a
                 href={hero.primary_cta_link}
                 onClick={() => trackCTAClick("hero_primary")}
-                className="pill-cta"
+                className="pill-cta pill-cta-glow"
               >
                 {profileImageUrl ? (
                   <img src={profileImageUrl} alt="Avatar" className="pill-cta-avatar" />
@@ -193,7 +217,7 @@ const HeroSection = () => {
               <a
                 href={secondaryLink}
                 onClick={() => trackCTAClick("hero_secondary")}
-                className="btn-secondary-glass gap-2"
+                className="btn-glass gap-2"
               >
                 {secondaryText}
                 <ArrowRight className="h-4 w-4" />
@@ -206,43 +230,50 @@ const HeroSection = () => {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="flow-panel"
+            className="flow-panel-glass relative"
           >
-            <div className="flex items-center gap-2 mb-5">
+            <div
+              aria-hidden
+              className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-[72px] opacity-40 pointer-events-none"
+              style={{ background: "hsl(var(--glow-blue-hsl))" }}
+            />
+
+            <div className="flex items-center gap-2 mb-5 relative">
               <span className="h-2 w-2 rounded-full bg-[hsl(var(--brand-blue))]" />
               <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 {hero.flow_title}
               </span>
             </div>
 
-            <div className="grid sm:grid-cols-[1fr_auto] gap-5">
+            <div className="grid sm:grid-cols-[1fr_auto] gap-5 relative">
               <div>
-                {hero.flow_nodes.map((n, i) => (
-                  <div key={`${n.label}-${i}`}>
-                    <div
-                      className={`flow-node ${
-                        n.style === "green"
-                          ? "border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]"
-                          : ""
-                      }`}
-                    >
-                      {n.mark ? (
-                        <Mark color={n.color || "#4285F4"}>{n.mark}</Mark>
-                      ) : n.style === "green" ? (
-                        <ShieldCheck className="h-4 w-4 text-[hsl(var(--accent-green))]" />
-                      ) : (
-                        <Globe className="h-4 w-4 text-muted-foreground" />
-                      )}
-                      {n.label}
+                {hero.flow_nodes.map((n, i) => {
+                  const FallbackIcon = nodeFallbackIcon(n.style);
+                  return (
+                    <div key={`${n.label}-${i}`}>
+                      <div
+                        className={`flow-node ${
+                          n.style === "green"
+                            ? "border-[hsl(var(--accent-green))] bg-[hsl(var(--accent-soft-green))]"
+                            : "glass-strong"
+                        }`}
+                      >
+                        {n.mark ? (
+                          <Mark color={n.color || "#4285F4"}>{n.mark}</Mark>
+                        ) : (
+                          <FallbackIcon className={`h-4 w-4 ${n.style === "green" ? "text-[hsl(var(--accent-green))]" : "text-muted-foreground"}" />
+                        )}
+                        {n.label}
+                      </div>
+                      <Arrow />
                     </div>
-                    <Arrow />
-                  </div>
-                ))}
+                  );
+                })}
                 <div className="grid grid-cols-2 gap-3">
                   {hero.flow_destinations.map((d, i) => (
                     <div
                       key={`${d.label}-${i}`}
-                      className={`flow-node text-xs sm:text-sm ${d.sub ? "flex-col items-start" : ""}`}
+                      className={`flow-node text-xs sm:text-sm glass ${d.sub ? "flex-col items-start" : ""}`}
                     >
                       <span className="flex items-center gap-2">
                         {d.mark && <Mark color={d.color || "#4285F4"}>{d.mark}</Mark>}
@@ -256,22 +287,25 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-border bg-card p-4 space-y-4 sm:w-[190px]">
-                {hero.tracked_items.map((t, i) => (
-                  <div key={`${t.label}-${i}`} className="flex items-start gap-2.5">
-                    <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
-                      <Check className="h-3 w-3" strokeWidth={3} />
-                    </span>
-                    <span>
-                      <span className="block text-xs font-semibold text-foreground leading-tight">{t.label}</span>
-                      <span className="block text-[11px] text-muted-foreground">{t.sub}</span>
-                    </span>
-                  </div>
-                ))}
+              <div className="rounded-2xl border border-border/70 glass p-4 space-y-4 sm:w-[190px]">
+                {hero.tracked_items.map((t, i) => {
+                  const Icon = trackedIcon(t.label);
+                  return (
+                    <div key={`${t.label}-${i}`} className="flex items-start gap-2.5">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-green))] text-white">
+                        <Icon className="h-3 w-3" strokeWidth={3} />
+                      </span>
+                      <span>
+                        <span className="block text-xs font-semibold text-foreground leading-tight">{t.label}</span>
+                        <span className="block text-[11px] text-muted-foreground">{t.sub}</span>
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            <div className="mt-5 pt-4 border-t border-border flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground">
+            <div className="mt-5 pt-4 border-t border-border/60 flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-[11px] text-muted-foreground relative">
               {hero.flow_footer.map((f, i) => (
                 <span key={i}>{f}</span>
               ))}

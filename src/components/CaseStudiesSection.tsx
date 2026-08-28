@@ -158,7 +158,8 @@ const CaseStudiesSection = () => {
 
   return (
     <section id="cases" className="py-32 relative">
-      <div className="section-container">
+      <div className="absolute inset-0 bg-radial-glow-strong opacity-40 pointer-events-none" />
+      <div className="section-container relative z-10">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -195,11 +196,11 @@ const CaseStudiesSection = () => {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -6 }}
-                className="group relative flex flex-col rounded-3xl border border-border bg-card/60 backdrop-blur-sm p-6 transition-shadow duration-300 hover:shadow-[0_24px_60px_-24px_hsl(var(--primary)/0.35)]"
+                className="group relative flex flex-col rounded-3xl border border-white/50 glass p-6 transition-shadow duration-300 hover:shadow-[0_24px_60px_-24px_hsl(var(--primary)/0.35)]"
               >
                 {/* Industry badge */}
                 <div className="flex items-center justify-between gap-3">
-                  <span className="inline-flex items-center rounded-full border border-border bg-background/60 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                  <span className="inline-flex items-center rounded-full border border-border/70 bg-background/40 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                     {c.industry || c.platform_used || "Case study"}
                   </span>
                   <span className="font-mono text-[10px] text-muted-foreground">
@@ -232,7 +233,7 @@ const CaseStudiesSection = () => {
                     whileInView={{ clipPath: "inset(0 0% 0 0)" }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
-                    className="mt-5 h-16 rounded-xl border border-border bg-background/50 px-2 py-1"
+                    className="mt-5 h-16 rounded-xl border border-border/70 glass-strong px-2 py-1 shimmer"
                   >
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={chart}>
@@ -258,7 +259,7 @@ const CaseStudiesSection = () => {
                 {/* Before → After */}
                 {(before.length > 0 || after.length > 0) && (
                   <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-                    <div className="rounded-xl border border-border bg-background/40 p-3">
+                    <div className="rounded-xl border border-border/70 glass p-3">
                       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">
                         Before
                       </p>
@@ -294,7 +295,7 @@ const CaseStudiesSection = () => {
                     {techs.map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-border px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-muted-foreground"
+                        className="rounded-full border border-border/70 bg-background/40 px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-muted-foreground"
                       >
                         {t}
                       </span>
@@ -305,7 +306,7 @@ const CaseStudiesSection = () => {
                 {/* CTA */}
                 <button
                   onClick={() => setActive(c)}
-                  className="mt-6 inline-flex items-center justify-between rounded-full border border-border bg-background/60 px-5 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="mt-6 inline-flex items-center justify-between rounded-full border border-border/70 bg-background/50 px-5 py-3 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   {c.cta_label || "View Case Study"}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -318,7 +319,7 @@ const CaseStudiesSection = () => {
 
       {/* Expanded detail modal */}
       <Dialog open={!!active} onOpenChange={(o) => !o && setActive(null)}>
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl border-border bg-card">
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto rounded-3xl border-border/70 glass-strong">
           {active && (
             <>
               <DialogHeader>
@@ -344,7 +345,7 @@ const CaseStudiesSection = () => {
                   ].map((b, idx) => (
                     <div
                       key={b.k}
-                      className={`rounded-2xl border p-4 ${idx === 2 ? "border-primary/30 bg-primary/5" : "border-border bg-background/40"}`}
+                      className={`rounded-2xl border p-4 ${idx === 2 ? "border-primary/30 bg-primary/5" : "border-border/70 glass"}`}
                     >
                       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">
                         {b.k}
@@ -360,7 +361,7 @@ const CaseStudiesSection = () => {
                 {active.metrics?.length > 0 && (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {(active.metrics as Metric[]).map((m) => (
-                      <div key={m.label} className="rounded-2xl border border-border p-4">
+                      <div key={m.label} className="rounded-2xl border border-border/70 glass p-4">
                         <p className="font-serif-display text-3xl leading-none text-primary">{m.value}</p>
                         <p className="mt-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                           {m.label}
@@ -375,7 +376,7 @@ const CaseStudiesSection = () => {
                     src={active.image_url}
                     alt={`${active.title} tracking dashboard`}
                     loading="lazy"
-                    className="w-full rounded-2xl border border-border object-cover"
+                    className="w-full rounded-2xl border border-border/70 object-cover"
                   />
                 )}
 
@@ -393,14 +394,14 @@ const CaseStudiesSection = () => {
                       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                         {s.k}
                       </p>
-                      <p className="text-sm leading-relaxed text-foreground/80 whitespace-pre-line">{s.v}</p>
+                      <p className="text-sm text-foreground/80 whitespace-pre-line leading-relaxed">{s.v}</p>
                     </div>
                   ))}
 
                 {/* Before / After */}
                 {(toList(active.before_points).length > 0 || toList(active.after_points).length > 0) && (
                   <div className="grid sm:grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-border bg-background/40 p-4">
+                    <div className="rounded-2xl border border-border/70 glass p-4">
                       <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-3">
                         Before
                       </p>
@@ -432,7 +433,7 @@ const CaseStudiesSection = () => {
                     {toList(active.technologies).map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-border px-3 py-1 text-[11px] font-mono uppercase tracking-wider text-muted-foreground"
+                        className="rounded-full border border-border/70 bg-background/40 px-3 py-1 text-[11px] font-mono uppercase tracking-wider text-muted-foreground"
                       >
                         {t}
                       </span>

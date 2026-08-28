@@ -27,9 +27,17 @@ const Footer = () => {
   const copyright = settings.copyright_text.replace("{year}", String(year));
 
   return (
-    <footer className="relative border-t border-border bg-background overflow-hidden">
-      {/* Massive brand wordmark */}
-      <div className="section-container pt-20 pb-12">
+    <footer className="relative border-t border-white/50 bg-background/50 backdrop-blur-xl overflow-hidden">
+      {/* Massive blurred wordmark behind */}
+      <p
+        className="absolute bottom-0 left-0 font-serif-display text-foreground/[0.04] leading-none select-none whitespace-nowrap overflow-hidden pointer-events-none"
+        style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
+        aria-hidden="true"
+      >
+        {settings.site_name}
+      </p>
+
+      <div className="section-container pt-20 pb-12 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 mb-16">
           <div className="lg:col-span-5 space-y-6">
             <p className="pill-eyebrow">{settings.footer_eyebrow}</p>
@@ -89,18 +97,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Massive wordmark */}
-        <div className="border-t border-border pt-8">
-          <p
-            className="font-serif-display text-foreground/[0.06] leading-none select-none whitespace-nowrap overflow-hidden"
-            style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}
-            aria-hidden="true"
-          >
-            {settings.site_name}
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-6 pt-8 border-t border-border/60">
           <p className="text-xs font-mono text-muted-foreground">{copyright}</p>
           <p className="text-xs font-mono text-muted-foreground">
             Crafted with precision · {year}

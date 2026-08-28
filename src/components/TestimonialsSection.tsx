@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -42,9 +42,12 @@ const fallbackMeta: MetaData = {
   title_suffix: ".",
 };
 
+const MAX_PREVIEW = 180;
+
 const TestimonialsSection = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(fallback);
   const [meta, setMeta] = useState<MetaData>(fallbackMeta);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     supabase
@@ -64,9 +67,16 @@ const TestimonialsSection = () => {
       });
   }, []);
 
+  const toggle = (key: string) => setExpanded((p) => ({ ...p, [key]: !p[key] }));
+
   return (
-    <section id="testimonials" className="py-32 relative border-t border-border overflow-hidden">
-      <div className="section-container">
+    <section id="testimonials" className="py-32 relative border-t border-border/70 overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[120px] opacity-25 pointer-events-none"
+        style={{ background: "hsl(var(--glow-blue-hsl))" }}
+      />
+      <div className="section-container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -82,50 +92,78 @@ const TestimonialsSection = () => {
 
         {/* Masonry-style testimonial grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
-            <motion.figure
-              key={t.name + i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: (i % 3) * 0.08 }}
-              className="group relative border border-border rounded-2xl p-7 bg-card/30 hover:bg-card/60 hover:border-primary/30 transition-all duration-300"
-            >
-              <Quote className="w-6 h-6 text-primary/40 mb-5" />
+          {testimonials.map((t, i) => {
+            const key = t.name + i;
+            const isLong = t.text.length > MAX_PREVIEW;
+            const isExpanded = expanded[key];
+            const display = isLong && !isExpanded ? `${t.text.slice(0, MAX_PREVIEW).trim()}…` : t.text;
+            return (
+              <motion.figure
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (i % 3) * 0.08 }}
+                className="group relative border border-white/50 rounded-2xl p-7 glass hover:glass-strong hover:border-primary/20 transition-all duration-300"
+              >
+                <div
+                  aria-hidden
+                  className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: "hsl(var(--glow-blue-hsl))" }}
+                />
 
-              <blockquote className="text-foreground/90 leading-relaxed text-[15px] mb-8 line-clamp-6">
-                {t.text}
-              </blockquote>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + (i % 3) * 0.05 }}
+                >
+                  <Quote className="w-6 h-6 text-primary/40 mb-5" />
+                </motion.div>
 
-              <figcaption className="flex items-center justify-between gap-3 pt-5 border-t border-border">
-                <div className="flex items-center gap-3 min-w-0">
-                  {t.avatar_url ? (
-                    <img
-                      src={t.avatar_url}
-                      alt={t.name}
-                      className="w-10 h-10 rounded-full object-cover border border-border shrink-0"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                      <span className="text-sm font-bold text-muted-foreground">
-                        {t.name[0]}
-                      </span>
-                    </div>
+                <blockquote className="text-foreground/90 leading-relaxed text-[15px] mb-8 relative">
+                  {display}
+                  {isLong && (
+                    <button
+                      onClick={() => toggle(key)}
+                      className="inline-flex items-center gap-0.5 ml-1 text-xs font-medium text-primary hover:underline"
+                    >
+                      {isExpanded ? "Show less" : "Read more"}
+                      <ChevronDown className={`w-3 h-3 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                    </button>
                   )}
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{t.role}</p>
-                  </div>
-                </div>
+                </blockquote>
 
-                <div className="flex gap-0.5 shrink-0">
-                  {Array.from({ length: t.rating }).map((_, s) => (
-                    <Star key={s} className="w-3 h-3 fill-primary text-primary" />
-                  ))}
-                </div>
-              </figcaption>
-            </motion.figure>
-          ))}
+                <figcaption className="flex items-center justify-between gap-3 pt-5 border-t border-border/60 relative">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {t.avatar_url ? (
+                      <img
+                        src={t.avatar_url}
+                        alt={t.name}
+                        className="w-10 h-10 rounded-full object-cover border border-border/70 shrink-0"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
+                        <span className="text-sm font-bold text-muted-foreground">
+                          {t.name[0]}
+                        </span>
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{t.role}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-0.5 shrink-0">
+                    {Array.from({ length: t.rating }).map((_, s) => (
+                      <Star key={s} className="w-3 h-3 fill-primary text-primary" />
+                    ))}
+                  </div>
+                </figcaption>
+              </motion.figure>
+            );
+          })}
         </div>
       </div>
     </section>
