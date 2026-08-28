@@ -122,8 +122,13 @@ const CTASection = () => {
   ];
 
   return (
-    <section id="cta" className="py-32 relative border-t border-border overflow-hidden">
+    <section id="cta" className="py-32 relative border-t border-border/70 overflow-hidden">
       <div className="absolute inset-0 bg-radial-glow opacity-50 pointer-events-none" />
+      <div
+        aria-hidden
+        className="absolute top-1/3 right-0 w-96 h-96 rounded-full blur-[120px] opacity-25 pointer-events-none"
+        style={{ background: "hsl(var(--glow-green-hsl))" }}
+      />
 
       <div className="section-container relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
@@ -148,7 +153,9 @@ const CTASection = () => {
             <div className="pt-4 space-y-3">
               {cta.bullets.map((b) => (
                 <div key={b} className="flex items-center gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-primary shrink-0" />
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--accent-soft-green))] text-[hsl(var(--accent-green))]">
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                  </span>
                   {b}
                 </div>
               ))}
@@ -166,10 +173,10 @@ const CTASection = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="border border-border rounded-2xl p-12 text-center bg-card/30"
+                className="border border-white/50 rounded-2xl p-12 text-center glass-strong animate-pop"
               >
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <Check className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-full bg-[hsl(var(--accent-soft-green))] flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-6 h-6 text-[hsl(var(--accent-green))]" />
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground mb-3">{cta.success_title}</h3>
                 <p className="text-muted-foreground">{cta.success_description}</p>
@@ -177,7 +184,7 @@ const CTASection = () => {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="border border-border rounded-2xl p-6 sm:p-8 bg-card/30 space-y-5"
+                className="border border-white/50 rounded-2xl p-6 sm:p-8 glass space-y-5"
                 noValidate
               >
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -207,7 +214,7 @@ const CTASection = () => {
                       setForm({ ...form, problem: e.target.value });
                       if (errors.problem) setErrors({ ...errors, problem: "" });
                     }}
-                    className={`w-full rounded-lg bg-background border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-all resize-none ${
+                    className={`w-full rounded-lg bg-background/50 border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all resize-none ${
                       errors.problem ? "border-destructive" : "border-border"
                     }`}
                   />
@@ -217,7 +224,7 @@ const CTASection = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn-primary-glow w-full !py-4 !text-sm group disabled:opacity-50"
+                  className="btn-primary-glow w-full !py-4 !text-sm group disabled:opacity-50 relative overflow-hidden"
                 >
                   {submitting ? "Submitting…" : cta.button_text}
                   <ArrowUpRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -252,7 +259,7 @@ const FieldInput = ({
       maxLength={field.maxLength}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-full rounded-lg bg-background border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-all ${
+      className={`w-full rounded-lg bg-background/50 border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all ${
         error ? "border-destructive" : "border-border"
       }`}
     />

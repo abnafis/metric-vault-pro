@@ -39,8 +39,14 @@ const WhyNotScalingSection = () => {
   return (
     <section className="py-12 sm:py-16">
       <div className="section-container">
-        <div className="rounded-3xl border border-border bg-card p-6 sm:p-10">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] gap-10 items-center">
+        <div className="rounded-3xl border border-white/50 glass p-6 sm:p-10 relative overflow-hidden">
+          <div
+            aria-hidden
+            className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[80px] opacity-30 pointer-events-none"
+            style={{ background: "hsl(var(--glow-blue-hsl))" }}
+          />
+
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] gap-10 items-center relative">
             <div>
               {header.eyebrow && (
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{header.eyebrow}</p>
@@ -70,7 +76,7 @@ const WhyNotScalingSection = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.07 }}
-                    className="rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-28px_hsl(220_40%_20%_/_0.5)]"
+                    className="rounded-2xl border border-border/70 glass-strong p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-28px_hsl(220_40%_20%_/_0.5)]"
                   >
                     <span
                       className="inline-flex h-10 w-10 items-center justify-center rounded-xl mb-4"

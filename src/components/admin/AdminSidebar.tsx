@@ -50,8 +50,8 @@ export function AdminSidebar() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border px-4 py-4">
+    <Sidebar collapsible="icon" className="border-r border-border/50 bg-background/50 backdrop-blur-xl">
+      <SidebarHeader className="border-b border-border/50 px-4 py-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="h-6 w-6 shrink-0 text-primary" />
           {!collapsed && <span className="font-bold text-sidebar-foreground text-sm">TrackRight</span>}
@@ -66,7 +66,12 @@ export function AdminSidebar() {
               {contentItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <NavLink to={item.url} end={item.url === "/admin"} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
+                    <NavLink
+                      to={item.url}
+                      end={item.url === "/admin"}
+                      className="hover:bg-sidebar-accent/50 relative"
+                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-[3px] before:rounded-r-full before:bg-primary"
+                    >
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -84,7 +89,11 @@ export function AdminSidebar() {
               {settingsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <NavLink to={item.url} className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
+                    <NavLink
+                      to={item.url}
+                      className="hover:bg-sidebar-accent/50 relative"
+                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-[3px] before:rounded-r-full before:bg-primary"
+                    >
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -96,7 +105,7 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
+      <SidebarFooter className="border-t border-border/50 p-2">
         {!collapsed && <p className="text-xs text-muted-foreground text-center">Admin Panel v1.0</p>}
       </SidebarFooter>
     </Sidebar>

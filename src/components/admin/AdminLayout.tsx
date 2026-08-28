@@ -10,11 +10,11 @@ export default function AdminLayout() {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar />
 
         <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center justify-between border-b border-border/50 backdrop-blur-xl bg-background/70 px-4">
+          <header className="h-14 flex items-center justify-between border-b border-border/50 backdrop-blur-xl bg-background/60 px-4 sticky top-0 z-20">
             <SidebarTrigger />
             <div className="flex items-center gap-3">
               <span className="text-xs text-muted-foreground hidden sm:inline">
