@@ -261,7 +261,7 @@ const HeroSection = () => {
                         {n.mark ? (
                           <Mark color={n.color || "#4285F4"}>{n.mark}</Mark>
                         ) : (
-                          <FallbackIcon className={`h-4 w-4 ${n.style === "green" ? "text-[hsl(var(--accent-green))]" : "text-muted-foreground"}" />
+                          <FallbackIcon className={`h-4 w-4 ${n.style === "green" ? "text-[hsl(var(--accent-green))]" : "text-muted-foreground"}`} />
                         )}
                         {n.label}
                       </div>
